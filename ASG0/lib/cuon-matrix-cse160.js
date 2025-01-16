@@ -46,12 +46,12 @@ class Vector3 {
     add(other) {
         // Insert your code here.
         // This function should change this vector (this.elements) and not create a new vector.
-        let v2 = this.elements;
-        let v1 = other.elements;
+        let v1 = this.elements;
+        let v2 = other.elements;
 
-        v2[0] += v1[0];
-        v2[1] += v1[1];
-        v2[2] += v1[2];
+        v1[0] += v2[0];
+        v1[1] += v2[1];
+        v1[2] += v2[2];
 
         // Don't delete the return statement.
         return this;
@@ -131,9 +131,11 @@ class Vector3 {
         // Insert your code here.
         // This function should create and return a new vector.
         let v3 = new Vector3(); // Modify this line to calculate cross product between other1 and other2.
-        v3.elements[0] = (other1.elements[1] * other2.elements[2])-(other1.elements[2] * other2.elements[1]);
-        v3.elements[1] = -(other1.elements[0] * other2.elements[2])+(other1.elements[2] * other2.elements[0]);
-        v3.elements[2] = (other1.elements[0] * other2.elements[1])-(other1.elements[1] * other2.elements[0]);
+        let v1 = other1.elements;
+        let v2 = other2.elements;
+        v3.elements[0] =  (v1[1] * v2[2]) - (v1[2] * v2[1]);
+        v3.elements[1] = -(v1[0] * v2[2]) + (v1[2] * v2[0]);
+        v3.elements[2] =  (v1[0] * v2[1]) - (v1[1] * v2[0]);
         // Don't delete the return statement.
         return v3;
     }

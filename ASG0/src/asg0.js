@@ -1,14 +1,14 @@
 // DrawRectangle.js
 function main() {
     // Retrieve <canvas> element <- (1)
-    canvas = document.getElementById('example');
+    let canvas = document.getElementById('example');
     if (!canvas) {
 	console.log('Failed to retrieve the <canvas> element');
 	return;
     }
     
     // Get the rendering context for 2DCG <- (2)
-    ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext('2d');
 
     // Part 1: Draw a blue rectangle
     // ctx.fillStyle = 'rgba(0, 0, 255, 1.0)'; // Set color to blue
@@ -36,6 +36,11 @@ function areaTriangle(v1, v2) {
 }
 
 function drawVector(v, color) {
+    // Retrieing canvas and ctx again to avoid the
+    // introduction of global variables for them
+    let canvas = document.getElementById('example');
+    let ctx = canvas.getContext('2d');
+    
     let vx = v.elements[0]
     let vy = v.elements[1]
     
@@ -50,6 +55,11 @@ function drawVector(v, color) {
 }
 
 function handleDrawEvent() {
+    // Retrieing canvas and ctx again to avoid the
+    // introduction of global variables for them
+    let canvas = document.getElementById('example');
+    let ctx = canvas.getContext('2d');
+
     // Clear the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     // Fill canvas with black color
@@ -70,6 +80,11 @@ function handleDrawEvent() {
 }
 
 function handleDrawOperationEvent() {
+    // Retrieing canvas and ctx again to avoid the
+    // introduction of global variables for them
+    let canvas = document.getElementById('example');
+    let ctx = canvas.getContext('2d');
+
     // Clear the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     // Fill canvas with black color
@@ -91,7 +106,6 @@ function handleDrawOperationEvent() {
     let operation = document.getElementById("operation").value;
     let scalar = document.getElementById("scalar").value;
 
-    // console.log(operation);
     if (operation == "add") {
         let v3 = v2.add(v1);
         drawVector(v3, "green");
@@ -117,8 +131,8 @@ function handleDrawOperationEvent() {
         console.log("Magnitude v2: " + v2.magnitude());
     }
     else if (operation == "normalize") {
-        v1normalize = v1.normalize();
-        v2normalize = v2.normalize();
+        let v1normalize = v1.normalize();
+        let v2normalize = v2.normalize();
         drawVector(v1normalize, "green");
         drawVector(v2normalize, "green");
     }
