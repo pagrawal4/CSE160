@@ -1,7 +1,7 @@
 // DrawRectangle.js
 function main() {
     // Retrieve <canvas> element <- (1)
-    let canvas = document.getElementById('example');
+    let canvas = document.getElementById('asg0canvas');
     if (!canvas) {
 	console.log('Failed to retrieve the <canvas> element');
 	return;
@@ -38,7 +38,7 @@ function areaTriangle(v1, v2) {
 function drawVector(v, color) {
     // Retrieing canvas and ctx again to avoid the
     // introduction of global variables for them
-    let canvas = document.getElementById('example');
+    let canvas = document.getElementById('asg0canvas');
     let ctx = canvas.getContext('2d');
     
     let vx = v.elements[0]
@@ -57,7 +57,7 @@ function drawVector(v, color) {
 function handleDrawEvent() {
     // Retrieing canvas and ctx again to avoid the
     // introduction of global variables for them
-    let canvas = document.getElementById('example');
+    let canvas = document.getElementById('asg0canvas');
     let ctx = canvas.getContext('2d');
 
     // Clear the canvas
@@ -82,7 +82,7 @@ function handleDrawEvent() {
 function handleDrawOperationEvent() {
     // Retrieing canvas and ctx again to avoid the
     // introduction of global variables for them
-    let canvas = document.getElementById('example');
+    let canvas = document.getElementById('asg0canvas');
     let ctx = canvas.getContext('2d');
 
     // Clear the canvas
