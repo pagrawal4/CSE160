@@ -3,8 +3,8 @@ function main() {
     // Retrieve <canvas> element <- (1)
     let canvas = document.getElementById('asg0canvas');
     if (!canvas) {
-	console.log('Failed to retrieve the <canvas> element');
-	return;
+        console.log('Failed to retrieve the <canvas> element');
+        return;
     }
     
     // Get the rendering context for 2DCG <- (2)
@@ -27,9 +27,9 @@ function main() {
 function angleBetween(v1, v2) {
     let normalizedDot = Vector3.dot(v1, v2)/(v1.magnitude()*v2.magnitude());
     if (normalizedDot < -1.0) { // Take care of floating point error (value < -1.0)
-	normalizedDot = -1.0;
+        normalizedDot = -1.0;
     } else if (normalizedDot > 1.0) { // floating point error (value > 1.0)
-	normalizedDot = 1.0;
+        normalizedDot = 1.0;
     }
     let angle = (Math.acos(normalizedDot) * 180)/Math.PI;
     return angle;
