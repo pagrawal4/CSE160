@@ -25,7 +25,13 @@ function main() {
 }
 
 function angleBetween(v1, v2) {
-    let angle = (Math.acos((Vector3.dot(v1, v2))/(v1.magnitude()*v2.magnitude())) * 180)/Math.PI // call static function like this?
+    let normalizedDot = Vector3.dot(v1, v2)/(v1.magnitude()*v2.magnitude());
+    if (normalizedDot < -1.0) { // Take care of floating point error (value < -1.0)
+	normalizedDot = -1.0;
+    } else if (normalizedDot > 1.0) { // floating point error (value > 1.0)
+	normalizedDot = 1.0;
+    }
+    let angle = (Math.acos(normalizedDot) * 180)/Math.PI;
     return angle;
 }
 
