@@ -24,9 +24,15 @@ let a_Position;
 let u_FragColor;
 let u_Size;
 
+// Constants
+const POINT = 0;
+const TRIANGLE = 1;
+const CIRCLE = 2;
+
 // HTML Controls
 let g_selectedColor=[1.0, 1.0, 1.0, 1.0];
 let g_selectedSize=5;
+let g_selectedType=POINT;
 
 function setupWebGL() {
   // Retrieve <canvas> element
@@ -80,6 +86,11 @@ function registerActionsForUIControls() {
   document.getElementById("red").onclick = function() { g_selectedColor = [1.0, 0.0, 0.0, 1.0]; };
   document.getElementById("clear").onclick = function() { g_shapesList = []; renderAllShapes();};
 
+  // Register actions for point, triangle, and circle buttons
+  document.getElementById("point").onclick = function() { g_selectedType = POINT};
+  document.getElementById("triangle").onclick = function() { g_selectedType = TRIANGLE};
+  document.getElementById("circle").onclick = function() {g_selectedType = CIRCLE};
+
   // Register actions for red, green, and blue sliders
   document.getElementById("redValue").addEventListener("mouseup", function() { g_selectedColor[0] = this.value/100; });
   document.getElementById("greenValue").addEventListener("mouseup", function() { g_selectedColor[1] = this.value/100; });
@@ -124,7 +135,17 @@ function click(ev) {
   let [x, y] = convertEventCoordinatesToGL(ev);
 
   // Store the new point with its position, color, and size
-  let point = new Point();
+  let point;
+  if (g_selectedType==POINT) {
+    point = new Point();
+  }
+  else if (g_selectedType==TRIANGLE) {
+    point = new Triangle();
+  }
+  else {
+    point = new Circle();
+  }
+
   point.position = [x, y];
   point.color = g_selectedColor.slice();
   point.size = g_selectedSize;
