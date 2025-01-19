@@ -1,4 +1,8 @@
-// DrawRectangle.js
+// Pranjal Agrawal
+// pagrawa4@ucsc.edu
+// Assignment 0: asg0.js
+
+// The main function
 function main() {
     // Retrieve <canvas> element <- (1)
     let canvas = document.getElementById('asg0canvas');
@@ -24,23 +28,7 @@ function main() {
 
 }
 
-function angleBetween(v1, v2) {
-    let normalizedDot = Vector3.dot(v1, v2)/(v1.magnitude()*v2.magnitude());
-    if (normalizedDot < -1.0) { // Take care of floating point error (value < -1.0)
-        normalizedDot = -1.0;
-    } else if (normalizedDot > 1.0) { // floating point error (value > 1.0)
-        normalizedDot = 1.0;
-    }
-    let angle = (Math.acos(normalizedDot) * 180)/Math.PI;
-    return angle;
-}
-
-function areaTriangle(v1, v2) {
-    let v3 = Vector3.cross(v1, v2)
-    let area = v3.magnitude()/2;
-    return area;
-}
-
+// Draw the vector with the specified color
 function drawVector(v, color) {
     // Retrieing canvas and ctx again to avoid the
     // introduction of global variables for them
@@ -60,6 +48,26 @@ function drawVector(v, color) {
     ctx.stroke();
 }
 
+// Calculate the angle between the 2 given vectors
+function angleBetween(v1, v2) {
+    let normalizedDot = Vector3.dot(v1, v2)/(v1.magnitude()*v2.magnitude());
+    if (normalizedDot < -1.0) { // Take care of floating point error (value < -1.0)
+        normalizedDot = -1.0;
+    } else if (normalizedDot > 1.0) { // floating point error (value > 1.0)
+        normalizedDot = 1.0;
+    }
+    let angle = (Math.acos(normalizedDot) * 180)/Math.PI;
+    return angle;
+}
+
+// Calculate the area of the triangle formed by the given two vectors
+function areaTriangle(v1, v2) {
+    let v3 = Vector3.cross(v1, v2)
+    let area = v3.magnitude()/2;
+    return area;
+}
+
+// Handle the drawing of vectors v1 and v2
 function handleDrawEvent() {
     // Retrieing canvas and ctx again to avoid the
     // introduction of global variables for them
@@ -85,6 +93,7 @@ function handleDrawEvent() {
     drawVector(v2, "blue");
 }
 
+// Handle the operation between the two vectors v1 and v2
 function handleDrawOperationEvent() {
     // Retrieing canvas and ctx again to avoid the
     // introduction of global variables for them
