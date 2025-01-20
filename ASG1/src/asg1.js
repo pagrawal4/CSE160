@@ -84,8 +84,6 @@ function connectVariablesToGLSL() {
 function addActionsForHtmlUI() {
 
   // Register actions for selecting color buttons
-  document.getElementById("green").onclick = function() { g_selectedColor = [0.0, 1.0, 0.0, 1.0]; };
-  document.getElementById("red").onclick = function() { g_selectedColor = [1.0, 0.0, 0.0, 1.0]; };
   document.getElementById("clear").onclick = function() { g_shapesList = []; renderAllShapes();};
 
   // Register actions for point, triangle, and circle buttons
