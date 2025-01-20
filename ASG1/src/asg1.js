@@ -80,7 +80,7 @@ function connectVariablesToGLSL() {
   }
 }
 
-function registerActionsForUIControls() {
+function addActionsForHtmlUI() {
 
   // Register actions for selecting color buttons
   document.getElementById("green").onclick = function() { g_selectedColor = [0.0, 1.0, 0.0, 1.0]; };
@@ -114,7 +114,7 @@ function main() {
   connectVariablesToGLSL();
 
   // Register the actions for the controls in HTML
-  registerActionsForUIControls();
+  addActionsForHtmlUI();
     
   // Register function (event handler) to be called on a mouse press
   canvas.onmousedown = click;
