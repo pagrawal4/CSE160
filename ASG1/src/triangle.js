@@ -1,8 +1,9 @@
 class Triangle{
+
   constructor(){
-    this.type='triangle';
+    this.type = 'triangle';
     this.position = [0.0, 0.0, 0.0];
-    this.color = [1.0,1.0,1.0,1.0];
+    this.color = [1.0, 1.0, 1.0, 1.0];
     this.size = 5.0;
   }
 
@@ -20,9 +21,8 @@ class Triangle{
     // Pass the color of a point to u_FragColor variable
     gl.uniform1f(u_Size, size);
     
-    // Draw
-    var d = this.size/200.0; // delta
-    drawTriangle( [xy[0], xy[1], xy[0]+d, xy[1], xy[0], xy[1]+d] );
+    var scaledSize = this.size/200.0;
+    drawTriangle( [xy[0], xy[1], xy[0] + scaledSize, xy[1], xy[0], xy[1] + scaledSize] );
 
   }
 }
