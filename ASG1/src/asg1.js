@@ -33,6 +33,7 @@ const CIRCLE = 2;
 let g_selectedColor=[1.0, 1.0, 1.0, 1.0];
 let g_selectedSize=5;
 let g_selectedType=POINT;
+let g_segments=10;
 
 function setupWebGL() {
   // Retrieve <canvas> element
@@ -98,6 +99,10 @@ function registerActionsForUIControls() {
 
   // Register action for the shape size slider
   document.getElementById("shapeSize").addEventListener("mouseup", function() { g_selectedSize = this.value; });
+
+  // Register action for the segment number of circle
+  document.getElementById("segments").addEventListener("mouseup", function() { g_segments = this.value; });
+
 }
 
 function main() {
@@ -144,6 +149,7 @@ function click(ev) {
   }
   else {
     point = new Circle();
+    point.segments = g_segments;
   }
 
   point.position = [x, y];
