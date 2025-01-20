@@ -22,7 +22,11 @@ class Triangle{
     gl.uniform1f(u_Size, size);
     
     var scaledSize = this.size/200.0;
-    drawTriangle( [xy[0], xy[1], xy[0] + scaledSize, xy[1], xy[0], xy[1] + scaledSize] );
+    //drawTriangle( [xy[0], xy[1], xy[0] + scaledSize, xy[1], xy[0], xy[1] + scaledSize] );
+    // Draw an equilateral triangle
+     drawTriangle( [xy[0] - scaledSize/2, xy[1],
+		    xy[0] + scaledSize/2, xy[1],
+		    xy[0], xy[1] + scaledSize * Math.sqrt(3)/2] );
 
   }
 }
