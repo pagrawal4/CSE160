@@ -28,6 +28,7 @@ let u_Size;
 const POINT = 0;
 const TRIANGLE = 1;
 const CIRCLE = 2;
+const KALEIDOSCOPE = 3;
 
 // HTML Controls
 let g_selectedColor=[1.0, 1.0, 1.0, 1.0];
@@ -103,6 +104,8 @@ function addActionsForHtmlUI() {
   // Register action for the segment number of circle
   document.getElementById("segments").addEventListener("mouseup", function() { g_segments = this.value; });
 
+  document.getElementById("kaleido").onclick = function() { g_selectedType = KALEIDOSCOPE };
+  document.getElementById("picture").onclick = function() { let eagle = new Eagle(); eagle.render(); };
 }
 
 function main() {
@@ -147,9 +150,12 @@ function click(ev) {
   else if (g_selectedType==TRIANGLE) {
     point = new Triangle();
   }
-  else {
+  else if (g_selectedType==CIRCLE) {
     point = new Circle();
     point.segments = g_segments;
+  }
+  else {
+    point = new ReflectedPoints();
   }
 
   point.position = [x, y];
