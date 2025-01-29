@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>CSE160 Assignment 1</title>
+  </head>
+
+  <body onload="main()">
+    Pranjal Agrawal
+    <br>
+    pagrawa4@ucsc.edu
+    <br><br>
+    Notes to Grader: None
+    <br><br>
+
+    <canvas id="webgl" width="400" height="400">
+    Please use a browser that supports "canvas"
+    </canvas>
+
+    <p>
+    <button type="button" id="clear">Clear Canvas</button>
+    <p>
+
+    Drawing Mode:
+    <p>
+    <button type="button" id="point">Squares</button>
+    <button type="button" id="triangle">Triangles</button>
+    <button type="button" id="circle">Circles</button>
+
+    <p>
+    Shape Color:
+    <p>
+    Red <input type="range" min="0" max="100" value="100" class="slider" id="redValue">  Green <input type="range" min="0" max="100" value="100" class="slider" id="greenValue"> Blue <input type="range" min="0" max="100" value="100" class="slider" id="blueValue">
+    
+    <p>
+    Shape Size: <input type="range" min="5" max="40" value="0" class="slider" id="shapeSize"> (Circles) Segment Count: <input type="range" min="3" max="100" value="10" class="slider" id="segments">
+
+    <p id="numdot">  </p>
+
+    <script src="../lib/webgl-utils.js"></script>
+    <script src="../lib/webgl-debug.js"></script>
+    <script src="../lib/cuon-utils.js"></script>
+    <script src="point.js"></script>
+    <script src="triangle.js"></script>
+    <script src="circle.js"></script>
+    <script src="asg2.js"></script>
+  </body>
+</html>
