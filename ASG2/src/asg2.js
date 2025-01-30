@@ -37,6 +37,7 @@ let g_selectedSize=5;
 let g_selectedType=POINT;
 let g_segments=10;
 let g_cameraAngle=5;
+let g_yellowAngle=0;
 
 function setupWebGL() {
   // Retrieve <canvas> element
@@ -124,6 +125,9 @@ function addActionsForHtmlUI() {
 
   // Camera angle slider events
   document.getElementById("cameraAngle").addEventListener("mousemove", function() { g_cameraAngle = this.value; renderAllShapes();});
+
+  // Camera angle slider events
+  document.getElementById("yellowSlide").addEventListener("mousemove", function() { g_yellowAngle = this.value; renderAllShapes();});
 
   // Register action for the segment number of circle
   document.getElementById("segments").addEventListener("mouseup", function() { g_segments = this.value; });
@@ -230,20 +234,30 @@ function renderAllShapes() {
   //drawTriangle3D( [-1.0, 0.0, 0.0,   -0.5, -1.0, 0.0,   0.0, 0.0, 0.0] );
 
   // Draw a cube
-
   var body = new Cube();
-  body.color = [1.0, 0.0, 0.0, 1.0];
-  body.matrix.translate(-0.25, -0.5, 0.0);
-  body.matrix.scale(0.5, 1, 0.5);
+  body.color = [1, 0, 0, 1];
+  body.matrix.translate(-0.25, -0.75, 0.0);
+  body.matrix.rotate(-5, 1, 0, 0);
+  body.matrix.scale(0.5, 0.3, 0.5);
   body.render();
 
-
+  // Draw left arm
   var leftArm = new Cube();
-  leftArm.color = [1.0, 1.0, 0.0, 1.0];
-  leftArm.matrix.translate(0.7, 0.0, 0.0);
-  leftArm.matrix.rotate(45, 0, 0, 1.0);
+  leftArm.color = [1, 1, 0, 1];
+  leftArm.matrix.translate(0.0, -0.5, 0.0);
+  leftArm.matrix.rotate(-5, 1, 0, 0);
+  leftArm.matrix.rotate(-g_yellowAngle, 0, 0, 1);
   leftArm.matrix.scale(0.25, 0.7, 0.5);
+  leftArm.matrix.translate(-0.5, 0, 0);
   leftArm.render();
+
+  // Draw left arm
+  var box = new Cube();
+  box.color = [1, 0, 1, 1];
+  box.matrix.translate(-0.1, 0.1, 0.0);
+  box.matrix.rotate(-30, 1, 0, 0);
+  box.matrix.scale(0.2, 0.4, 0.2);
+  box.render();
 
   // Use the start and current time to record duration (in ms)
   var duration = performance.now() - startTime;
