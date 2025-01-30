@@ -2,10 +2,10 @@
 // Vertex shader program
 var VSHADER_SOURCE = `
   attribute vec4 a_Position;
-  uniform float u_Size;
+  uniform mat4 u_ModelMatrix;
+  uniform mat4 u_GlobalRotateMatrix;
   void main() {
-    gl_Position = a_Position;
-    gl_PointSize = u_Size;
+    gl_Position = u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
   }`
 
 // Fragment shader program
@@ -23,6 +23,8 @@ let gl;
 let a_Position;
 let u_FragColor;
 let u_Size;
+let u_ModelMatrix;
+let u_GlobalRotateMatrix; // For camera action
 
 // Constants
 const POINT = 0;
@@ -34,6 +36,7 @@ let g_selectedColor=[1.0, 1.0, 1.0, 1.0];
 let g_selectedSize=5;
 let g_selectedType=POINT;
 let g_segments=10;
+let g_cameraAngle=5;
 
 function setupWebGL() {
   // Retrieve <canvas> element
@@ -49,6 +52,7 @@ function setupWebGL() {
     console.log('Failed to get the rendering context for WebGL');
     return;
   }
+  gl.enable(gl.DEPTH_TEST);
 }
 
 function connectVariablesToGLSL() {
@@ -72,12 +76,32 @@ function connectVariablesToGLSL() {
     return;
   }
 
+  // Get the storage location of u_ModelMatrix
+  u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix');
+  if (!u_ModelMatrix) {
+    console.log('Failed to get the storage location of u_ModelMatrix');
+    return;
+  }
+
+  // Get the storage location of u_GlobalRotateMatrix
+  u_GlobalRotateMatrix = gl.getUniformLocation(gl.program, 'u_GlobalRotateMatrix');
+  if (!u_GlobalRotateMatrix) {
+    console.log('Failed to get the storage location of u_GlobalRotateMatrix');
+    return;
+  }
+
+  // Pass the Identity matrix to u_ModelMatrix attribute
+  var identityM = new Matrix4();
+  gl.uniformMatrix4fv(u_ModelMatrix, false, identityM.elements);
+
   // Get the storage location of u_Size
+  
   u_Size = gl.getUniformLocation(gl.program, 'u_Size');
   if (!u_Size) {
     console.log('Failed to get the storage location of u_Size');
     return;
   }
+  
 }
 
 function addActionsForHtmlUI() {
@@ -97,6 +121,9 @@ function addActionsForHtmlUI() {
 
   // Register action for the shape size slider
   document.getElementById("shapeSize").addEventListener("mouseup", function() { g_selectedSize = this.value; });
+
+  // Camera angle slider events
+  document.getElementById("cameraAngle").addEventListener("mousemove", function() { g_cameraAngle = this.value; renderAllShapes();});
 
   // Register action for the segment number of circle
   document.getElementById("segments").addEventListener("mouseup", function() { g_segments = this.value; });
@@ -122,12 +149,13 @@ function main() {
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
   // Clear <canvas>
-  gl.clear(gl.COLOR_BUFFER_BIT);
+  // gl.clear(gl.COLOR_BUFFER_BIT);
+  renderAllShapes();
 }
 
 
 // Represents the state that gets rendered
-var g_shapesList = [];
+//var g_shapesList = [];
 //var g_points = [];  // The array for the position of a mouse press
 //var g_colors = [];  // The array to store the color of a point
 //var g_sizes = [];  // The array to store the size of a point
@@ -185,18 +213,42 @@ function renderAllShapes() {
   // Record the start time
   var startTime = performance.now()
 
+  // Connect the matrix to u_ModelMatrix attribute
+  var globalRotMat = new Matrix4().rotate(g_cameraAngle, 0, 1, 0);
+  gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
+
   // Clear <canvas>
-  gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  var len = g_shapesList.length;
+  // var len = g_shapesList.length;
 
-  for(var i = 0; i < len; i++) {
-    g_shapesList[i].render();
-  }
+  // for(var i = 0; i < len; i++) {
+  //   g_shapesList[i].render();
+  // }
+
+  // Draw a test triangle
+  //drawTriangle3D( [-1.0, 0.0, 0.0,   -0.5, -1.0, 0.0,   0.0, 0.0, 0.0] );
+
+  // Draw a cube
+
+  var body = new Cube();
+  body.color = [1.0, 0.0, 0.0, 1.0];
+  body.matrix.translate(-0.25, -0.5, 0.0);
+  body.matrix.scale(0.5, 1, 0.5);
+  body.render();
+
+
+  var leftArm = new Cube();
+  leftArm.color = [1.0, 1.0, 0.0, 1.0];
+  leftArm.matrix.translate(0.7, 0.0, 0.0);
+  leftArm.matrix.rotate(45, 0, 0, 1.0);
+  leftArm.matrix.scale(0.25, 0.7, 0.5);
+  leftArm.render();
 
   // Use the start and current time to record duration (in ms)
   var duration = performance.now() - startTime;
-  sendTextToUI("Points = " + len + ", time = " + Math.floor(duration*1000) + " us" /*+ ", fps: " + Math.floor(10000/duration)/10*/, "numdot");
+  //sendTextToUI("Points = " + len + ", time = " + Math.floor(duration*1000) + " us" /*+ ", fps: " + Math.floor(10000/duration)/10*/, "numdot");
+  sendTextToUI("time = " + Math.floor(duration*1000) + " us" /*+ ", fps: " + Math.floor(10000/duration)/10*/, "numdot");
 
 }
 
