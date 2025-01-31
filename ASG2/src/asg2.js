@@ -38,6 +38,9 @@ let g_selectedType=POINT;
 let g_segments=10;
 let g_cameraAngle=5;
 let g_yellowAngle=0;
+let g_magentaAngle=0;
+let g_yellowAnimation=false;
+let g_magentaAnimation=false;
 
 function setupWebGL() {
   // Retrieve <canvas> element
@@ -129,8 +132,17 @@ function addActionsForHtmlUI() {
   // Camera angle slider events
   document.getElementById("yellowSlide").addEventListener("mousemove", function() { g_yellowAngle = this.value; renderAllShapes();});
 
+  // Camera angle slider events
+  document.getElementById("magentaSlide").addEventListener("mousemove", function() { g_magentaAngle = this.value; renderAllShapes();});
+
   // Register action for the segment number of circle
   document.getElementById("segments").addEventListener("mouseup", function() { g_segments = this.value; });
+
+  document.getElementById("animationYellowOnButton").onclick = function() {g_yellowAnimation = true};
+  document.getElementById("animationYellowOffButton").onclick = function() {g_yellowAnimation = false};
+
+  document.getElementById("animationMagentaOnButton").onclick = function() {g_magentaAnimation = true};
+  document.getElementById("animationMagentaOffButton").onclick = function() {g_magentaAnimation = false};
 }
 
 function main() {
@@ -154,9 +166,8 @@ function main() {
 
   // Clear <canvas>
   // gl.clear(gl.COLOR_BUFFER_BIT);
-  renderAllShapes();
+  requestAnimationFrame(tick);
 }
-
 
 // Represents the state that gets rendered
 //var g_shapesList = [];
@@ -213,6 +224,34 @@ function convertEventCoordinatesToGL(ev) {
   return([x,y]);
 }
 
+var g_startTime = performance.now()/1000.0;
+var g_seconds = performance.now()/1000.0 - g_startTime;
+
+function tick() {
+  // Save the current time
+  g_seconds = performance.now()/1000.0 - g_startTime;
+  // Print some debug information so we know that it is being called
+  console.log(g_seconds);
+
+  // Update Animation Angles
+  updateAnimationAngles();
+
+  // Draw everything
+  renderAllShapes();
+
+  // Tell the browser to call me again
+  requestAnimationFrame(tick);
+}
+
+function updateAnimationAngles() {
+  if (g_yellowAnimation) {
+    g_yellowAngle = (45*Math.sin(g_seconds));
+  }
+  if (g_magentaAnimation) {
+    g_magentaAngle = (45*Math.sin(3*g_seconds));
+  }
+}
+
 function renderAllShapes() {
   // Record the start time
   var startTime = performance.now()
@@ -246,7 +285,17 @@ function renderAllShapes() {
   leftArm.color = [1, 1, 0, 1];
   leftArm.matrix.translate(0.0, -0.5, 0.0);
   leftArm.matrix.rotate(-5, 1, 0, 0);
-  leftArm.matrix.rotate(-g_yellowAngle, 0, 0, 1);
+  
+  leftArm.matrix.rotate( -g_yellowAngle, 0, 0, 1);
+  
+  // if (g_yellowAnimation) {
+  //  leftArm.matrix.rotate(45*Math.sin(g_seconds), 0, 0, 1);
+  // } else {
+  //  leftArm.matrix.rotate( -g_yellowAngle, 0, 0, 1);
+  // }
+    
+  // Making a copy of original matrix to avoid getting future transformations
+  var yellowCoordinatesMat = new Matrix4(leftArm.matrix);
   leftArm.matrix.scale(0.25, 0.7, 0.5);
   leftArm.matrix.translate(-0.5, 0, 0);
   leftArm.render();
@@ -254,15 +303,29 @@ function renderAllShapes() {
   // Draw left arm
   var box = new Cube();
   box.color = [1, 0, 1, 1];
-  box.matrix.translate(-0.1, 0.1, 0.0);
-  box.matrix.rotate(-30, 1, 0, 0);
-  box.matrix.scale(0.2, 0.4, 0.2);
+  box.matrix = yellowCoordinatesMat;
+  box.matrix.translate(0.0, 0.65, 0.0);
+  box.matrix.rotate(g_magentaAngle, 0, 0, 1);
+  box.matrix.scale(0.3, 0.3, 0.3);
+  box.matrix.translate(-0.5, 0, -0.001); // Last value is to remove z-fight flicker
+  // box.matrix.rotate(-30, 1, 0, 0);
+  // box.matrix.scale(0.2, 0.4, 0.2);
   box.render();
+
+  // A bunch of rotating cubes
+  var K = 1000.0;
+  for (var i=1; i < K; i++) {
+    var c = new Cube();
+    c.matrix.translate(-.8, 1.9*i/K-1.0, 0);
+    c.matrix.rotate(g_seconds*100, 1, 1, 1);
+    c.matrix.scale(.1, 0.5/K, 1.0/K);
+    c.render();
+  }
 
   // Use the start and current time to record duration (in ms)
   var duration = performance.now() - startTime;
   //sendTextToUI("Points = " + len + ", time = " + Math.floor(duration*1000) + " us" /*+ ", fps: " + Math.floor(10000/duration)/10*/, "numdot");
-  sendTextToUI("time = " + Math.floor(duration*1000) + " us" /*+ ", fps: " + Math.floor(10000/duration)/10*/, "numdot");
+  sendTextToUI("time = " + Math.floor(duration*1000) + " us" + ", fps: " + Math.floor(10000/duration)/10, "numdot");
 
 }
 
