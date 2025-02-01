@@ -42,25 +42,40 @@ class Cube {
         }
         */
        
-        // Front of cube
-        drawTriangle3D( [0,0,0,   1,1,0,  1,0,0 ]);
-        drawTriangle3D( [0,0,0,   0,1,0,  1,1,0 ]);
+        // Right face
+        //gl.uniform4f(u_FragColor, 1,0,0,1);  (red)
+        drawTriangle3D( [ 1, 0, 1,   1, 0, 0,   1, 1, 0 ]);
+        drawTriangle3D( [ 1, 0, 1,   1, 1, 0,   1, 1, 1 ]);
 
-        // Pass the color of a point to u_FragColor uniform variable
+        // Left face
+        //gl.uniform4f(u_FragColor, 0,1,1,1);  (cyan)
         gl.uniform4f(u_FragColor, rgba[0]*.9,  rgba[1]*.9, rgba[2]*.9, rgba[3]);
-        //gl.uniform4f(u_FragColor, 1*.9,  0*.9, 0*.9, 1);
+        drawTriangle3D( [ 0, 0, 1,   0, 0, 0,   0, 1, 0 ]);
+        drawTriangle3D( [ 0, 0, 1,   0, 1, 0,   0, 1, 1 ]);
 
-        // Right side  of code
-        drawTriangle3D( [1,0,0,   1,1,0,   1,0,1 ]);
-        drawTriangle3D( [1,0,1,   1,1,0,   1,1,1 ]);
-     
-        //gl.uniform4f(u_FragColor, 0*.9,  0*.9, 1*.9, 1);
+        // Top face
+        //gl.uniform4f(u_FragColor, 0,1,0,1); (green)
+        gl.uniform4f(u_FragColor, rgba[0]*.9,  rgba[1]*.9, rgba[2]*.9, rgba[3]);
+        drawTriangle3D( [ 1, 1, 0,   0, 1, 0,   0, 1, 1 ]);
+        drawTriangle3D( [ 1, 1, 0,   1, 1, 1,   0, 1, 1 ]);
 
-        // Top  of cube
-        drawTriangle3D( [0,1,0,   0,1,1,   1,1,1 ]);
-        drawTriangle3D( [0,1,0,   1,1,1,   1,1,0 ]);    
+        // Bottom face
+        //gl.uniform4f(u_FragColor, 1,0,1,1); (purple)
+        gl.uniform4f(u_FragColor, rgba[0]*.9,  rgba[1]*.9, rgba[2]*.9, rgba[3]);
+        drawTriangle3D( [ 1, 0, 0,   0, 0, 0,   0, 0, 1 ]);
+        drawTriangle3D( [ 1, 0, 0,   1, 0, 1,   0, 0, 1 ]);
 
-        // Other sides of cube
-        // <fill this in yourself>
+        // Front face
+        //gl.uniform4f(u_FragColor, 0,0,1,1); (blue)
+        gl.uniform4f(u_FragColor, rgba[0]*.9,  rgba[1]*.9, rgba[2]*.9, rgba[3]);
+        drawTriangle3D( [ 1, 0, 0,   0, 0, 0,   0, 1, 0 ]);
+        drawTriangle3D( [ 1, 0, 0,   0, 1, 0,   1, 1, 0 ]);
+
+        // Back face
+        //gl.uniform4f(u_FragColor, 1,1,0,1); (yellow)
+        gl.uniform4f(u_FragColor, rgba[0]*.9,  rgba[1]*.9, rgba[2]*.9, rgba[3]);
+        drawTriangle3D( [ 1, 0, 1,   0, 0, 1,   0, 1, 1 ]);
+        drawTriangle3D( [ 1, 0, 1,   0, 1, 1,   1, 1, 1 ]);
+
     }
 }
