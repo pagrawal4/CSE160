@@ -34,13 +34,15 @@ const CIRCLE = 2;
 let g_selectedColor=[1.0, 1.0, 1.0, 1.0];
 let g_selectedSize=5;
 let g_selectedType=POINT;
-let g_segments=10;
 let g_cameraAngle=5;
-let g_upperLegAngle=0;
-let g_lowerLegAngle=0;
-let g_feetAngle=0;
+let g_upperRightLegAngle=0;
+let g_upperLeftLegAngle=0;
+let g_lowerRightLegAngle=0;
+let g_lowerLeftLegAngle=0;
+let g_rightFeetAngle=0;
+let g_leftFeetAngle=0;
 let g_magentaAngle=0;
-let g_yellowAnimation=false;
+let g_animationOn=false;
 let g_magentaAnimation=false;
 
 function setupWebGL() {
@@ -103,42 +105,29 @@ function connectVariablesToGLSL() {
 
 function addActionsForHtmlUI() {
 
-  // Register actions for selecting color buttons
-  document.getElementById("clear").onclick = function() { g_shapesList = []; renderScene();};
-
-  // Register actions for point, triangle, and circle buttons
-  document.getElementById("point").onclick = function() { g_selectedType = POINT};
-  document.getElementById("triangle").onclick = function() { g_selectedType = TRIANGLE};
-  document.getElementById("circle").onclick = function() {g_selectedType = CIRCLE};
-
-  // Register actions for red, green, and blue sliders
-  document.getElementById("redValue").addEventListener("mouseup", function() { g_selectedColor[0] = this.value/100; });
-  document.getElementById("greenValue").addEventListener("mouseup", function() { g_selectedColor[1] = this.value/100; });
-  document.getElementById("blueValue").addEventListener("mouseup", function() { g_selectedColor[2] = this.value/100; });
-
-  // Register action for the shape size slider
-  document.getElementById("shapeSize").addEventListener("mouseup", function() { g_selectedSize = this.value; });
-
   // Camera angle slider events
   document.getElementById("cameraAngle").addEventListener("mousemove", function() { g_cameraAngle = this.value; renderScene();});
 
   // Upper leg slider events
-  document.getElementById("upperLegSlide").addEventListener("mousemove", function() { g_upperLegAngle = this.value; renderScene();});
+  document.getElementById("upperRightLegSlide").addEventListener("mousemove", function() { g_upperRightLegAngle = this.value; renderScene();});
+  // Upper leg slider events
+  document.getElementById("upperLeftLegSlide").addEventListener("mousemove", function() { g_upperLeftLegAngle = this.value; renderScene();});
 
   // Lower leg slider events
-  document.getElementById("lowerLegSlide").addEventListener("mousemove", function() { g_lowerLegAngle = this.value; renderScene();});
+  document.getElementById("lowerRightLegSlide").addEventListener("mousemove", function() { g_lowerRightLegAngle = this.value; renderScene();});
+  // Lower leg slider events
+  document.getElementById("lowerLeftLegSlide").addEventListener("mousemove", function() { g_lowerLeftLegAngle = this.value; renderScene();});
 
   // Feet slider events
-  document.getElementById("feetSlide").addEventListener("mousemove", function() { g_feetAngle = this.value; renderScene();});
+  document.getElementById("rightFeetSlide").addEventListener("mousemove", function() { g_rightFeetAngle = this.value; renderScene();});
+  // Feet slider events
+  document.getElementById("leftFeetSlide").addEventListener("mousemove", function() { g_leftFeetAngle = this.value; renderScene();});
 
   // Camera magenta slider events
   document.getElementById("magentaSlide").addEventListener("mousemove", function() { g_magentaAngle = this.value; renderScene();});
 
-  // Register action for the segment number of circle
-  document.getElementById("segments").addEventListener("mouseup", function() { g_segments = this.value; });
-
-  document.getElementById("animationYellowOnButton").onclick = function() {g_yellowAnimation = true};
-  document.getElementById("animationYellowOffButton").onclick = function() {g_yellowAnimation = false};
+  document.getElementById("animationOnButton").onclick = function() {g_animationOn = true};
+  document.getElementById("animationOffButton").onclick = function() {g_animationOn = false};
 
   document.getElementById("animationMagentaOnButton").onclick = function() {g_magentaAnimation = true};
   document.getElementById("animationMagentaOffButton").onclick = function() {g_magentaAnimation = false};
@@ -243,8 +232,8 @@ function tick() {
 }
 
 function updateAnimationAngles() {
-  if (g_yellowAnimation) {
-    g_upperLegAngle = (45*Math.sin(g_seconds));
+  if (g_animationOn) {
+    g_upperRightLegAngle = (45*Math.sin(g_seconds));
   }
   if (g_magentaAnimation) {
     g_magentaAngle = (45*Math.sin(3*g_seconds));
@@ -280,12 +269,12 @@ function renderScene() {
 
   // Rotate and translate right leg
   let rightUpperLegC = [1, 1, 0, 1];
-  rightUpperLegM.rotate( g_upperLegAngle, 0, 0, 1);
+  rightUpperLegM.rotate( g_upperRightLegAngle, 0, 0, 1);
   rightUpperLegM.translate(0.0, -0.1, 0.01);
 
   // Rotate and translate left leg
   let leftUpperLegC = [1, 1, 0, 1];
-  leftUpperLegM.rotate( -g_upperLegAngle, 0, 0, 1);
+  leftUpperLegM.rotate( -g_upperLeftLegAngle, 0, 0, 1);
   leftUpperLegM.translate(0.0, -0.1, -0.01);
 
   // Set reference for lower left and right legs
@@ -297,12 +286,12 @@ function renderScene() {
 
   // Scale and translate left leg
   let rightLowerLegC = [1, 1, 0, 1];
-  rightLowerLegM.rotate( g_lowerLegAngle, 0, 0, 1);
+  rightLowerLegM.rotate( g_lowerRightLegAngle, 0, 0, 1);
   rightLowerLegM.translate(-0.06, -0.2, 0);
 
   // Scale and translate right leg
   let leftLowerLegC = [1, 1, 0, 1];
-  leftLowerLegM.rotate( g_lowerLegAngle, 0, 0, 1);
+  leftLowerLegM.rotate( g_lowerLeftLegAngle, 0, 0, 1);
   leftLowerLegM.translate(-0.06, -0.2, 0);
 
   drawCube(leftUpperLegM, leftUpperLegC);
@@ -320,12 +309,12 @@ function renderScene() {
 
   // Scale and translate left feet
   let rightFeetC = [0, 0, 1, 1];
-  rightFeetM.rotate( g_feetAngle, 0, 0, 1);
+  rightFeetM.rotate( g_rightFeetAngle, 0, 0, 1);
   rightFeetM.translate(0.1, 0.05, 0);
 
   // Scale and translate right feet
   let leftFeetC = [0, 0, 1, 1];
-  leftFeetM.rotate( g_feetAngle, 0, 0, 1);
+  leftFeetM.rotate( g_leftFeetAngle, 0, 0, 1);
   leftFeetM.translate(0.1, 0.05, 0);
 
   rightFeetM.scale(0.25, 0.11, 0.101);
