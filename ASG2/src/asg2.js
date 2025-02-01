@@ -254,39 +254,42 @@ function renderScene() {
   // Clear canvas
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  // var len = g_shapesList.length;
+  //drawCube(new Matrix4().translate(0.5, 0.5, 0.7));
 
-  // for(var i = 0; i < len; i++) {
-  //   g_shapesList[i].render();
-  // }
+  // Find coordinate frame for body to be used by leg
+  // V V IMP: The transformation that is specified first is the last transformation on the points!!!
+  let bodyM = new Matrix4();
+  bodyM.translate(g_magentaAngle/100, -0.25, -0.15); // Usually half of scale below
 
-  // Draw a test triangle
-  //drawTriangle3D( [-1.0, 0.0, 0.0,   -0.5, -1.0, 0.0,   0.0, 0.0, 0.0] );
+  // Set reference for left and right legs
+  let rightUpperLegM = new Matrix4(bodyM).translate(0, -0.1, -0.1);
+  let leftUpperLegM = new Matrix4(bodyM).translate(0, -0.1, 0.1);
 
-  // Draw the body
-  bodyM = new Matrix4().translate(-0.25, -0.75, 0.0).rotate(-5, 1, 0, 0).scale(0.5, 0.3, 0.5);
+  // Scale and draw body
+  bodyM.scale(0.2, 0.5, 0.3);
   bodyC = [1, 0, 0, 1];
   drawCube(bodyM, bodyC);
 
-  // Draw left arm
-  leftArmM = new Matrix4();
-  leftArmC = [1, 1, 0, 1];
-  leftArmM.translate(0.0, -0.5, 0.0);
-  leftArmM.rotate(-5, 1, 0, 0);
-  leftArmM.rotate( -g_yellowAngle, 0, 0, 1);
-  
-  // if (g_yellowAnimation) {
-  //  leftArm.matrix.rotate(45*Math.sin(g_seconds), 0, 0, 1);
-  // } else {
-  //  leftArm.matrix.rotate( -g_yellowAngle, 0, 0, 1);
-  // }
-    
-  // Making a copy of original matrix to avoid getting future transformations
-  var leftArmLowerM = new Matrix4(leftArmM);
-  leftArmM.scale(0.25, 0.7, 0.5);
-  leftArmM.translate(-0.5, 0, 0);
-  drawCube(leftArmM, leftArmC);
+  // Scale and translate left leg
+  let leftUpperLegC = [1, 1, 0, 1];
+  rightUpperLegM.rotate( g_yellowAngle/5, 0, 0, 1);
+  rightUpperLegM.translate(0.02, -0.2, 0.01);
+  rightUpperLegM.scale(0.15, 0.3, 0.11);
 
+  // Scale and translate right leg
+  let rightUpperLegC = [1, 1, 0, 1];
+  leftUpperLegM.rotate( -g_yellowAngle/5, 0, 0, 1);
+  leftUpperLegM.translate(0.02, -0.2, -0.01);
+  leftUpperLegM.scale(0.15, 0.3, 0.11);
+
+  // Making a copy of original matrix to avoid getting future transformations
+  var leftArmLowerM = new Matrix4(rightUpperLegM);
+  //rightUpperLegM.scale(0.25, 0.7, 0.5);
+  //rightUpperLegM.translate(-0.5, 0, 0);
+  drawCube(leftUpperLegM, leftUpperLegC);
+  drawCube(rightUpperLegM, rightUpperLegC);
+
+  /***
   // Draw left arm lower
   leftArmLowerM.translate(0.0, 0.65, 0.0);
   leftArmLowerM.rotate(g_magentaAngle, 0, 0, 1);
@@ -294,23 +297,7 @@ function renderScene() {
   leftArmLowerM.translate(-0.5, 0, -0.001); // Last value is to remove z-fight flicker
   leftArmLowerC = [1, 0, 1, 1];
   drawCube(leftArmLowerM, leftArmLowerC);
-
-  // A bunch of rotating cubes
-  var K = 100.0;
-  for (var i=1; i < K; i++) {
-    var cM = new Matrix4();
-    cM.translate(-.8, 1.9*i/K-1.0, 0);
-    cM.rotate(g_seconds*100, 1, 1, 1);
-    cM.scale(.1, 0.5/K, 1.0/K);
-    drawCube(cM);
-    /*
-    var c = new Cube();
-    c.matrix.translate(-.8, 1.9*i/K-1.0, 0);
-    c.matrix.rotate(g_seconds*100, 1, 1, 1);
-    c.matrix.scale(.1, 0.5/K, 1.0/K);
-    c.render();
-    */
-  }
+***/
 
   // Use the start and current time to record duration (in ms)
   var duration = performance.now() - startTime;
