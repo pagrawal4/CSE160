@@ -3,9 +3,9 @@
 var VSHADER_SOURCE = `
   attribute vec4 a_Position;
   uniform mat4 u_ModelMatrix;
-  uniform mat4 u_GlobalRotateMatrix;
+  uniform mat4 u_GlobalRotation;
   void main() {
-    gl_Position = u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
+    gl_Position = u_GlobalRotation * u_ModelMatrix * a_Position;
   }`
 
 // Fragment shader program
@@ -24,7 +24,7 @@ let a_Position;
 let u_FragColor;
 let u_Size;
 let u_ModelMatrix;
-let u_GlobalRotateMatrix; // For camera action
+let u_GlobalRotation; // For camera action
 
 // Constants
 const POINT = 0;
@@ -87,10 +87,10 @@ function connectVariablesToGLSL() {
     return;
   }
 
-  // Get the storage location of u_GlobalRotateMatrix
-  u_GlobalRotateMatrix = gl.getUniformLocation(gl.program, 'u_GlobalRotateMatrix');
-  if (!u_GlobalRotateMatrix) {
-    console.log('Failed to get the storage location of u_GlobalRotateMatrix');
+  // Get the storage location of u_GlobalRotation
+  u_GlobalRotation = gl.getUniformLocation(gl.program, 'u_GlobalRotation');
+  if (!u_GlobalRotation) {
+    console.log('Failed to get the storage location of u_GlobalRotation');
     return;
   }
 
@@ -258,7 +258,7 @@ function renderAllShapes() {
 
   // Connect the matrix to u_ModelMatrix attribute
   var globalRotMat = new Matrix4().rotate(g_cameraAngle, 0, 1, 0);
-  gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
+  gl.uniformMatrix4fv(u_GlobalRotation, false, globalRotMat.elements);
 
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
