@@ -2,10 +2,10 @@ class Cube {
     constructor() {
         this.type = "cube";
         // this.position = [0.0, 0.0, 0.0];
-        this.color = [1.0, 1.0, 1.0, 1.0];
+        this.color = [1.0, 1.0, 1.0, 1.0]; // default white
         // this.size = 5.0;
         // this.segments = 10;
-        this.matrix = new Matrix4();
+        this.matrix = new Matrix4(); // default identity
     }
 
     render() {
@@ -78,4 +78,15 @@ class Cube {
         drawTriangle3D( [ 1, 0, 1,   0, 1, 1,   1, 1, 1 ]);
 
     }
+}
+
+function drawCube(matrix, color) {
+    var cube = new Cube();
+    if (matrix) {
+        cube.matrix = matrix;
+    }
+    if (color) {
+        cube.color = color;
+    }
+    cube.render();
 }

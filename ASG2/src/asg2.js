@@ -22,7 +22,6 @@ let canvas;
 let gl;
 let a_Position;
 let u_FragColor;
-let u_Size;
 let u_ModelMatrix;
 let u_GlobalRotation; // For camera action
 
@@ -97,21 +96,13 @@ function connectVariablesToGLSL() {
   // Pass the Identity matrix to u_ModelMatrix attribute
   var identityM = new Matrix4();
   gl.uniformMatrix4fv(u_ModelMatrix, false, identityM.elements);
-
-  // Get the storage location of u_Size
-  
-  u_Size = gl.getUniformLocation(gl.program, 'u_Size');
-  if (!u_Size) {
-    console.log('Failed to get the storage location of u_Size');
-    return;
-  }
   
 }
 
 function addActionsForHtmlUI() {
 
   // Register actions for selecting color buttons
-  document.getElementById("clear").onclick = function() { g_shapesList = []; renderAllShapes();};
+  document.getElementById("clear").onclick = function() { g_shapesList = []; renderScene();};
 
   // Register actions for point, triangle, and circle buttons
   document.getElementById("point").onclick = function() { g_selectedType = POINT};
@@ -127,13 +118,13 @@ function addActionsForHtmlUI() {
   document.getElementById("shapeSize").addEventListener("mouseup", function() { g_selectedSize = this.value; });
 
   // Camera angle slider events
-  document.getElementById("cameraAngle").addEventListener("mousemove", function() { g_cameraAngle = this.value; renderAllShapes();});
+  document.getElementById("cameraAngle").addEventListener("mousemove", function() { g_cameraAngle = this.value; renderScene();});
 
-  // Camera angle slider events
-  document.getElementById("yellowSlide").addEventListener("mousemove", function() { g_yellowAngle = this.value; renderAllShapes();});
+  // Camera yellow slider events
+  document.getElementById("yellowSlide").addEventListener("mousemove", function() { g_yellowAngle = this.value; renderScene();});
 
-  // Camera angle slider events
-  document.getElementById("magentaSlide").addEventListener("mousemove", function() { g_magentaAngle = this.value; renderAllShapes();});
+  // Camera magenta slider events
+  document.getElementById("magentaSlide").addEventListener("mousemove", function() { g_magentaAngle = this.value; renderScene();});
 
   // Register action for the segment number of circle
   document.getElementById("segments").addEventListener("mouseup", function() { g_segments = this.value; });
@@ -208,7 +199,7 @@ function click(ev) {
   // Store the size to the g_sizes array
   // g_sizes.push(g_selectedSize);
     
-  renderAllShapes();
+  renderScene();
 }
 
 // Convert event coordinates [0,0] to [400, 400] scale to
@@ -237,7 +228,7 @@ function tick() {
   updateAnimationAngles();
 
   // Draw everything
-  renderAllShapes();
+  renderScene();
 
   // Tell the browser to call me again
   requestAnimationFrame(tick);
@@ -252,7 +243,7 @@ function updateAnimationAngles() {
   }
 }
 
-function renderAllShapes() {
+function renderScene() {
   // Record the start time
   var startTime = performance.now()
 
@@ -260,7 +251,7 @@ function renderAllShapes() {
   var globalRotMat = new Matrix4().rotate(g_cameraAngle, 0, 1, 0);
   gl.uniformMatrix4fv(u_GlobalRotation, false, globalRotMat.elements);
 
-  // Clear <canvas>
+  // Clear canvas
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   // var len = g_shapesList.length;
@@ -272,21 +263,17 @@ function renderAllShapes() {
   // Draw a test triangle
   //drawTriangle3D( [-1.0, 0.0, 0.0,   -0.5, -1.0, 0.0,   0.0, 0.0, 0.0] );
 
-  // Draw a cube
-  var body = new Cube();
-  body.color = [1, 0, 0, 1];
-  body.matrix.translate(-0.25, -0.75, 0.0);
-  body.matrix.rotate(-5, 1, 0, 0);
-  body.matrix.scale(0.5, 0.3, 0.5);
-  body.render();
+  // Draw the body
+  bodyM = new Matrix4().translate(-0.25, -0.75, 0.0).rotate(-5, 1, 0, 0).scale(0.5, 0.3, 0.5);
+  bodyC = [1, 0, 0, 1];
+  drawCube(bodyM, bodyC);
 
   // Draw left arm
-  var leftArm = new Cube();
-  leftArm.color = [1, 1, 0, 1];
-  leftArm.matrix.translate(0.0, -0.5, 0.0);
-  leftArm.matrix.rotate(-5, 1, 0, 0);
-  
-  leftArm.matrix.rotate( -g_yellowAngle, 0, 0, 1);
+  leftArmM = new Matrix4();
+  leftArmC = [1, 1, 0, 1];
+  leftArmM.translate(0.0, -0.5, 0.0);
+  leftArmM.rotate(-5, 1, 0, 0);
+  leftArmM.rotate( -g_yellowAngle, 0, 0, 1);
   
   // if (g_yellowAnimation) {
   //  leftArm.matrix.rotate(45*Math.sin(g_seconds), 0, 0, 1);
@@ -295,31 +282,34 @@ function renderAllShapes() {
   // }
     
   // Making a copy of original matrix to avoid getting future transformations
-  var yellowCoordinatesMat = new Matrix4(leftArm.matrix);
-  leftArm.matrix.scale(0.25, 0.7, 0.5);
-  leftArm.matrix.translate(-0.5, 0, 0);
-  leftArm.render();
+  var leftArmLowerM = new Matrix4(leftArmM);
+  leftArmM.scale(0.25, 0.7, 0.5);
+  leftArmM.translate(-0.5, 0, 0);
+  drawCube(leftArmM, leftArmC);
 
-  // Draw left arm
-  var box = new Cube();
-  box.color = [1, 0, 1, 1];
-  box.matrix = yellowCoordinatesMat;
-  box.matrix.translate(0.0, 0.65, 0.0);
-  box.matrix.rotate(g_magentaAngle, 0, 0, 1);
-  box.matrix.scale(0.3, 0.3, 0.3);
-  box.matrix.translate(-0.5, 0, -0.001); // Last value is to remove z-fight flicker
-  // box.matrix.rotate(-30, 1, 0, 0);
-  // box.matrix.scale(0.2, 0.4, 0.2);
-  box.render();
+  // Draw left arm lower
+  leftArmLowerM.translate(0.0, 0.65, 0.0);
+  leftArmLowerM.rotate(g_magentaAngle, 0, 0, 1);
+  leftArmLowerM.scale(0.3, 0.3, 0.3);
+  leftArmLowerM.translate(-0.5, 0, -0.001); // Last value is to remove z-fight flicker
+  leftArmLowerC = [1, 0, 1, 1];
+  drawCube(leftArmLowerM, leftArmLowerC);
 
   // A bunch of rotating cubes
-  var K = 1000.0;
+  var K = 100.0;
   for (var i=1; i < K; i++) {
+    var cM = new Matrix4();
+    cM.translate(-.8, 1.9*i/K-1.0, 0);
+    cM.rotate(g_seconds*100, 1, 1, 1);
+    cM.scale(.1, 0.5/K, 1.0/K);
+    drawCube(cM);
+    /*
     var c = new Cube();
     c.matrix.translate(-.8, 1.9*i/K-1.0, 0);
     c.matrix.rotate(g_seconds*100, 1, 1, 1);
     c.matrix.scale(.1, 0.5/K, 1.0/K);
     c.render();
+    */
   }
 
   // Use the start and current time to record duration (in ms)
