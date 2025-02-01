@@ -36,7 +36,9 @@ let g_selectedSize=5;
 let g_selectedType=POINT;
 let g_segments=10;
 let g_cameraAngle=5;
-let g_yellowAngle=0;
+let g_upperLegAngle=0;
+let g_lowerLegAngle=0;
+let g_feetAngle=0;
 let g_magentaAngle=0;
 let g_yellowAnimation=false;
 let g_magentaAnimation=false;
@@ -120,8 +122,14 @@ function addActionsForHtmlUI() {
   // Camera angle slider events
   document.getElementById("cameraAngle").addEventListener("mousemove", function() { g_cameraAngle = this.value; renderScene();});
 
-  // Camera yellow slider events
-  document.getElementById("yellowSlide").addEventListener("mousemove", function() { g_yellowAngle = this.value; renderScene();});
+  // Upper leg slider events
+  document.getElementById("upperLegSlide").addEventListener("mousemove", function() { g_upperLegAngle = this.value; renderScene();});
+
+  // Lower leg slider events
+  document.getElementById("lowerLegSlide").addEventListener("mousemove", function() { g_lowerLegAngle = this.value; renderScene();});
+
+  // Feet slider events
+  document.getElementById("feetSlide").addEventListener("mousemove", function() { g_feetAngle = this.value; renderScene();});
 
   // Camera magenta slider events
   document.getElementById("magentaSlide").addEventListener("mousemove", function() { g_magentaAngle = this.value; renderScene();});
@@ -236,7 +244,7 @@ function tick() {
 
 function updateAnimationAngles() {
   if (g_yellowAnimation) {
-    g_yellowAngle = (45*Math.sin(g_seconds));
+    g_upperLegAngle = (45*Math.sin(g_seconds));
   }
   if (g_magentaAnimation) {
     g_magentaAngle = (45*Math.sin(3*g_seconds));
@@ -254,40 +262,77 @@ function renderScene() {
   // Clear canvas
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  //drawCube(new Matrix4().translate(0.5, 0.5, 0.7));
+  //drawCube(new Matrix4().translate(-0.5, -0.5, 0.7));
 
   // Find coordinate frame for body to be used by leg
   // V V IMP: The transformation that is specified first is the last transformation on the points!!!
   let bodyM = new Matrix4();
-  bodyM.translate(g_magentaAngle/100, -0.25, -0.15); // Usually half of scale below
+  //bodyM.translate(/*g_magentaAngle/100*/ -0.1, -0.25, -0.15);
 
-  // Set reference for left and right legs
-  let rightUpperLegM = new Matrix4(bodyM).translate(0, -0.1, -0.1);
-  let leftUpperLegM = new Matrix4(bodyM).translate(0, -0.1, 0.1);
+  // Set reference for upper left and right legs
+  let rightUpperLegM = new Matrix4(bodyM).translate(0, -0.2, -0.1);
+  let leftUpperLegM = new Matrix4(bodyM).translate(0, -0.2, 0.1);
 
   // Scale and draw body
-  bodyM.scale(0.2, 0.5, 0.3);
+  bodyM.scale(0.3, 0.5, 0.3);
   bodyC = [1, 0, 0, 1];
   drawCube(bodyM, bodyC);
 
-  // Scale and translate left leg
+  // Rotate and translate right leg
+  let rightUpperLegC = [1, 1, 0, 1];
+  rightUpperLegM.rotate( g_upperLegAngle, 0, 0, 1);
+  rightUpperLegM.translate(0.0, -0.1, 0.01);
+
+  // Rotate and translate left leg
   let leftUpperLegC = [1, 1, 0, 1];
-  rightUpperLegM.rotate( g_yellowAngle/5, 0, 0, 1);
-  rightUpperLegM.translate(0.02, -0.2, 0.01);
-  rightUpperLegM.scale(0.15, 0.3, 0.11);
+  leftUpperLegM.rotate( -g_upperLegAngle, 0, 0, 1);
+  leftUpperLegM.translate(0.0, -0.1, -0.01);
+
+  // Set reference for lower left and right legs
+  let rightLowerLegM = new Matrix4(rightUpperLegM).translate(0.06, -0.25, 0);
+  let leftLowerLegM = new Matrix4(leftUpperLegM).translate(0.06, -0.25, 0);
+
+  rightUpperLegM.scale(0.12, 0.5, 0.11);
+  leftUpperLegM.scale(0.12, 0.5, 0.11);
+
+  // Scale and translate left leg
+  let rightLowerLegC = [1, 1, 0, 1];
+  rightLowerLegM.rotate( g_lowerLegAngle, 0, 0, 1);
+  rightLowerLegM.translate(-0.06, -0.2, 0);
 
   // Scale and translate right leg
-  let rightUpperLegC = [1, 1, 0, 1];
-  leftUpperLegM.rotate( -g_yellowAngle/5, 0, 0, 1);
-  leftUpperLegM.translate(0.02, -0.2, -0.01);
-  leftUpperLegM.scale(0.15, 0.3, 0.11);
+  let leftLowerLegC = [1, 1, 0, 1];
+  leftLowerLegM.rotate( g_lowerLegAngle, 0, 0, 1);
+  leftLowerLegM.translate(-0.06, -0.2, 0);
 
-  // Making a copy of original matrix to avoid getting future transformations
-  var leftArmLowerM = new Matrix4(rightUpperLegM);
-  //rightUpperLegM.scale(0.25, 0.7, 0.5);
-  //rightUpperLegM.translate(-0.5, 0, 0);
   drawCube(leftUpperLegM, leftUpperLegC);
   drawCube(rightUpperLegM, rightUpperLegC);
+
+  // Set reference for lower left and right legs
+  let rightFeetM = new Matrix4(rightLowerLegM).translate(-0.06, -0.2, 0);
+  let leftFeetM = new Matrix4(leftLowerLegM).translate(-0.06, -0.2, 0);
+
+  rightLowerLegM.scale(0.12, 0.4, 0.10);
+  leftLowerLegM.scale(0.12, 0.4, 0.10);
+
+  drawCube(leftLowerLegM);
+  drawCube(rightLowerLegM);
+
+  // Scale and translate left feet
+  let rightFeetC = [0, 0, 1, 1];
+  rightFeetM.rotate( g_feetAngle, 0, 0, 1);
+  rightFeetM.translate(0.1, 0.05, 0);
+
+  // Scale and translate right feet
+  let leftFeetC = [0, 0, 1, 1];
+  leftFeetM.rotate( g_feetAngle, 0, 0, 1);
+  leftFeetM.translate(0.1, 0.05, 0);
+
+  rightFeetM.scale(0.25, 0.11, 0.101);
+  leftFeetM.scale(0.25, 0.11, 0.101);
+
+  drawCube(leftFeetM, leftFeetC);
+  drawCube(rightFeetM, rightFeetC);
 
   /***
   // Draw left arm lower
