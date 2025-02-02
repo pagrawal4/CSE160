@@ -42,6 +42,8 @@ let g_lowerRightArmAngle=90;
 let g_lowerLeftArmAngle=90;
 let g_rightFeetAngle=0;
 let g_leftFeetAngle=0;
+let g_rightHandAngle=0;
+let g_leftHandAngle=0;
 let g_moveXPosition=0;
 let g_moveYPosition=0;
 let g_animationOn=false;
@@ -139,6 +141,11 @@ function addActionsForHtmlUI() {
   // Lower arm slider events
   document.getElementById("lowerLeftArmSlide").addEventListener("mousemove", function() { g_lowerLeftArmAngle = this.value; renderScene();});
 
+  // Hand slider events
+  document.getElementById("rightHandSlide").addEventListener("mousemove", function() { g_rightHandAngle = this.value; renderScene();});
+  // Hand slider events
+  document.getElementById("leftHandSlide").addEventListener("mousemove", function() { g_leftHandAngle = this.value; renderScene();});
+
   // Camera moveX slider events
   document.getElementById("moveXSlide").addEventListener("mousemove", function() { g_moveXPosition = this.value; renderScene();});
   // Camera moveY slider events
@@ -216,6 +223,8 @@ function resetState() {
   g_lowerLeftArmAngle = 90;
   g_rightFeetAngle = 0;
   g_leftFeetAngle = 0;
+  g_rightHandAngle = 0;
+  g_leftHandAngle = 0;
   g_moveXPosition = 0;
   g_moveYPosition = 0;
 }
@@ -466,8 +475,18 @@ function renderScene() {
 
   drawCube(rightUpperArmM, rightUpperArmC);
 
+  let rightHandM = new Matrix4(rightLowerArmM).translate(0, -0.16, 0);
+
   rightLowerArmM.scale(0.12, 0.32, 0.10);
   drawCube(rightLowerArmM, rightLowerArmC);
+
+  // Scale and translate right hand
+  let rightHandC = [1, 1, 1, 1];
+  rightHandM.rotate(g_rightHandAngle, 0, 0, 1);
+  //rightHandM.translate(0.1, 0.05, 0);
+
+  rightHandM.scale(0.09, 0.09, 0.09);
+  drawCube(rightHandM, rightHandC);
 
   // LEFT ARM
 
@@ -489,8 +508,18 @@ function renderScene() {
 
   drawCube(leftUpperArmM, leftUpperArmC);
 
+  let leftHandM = new Matrix4(leftLowerArmM).translate(0, -0.16, 0);
+
   leftLowerArmM.scale(0.12, 0.32, 0.10);
   drawCube(leftLowerArmM, leftLowerArmC);
+
+  // Scale and translate left hand
+  let leftHandC = [1, 1, 1, 1];
+  leftHandM.rotate(g_leftHandAngle, 0, 0, 1);
+  //leftHandM.translate(0.1, 0.05, 0);
+
+  leftHandM.scale(0.09, 0.09, 0.09);
+  drawCube(leftHandM, leftHandC);
 
   // Use the start and current time to record duration (in ms)
   var duration = performance.now() - startTime;
