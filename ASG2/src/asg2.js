@@ -31,7 +31,7 @@ const TRIANGLE = 1;
 const CIRCLE = 2;
 
 // HTML Controls
-let g_cameraAngle=5;
+let g_animalGlobalRotation=5;
 let g_upperRightLegAngle=0;
 let g_upperLeftLegAngle=0;
 let g_lowerRightLegAngle=0;
@@ -45,6 +45,11 @@ let g_leftFeetAngle=0;
 let g_moveXPosition=0;
 let g_moveYPosition=0;
 let g_animationOn=false;
+
+// Performance
+var g_startTime = performance.now()/1000.0;
+var g_time = performance.now()/1000.0 - g_startTime;
+var g_tickNum = -1;
 
 function setupWebGL() {
   // Retrieve <canvas> element
@@ -107,7 +112,7 @@ function connectVariablesToGLSL() {
 function addActionsForHtmlUI() {
 
   // Camera angle slider events
-  document.getElementById("cameraAngle").addEventListener("mousemove", function() { g_cameraAngle = this.value; renderScene();});
+  document.getElementById("cameraAngle").addEventListener("mousemove", function() { g_animalGlobalRotation = this.value; renderScene();});
 
   // Upper leg slider events
   document.getElementById("upperRightLegSlide").addEventListener("mousemove", function() { g_upperRightLegAngle = this.value; renderScene();});
@@ -181,20 +186,11 @@ function convertEventCoordinatesToGL(ev) {
   return([x,y]);
 }
 
-var g_startTime = performance.now()/1000.0;
-var g_seconds = performance.now()/1000.0 - g_startTime;
-
 function tick() {
   // Save the current time
-  g_seconds = performance.now()/1000.0 - g_startTime;
+  g_time = performance.now()/1000.0 - g_startTime;
   // Print some debug information so we know that it is being called
-  //console.log(g_seconds);
-
-  /*
-  if (stateChanged()) {
-    printState();
-  }
-  */
+  //console.log(g_time);
 
   // Update Animation Angles
   if (g_animationOn) {
@@ -209,7 +205,7 @@ function tick() {
 }
 
 function resetState() {
-  g_cameraAngle = 5;
+  g_animalGlobalRotation = 5;
   g_upperRightLegAngle = 0;
   g_upperLeftLegAngle = 0;
   g_lowerRightLegAngle = 0;
@@ -224,33 +220,16 @@ function resetState() {
   g_moveYPosition = 0;
 }
 
-function printState() {
-  console.log("g_cameraAngle " + g_cameraAngle);
-  console.log("g_upperRightLegAngle " + g_upperRightLegAngle);
-  console.log("g_upperLeftLegAngle " + g_upperLeftLegAngle);
-  console.log("g_lowerRightLegAngle " + g_lowerRightLegAngle);
-  console.log("g_lowerLeftLegAngle " + g_lowerLeftLegAngle);
-  console.log("g_rightFeetAngle " + g_rightFeetAngle);
-  console.log("g_leftFeetAngle " + g_leftFeetAngle);
-  console.log("g_moveXPosition " + g_moveXPosition);
-  console.log("g_moveYPosition " + g_moveYPosition);
-  console.log("g_upperRightArmAngle " + g_upperRightArmAngle);
-  console.log("g_upperLeftArmAngle " + g_upperLeftArmAngle);
-  console.log("g_lowerRightArmAngle " + g_lowerRightArmAngle);
-  console.log("g_lowerLeftArmAngle " + g_lowerLeftArmAngle);
-}
-
-
-let g_tickNum = -1;
 function updateAnimationAngles() {
 
   if (g_tickNum == -1) {
     //resetState();
+    //g_animalGlobalRotation=5;
     g_moveXPosition += 60;
     g_moveYPosition += 3;
   }
   else if ((g_tickNum/10) % 6 == 0) {  // frame 0
-    // g_upperRightLegAngle = (45*Math.sin(g_seconds));
+    // g_upperRightLegAngle = (45*Math.sin(g_time));
     g_moveXPosition += -5;
     if (g_moveXPosition < -85) g_moveXPosition = 60;
     g_moveYPosition = 3;
@@ -319,7 +298,7 @@ function renderScene() {
   var startTime = performance.now()
 
   // Connect the matrix to u_ModelMatrix attribute
-  var globalRotMat = new Matrix4().rotate(g_cameraAngle, 0, 1, 0);
+  var globalRotMat = new Matrix4().rotate(g_animalGlobalRotation, 0, 1, 0);
   gl.uniformMatrix4fv(u_GlobalRotation, false, globalRotMat.elements);
 
   // Clear canvas
@@ -338,10 +317,11 @@ function renderScene() {
 
   let baseBodyM = new Matrix4();
   baseBodyM.translate(g_moveXPosition/100, g_moveYPosition/100, 0);// -0.1, -0.25, -0.15);
+  //baseBodyM.rotate(g_time*10, 0, 1, 0);
 
   // Scale and draw body
   let bodyM = new Matrix4(baseBodyM).scale(0.3, 0.5, 0.3);
-  bodyC = [1, 0, 0, 1];
+  let bodyC = [1, 0, 0, 1];
   drawCube(bodyM, bodyC);
 
   // HEAD and HAT
@@ -352,28 +332,28 @@ function renderScene() {
   // Scale and draw head
   let headM = new Matrix4(baseHeadM);
   headM.scale(0.3, 0.25, 0.27);
-  headC = [1, 1, 1, 1];
+  let headC = [0, 1, 1, 1];
   drawCube(headM, headC);
 
   // Set reference for neck
   let neckM = new Matrix4(baseBodyM).translate(0, 0.375, 0);
   // Scale and draw neck
   neckM.scale(0.18, 0.35, 0.18);
-  neckC = [1, 1, 0, 1];
+  let neckC = [1, 1, 0, 1];
   drawCube(neckM, neckC);
 
   // Set reference for right ear
   let rightEarM = new Matrix4(baseHeadM).translate(0, 0, -0.15);
   // Scale and draw rightEar
   rightEarM.scale(0.045, 0.125, 0.06);
-  rightEarC = [1, 0.9, 0.1, 1];
+  let rightEarC = [1, 0.9, 0.1, 1];
   drawCube(rightEarM, rightEarC);
 
   // Set reference for left ear
   let leftEarM = new Matrix4(baseHeadM).translate(0, 0, 0.15);
   // Scale and draw leftEar
   leftEarM.scale(0.045, 0.125, 0.06);
-  leftEarC = [1, 0.9, 0.1, 1];
+  let leftEarC = [1, 0.9, 0.1, 1];
   drawCube(leftEarM, leftEarC);
 
   // Set reference for nose
@@ -381,7 +361,7 @@ function renderScene() {
   noseM.rotate(25, 0, 0, 1);
   // Scale and draw nose
   noseM.scale(0.045, 0.125, 0.075);
-  noseC = [1, 0.8, 0, 1];
+  let noseC = [1, 0.8, 0, 1];
   drawCube(noseM, noseC);
 
   // HAT
@@ -390,26 +370,26 @@ function renderScene() {
   let brimM = new Matrix4(baseHeadM).translate(0, 0.15, 0);
   // Scale and draw brim
   brimM.scale(0.54, 0.05, 0.54);
-  brimC = [1, 0, 0, 1];
+  let brimC = [1, 0, 0, 1];
   drawCube(brimM, brimC);
 
   // Set reference for hat
   let hatM = new Matrix4(baseHeadM).translate(0, 0.275, 0);
   // Scale and draw hat
   hatM.scale(0.3, 0.20, 0.3);
-  hatC = [1, 0, 0.5, 1];
+  let hatC = [1, 0, 0.5, 1];
   drawCube(hatM, hatC);
 
   // RIGHT LEG
 
-  // Set reference for upper left and right legs
+  // Set reference for upper right leg
   let rightUpperLegM = new Matrix4(baseBodyM).translate(0, -0.2, -0.1);
   // Rotate and translate right leg
   let rightUpperLegC = [1, 1, 0, 1];
   rightUpperLegM.rotate( g_upperRightLegAngle, 0, 0, 1);
   rightUpperLegM.translate(0.0, -0.1, 0.01);
 
-  // Set reference for lower left and right legs
+  // Set reference for lower right leg
   let rightLowerLegM = new Matrix4(rightUpperLegM).translate(0.06, -0.25, 0);
   rightUpperLegM.scale(0.12, 0.5, 0.11);
 
@@ -420,7 +400,7 @@ function renderScene() {
 
   drawCube(rightUpperLegM, rightUpperLegC);
 
-  // Set reference for lower left and right legs
+  // Set reference for right feet
   let rightFeetM = new Matrix4(rightLowerLegM).translate(-0.06, -0.2, 0);
   rightLowerLegM.scale(0.12, 0.4, 0.10);
   drawCube(rightLowerLegM, rightLowerLegC);
@@ -468,14 +448,14 @@ function renderScene() {
 
   // RIGHT ARM
 
-  // Set reference for upper left and right arms
+  // Set reference for upper right arm
   let rightUpperArmM = new Matrix4(baseBodyM).translate(0, 0.2, -0.21);
   // Rotate and translate right arm
   let rightUpperArmC = [0, 0, 1, 1];
   rightUpperArmM.rotate( g_upperRightArmAngle, 0, 0, 1);
   rightUpperArmM.translate(0.0, -0.16, 0.01);
 
-  // Set reference for lower left and right arms
+  // Set reference for lower right arms
   let rightLowerArmM = new Matrix4(rightUpperArmM).translate(-0.06, -0.16, 0);
   rightUpperArmM.scale(0.12, 0.32, 0.11);
 

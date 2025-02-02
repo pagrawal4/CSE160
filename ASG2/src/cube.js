@@ -20,28 +20,6 @@ class Cube {
         // Pass the matrix to u_ModelMatrix attribute
         gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);
 	
-        /*
-        var scaledSize = this.size/200.0;
-
-        let center = [xy[0], xy[1]];
-        let thetaStep=360/this.segments;
-        for (var theta1 = 0; theta1 < 360; theta1 += thetaStep) {
-            let theta2 = theta1 + thetaStep;
-
-            let vec1 = [Math.cos(theta1 * Math.PI / 180) * scaledSize,
-			Math.sin(theta1 * Math.PI / 180) * scaledSize];
-            let vec2 = [Math.cos(theta2 * Math.PI / 180) * scaledSize,
-			Math.sin(theta2 * Math.PI / 180) * scaledSize];
-
-            let vertex1 = [center[0] + vec1[0], center[1] + vec1[1]];
-            let vertex2 = [center[0] + vec2[0], center[1] + vec2[1]];
-
-            drawTriangle ( [center[0], center[1],
-			    vertex1[0], vertex1[1],
-			    vertex2[0], vertex2[1]] );
-        }
-        */
-
         // Right face (red)
         //gl.uniform4f(u_FragColor, 1,0,0,1);
         drawTriangle3D( [ 0.5,-0.5, 0.5,   0.5,-0.5,-0.5,   0.5, 0.5,-0.5 ]);
