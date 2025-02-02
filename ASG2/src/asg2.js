@@ -31,9 +31,6 @@ const TRIANGLE = 1;
 const CIRCLE = 2;
 
 // HTML Controls
-let g_selectedColor=[1.0, 1.0, 1.0, 1.0];
-let g_selectedSize=5;
-let g_selectedType=POINT;
 let g_cameraAngle=5;
 let g_upperRightLegAngle=0;
 let g_upperLeftLegAngle=0;
@@ -41,9 +38,9 @@ let g_lowerRightLegAngle=0;
 let g_lowerLeftLegAngle=0;
 let g_rightFeetAngle=0;
 let g_leftFeetAngle=0;
-let g_magentaAngle=0;
+let g_moveXPosition=0;
+let g_moveYPosition=0;
 let g_animationOn=false;
-let g_magentaAnimation=false;
 
 function setupWebGL() {
   // Retrieve <canvas> element
@@ -123,14 +120,14 @@ function addActionsForHtmlUI() {
   // Feet slider events
   document.getElementById("leftFeetSlide").addEventListener("mousemove", function() { g_leftFeetAngle = this.value; renderScene();});
 
-  // Camera magenta slider events
-  document.getElementById("magentaSlide").addEventListener("mousemove", function() { g_magentaAngle = this.value; renderScene();});
+  // Camera moveX slider events
+  document.getElementById("moveXSlide").addEventListener("mousemove", function() { g_moveXPosition = this.value; renderScene();});
+  // Camera moveY slider events
+  document.getElementById("moveYSlide").addEventListener("mousemove", function() { g_moveYPosition = this.value; renderScene();});
 
   document.getElementById("animationOnButton").onclick = function() {g_animationOn = true};
   document.getElementById("animationOffButton").onclick = function() {g_animationOn = false};
 
-  document.getElementById("animationMagentaOnButton").onclick = function() {g_magentaAnimation = true};
-  document.getElementById("animationMagentaOffButton").onclick = function() {g_magentaAnimation = false};
 }
 
 function main() {
@@ -145,9 +142,9 @@ function main() {
   addActionsForHtmlUI();
     
   // Register function (event handler) to be called on a mouse press
-  canvas.onmousedown = click;
+  //canvas.onmousedown = tick;
   // canvas.onmousemove = click;
-  canvas.onmousemove = function(ev) { if(ev.buttons == 1) {click(ev)}}
+  //canvas.onmousemove = function(ev) { if(ev.buttons == 1) {tick()}}
 
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -155,48 +152,6 @@ function main() {
   // Clear <canvas>
   // gl.clear(gl.COLOR_BUFFER_BIT);
   requestAnimationFrame(tick);
-}
-
-// Represents the state that gets rendered
-//var g_shapesList = [];
-//var g_points = [];  // The array for the position of a mouse press
-//var g_colors = [];  // The array to store the color of a point
-//var g_sizes = [];  // The array to store the size of a point
-function click(ev) {
-
-  // Convert the click event coordinates to WebGL coordinates
-  let [x, y] = convertEventCoordinatesToGL(ev);
-
-  // Store the new point with its position, color, and size
-  let point;
-  if (g_selectedType==POINT) {
-    point = new Point();
-  }
-  else if (g_selectedType==TRIANGLE) {
-    point = new Triangle();
-  }
-  else if (g_selectedType==CIRCLE) {
-    point = new Circle();
-    point.segments = g_segments;
-  }
-
-  point.position = [x, y];
-  point.color = g_selectedColor.slice();
-  point.size = g_selectedSize;
-  g_shapesList.push(point);  
-    
-  // Store the coordinates to g_points array
-  // g_points.push([x, y]);
-
-  // Store the selected color to g_colors array
-  // Here, slice used to make a copy to prevent all points from
-  // changing to new color as g_selectedColor is passed as a pointer
-  // g_colors.push(g_selectedColor.slice());
-
-  // Store the size to the g_sizes array
-  // g_sizes.push(g_selectedSize);
-    
-  renderScene();
 }
 
 // Convert event coordinates [0,0] to [400, 400] scale to
@@ -221,8 +176,16 @@ function tick() {
   // Print some debug information so we know that it is being called
   console.log(g_seconds);
 
+  /*
+  if (stateChanged()) {
+    printState();
+  }
+  */
+
   // Update Animation Angles
-  updateAnimationAngles();
+  if (g_animationOn) {
+    updateAnimationAngles();
+  }
 
   // Draw everything
   renderScene();
@@ -231,13 +194,102 @@ function tick() {
   requestAnimationFrame(tick);
 }
 
+function resetState() {
+  g_cameraAngle = 5;
+  g_upperRightLegAngle = 0;
+  g_upperLeftLegAngle = 0;
+  g_lowerRightLegAngle = 0;
+  g_lowerLeftLegAngle = 0;
+  g_rightFeetAngle = 0;
+  g_leftFeetAngle = 0;
+  g_moveXPosition = 0;
+  g_moveYPosition = 0;
+}
+
+function printState() {
+  console.log("g_cameraAngle " + g_cameraAngle);
+  console.log("g_upperRightLegAngle " + g_upperRightLegAngle);
+  console.log("g_upperLeftLegAngle " + g_upperLeftLegAngle);
+  console.log("g_lowerRightLegAngle " + g_lowerRightLegAngle);
+  console.log("g_lowerLeftLegAngle " + g_lowerLeftLegAngle);
+  console.log("g_rightFeetAngle " + g_rightFeetAngle);
+  console.log("g_leftFeetAngle " + g_leftFeetAngle);
+  console.log("g_moveXPosition " + g_moveXPosition);
+  console.log("g_moveYPosition " + g_moveYPosition);
+}
+
+
+let g_tickNum = -1;
 function updateAnimationAngles() {
-  if (g_animationOn) {
-    g_upperRightLegAngle = (45*Math.sin(g_seconds));
+
+  if (g_tickNum == -1) {
+    resetState();
+    g_moveXPosition += 60;
+    g_moveYPosition += 3;
   }
-  if (g_magentaAnimation) {
-    g_magentaAngle = (45*Math.sin(3*g_seconds));
-  }
+  else if ((g_tickNum/10) % 6 == 0) {  // frame 0
+    // g_upperRightLegAngle = (45*Math.sin(g_seconds));
+    g_moveXPosition += -5;
+    if (g_moveXPosition < -85) g_moveXPosition = 60;
+    g_moveYPosition = 3;
+    g_upperRightLegAngle = 50;
+    g_upperLeftLegAngle = 0;
+    g_lowerRightLegAngle = -45;
+    g_lowerLeftLegAngle = 0;
+    g_rightFeetAngle = -50;
+    g_leftFeetAngle = 0;
+  } 
+  else if ((g_tickNum/10) % 6  == 1) {   // frame 1
+    // frame 1
+    g_moveXPosition += -5;
+    if (g_moveXPosition < -85) g_moveXPosition = 60;
+    g_moveYPosition += 0
+    g_upperLeftLegAngle = -25;
+  } 
+  else if ((g_tickNum/10) % 6  == 2) {   // frame 2
+    // frame 1
+    g_moveXPosition += -5;
+    if (g_moveXPosition < -85) g_moveXPosition = 60;
+    g_moveYPosition += 5
+    g_upperRightLegAngle = 20;
+    g_upperLeftLegAngle = 10;
+    g_lowerRightLegAngle = -20;
+    g_lowerLeftLegAngle = -30;
+    g_rightFeetAngle = -25;
+    g_leftFeetAngle = -20;
+  } 
+ else if ((g_tickNum/10) % 6  == 3) {  // frame 2
+    g_moveXPosition += -5;
+    if (g_moveXPosition < -85) g_moveXPosition = 60;
+    g_moveYPosition -= 5
+    g_upperRightLegAngle = 0;
+    g_upperLeftLegAngle = 50;
+    g_lowerRightLegAngle = 0;
+    g_lowerLeftLegAngle = -45;
+    g_rightFeetAngle = 0;
+    g_leftFeetAngle = -50;
+  } 
+  else if ((g_tickNum/10) % 6  == 4) {   // frame 1
+    // frame 1
+    g_moveXPosition += -5;
+    if (g_moveXPosition < -85) g_moveXPosition = 60;
+    g_moveYPosition += 0
+    g_upperRightLegAngle = -25;
+  } 
+  else if ((g_tickNum/10) % 6  == 5) {   // frame 2
+    // frame 1
+    g_moveXPosition += -5;
+    if (g_moveXPosition < -85) g_moveXPosition = 60;
+    g_moveYPosition += 5
+    g_upperLeftLegAngle = 20;
+    g_upperRightLegAngle = 10;
+    g_lowerLeftLegAngle = -20;
+    g_lowerRightLegAngle = -30;
+    g_leftFeetAngle = -25;
+    g_rightFeetAngle = -20;
+  } 
+  g_tickNum++;
+
 }
 
 function renderScene() {
@@ -251,12 +303,14 @@ function renderScene() {
   // Clear canvas
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  //drawCube(new Matrix4().translate(-0.5, -0.5, 0.7));
+  // Draw the floor
+  let floorM = new Matrix4().translate(0, -0.95, 0).scale(1.9, 0.05, 1.9);
+  drawCube(floorM, [1, 0, 1, 1]);
 
   // Find coordinate frame for body to be used by leg
   // V V IMP: The transformation that is specified first is the last transformation on the points!!!
   let bodyM = new Matrix4();
-  //bodyM.translate(/*g_magentaAngle/100*/ -0.1, -0.25, -0.15);
+  bodyM.translate(g_moveXPosition/100, g_moveYPosition/100, 0);// -0.1, -0.25, -0.15);
 
   // Set reference for upper left and right legs
   let rightUpperLegM = new Matrix4(bodyM).translate(0, -0.2, -0.1);
@@ -267,14 +321,64 @@ function renderScene() {
   bodyC = [1, 0, 0, 1];
   drawCube(bodyM, bodyC);
 
+  // Set reference for head
+  let headM = new Matrix4(bodyM).translate(0.1, 0.85, 0);
+  // Scale and draw head
+  headM.scale(1, 0.5, 0.9);
+  headC = [0.72, 0.62, 0.39];
+  drawCube(headM, headC);
+
+  // Set reference for neck
+  let neckM = new Matrix4(bodyM).translate(0, 0.75, 0);
+  // Scale and draw neck
+  neckM.scale(0.6, 0.5, 0.6);
+  neckC = [150, 75, 0, 1];
+  drawCube(neckM, neckC);
+
+  // Set reference for right ear
+  let rightEarM = new Matrix4(bodyM).translate(0, 0.85, -0.6);
+  // Scale and draw rightEar
+  rightEarM.scale(0.15, 0.25, 0.3);
+  rightEarC = [1, 0.9, 0.1, 1];
+  drawCube(rightEarM, rightEarC);
+
+  // Set reference for left ear
+  let leftEarM = new Matrix4(bodyM).translate(0, 0.85, 0.6);
+  // Scale and draw leftEar
+  leftEarM.scale(0.15, 0.25, 0.3);
+  leftEarC = [1, 0.9, 0.1, 1];
+  drawCube(leftEarM, leftEarC);
+
+  // Set reference for nose
+  let noseM = new Matrix4(bodyM).translate(0.6, 0.83, 0);
+  // Scale and draw nose
+  noseM.scale(0.1, 0.25, 0.3);
+  noseC = [1, 0.8, 0, 1];
+  drawCube(noseM, noseC);
+
+  // Set reference for brim of hat
+  let brimM = new Matrix4(headM).translate(0.05, 0.55, -0.1);
+  // Scale and draw brim
+  brimM.scale(1.8, 0.1, 1.8);
+  brimC = [1, 0, 0.5, 1];
+  drawCube(brimM, brimC);
+
+  // Set reference for hat
+  let hatM = new Matrix4(headM).translate(0, 0.9, -0.1);
+  // Scale and draw hat
+  hatM.scale(1.1, 0.7, 1.1);
+  hatC = [1, 0, 0.5, 1];
+  drawCube(hatM, hatC);
+
+
   // Rotate and translate right leg
   let rightUpperLegC = [1, 1, 0, 1];
   rightUpperLegM.rotate( g_upperRightLegAngle, 0, 0, 1);
   rightUpperLegM.translate(0.0, -0.1, 0.01);
 
   // Rotate and translate left leg
-  let leftUpperLegC = [1, 1, 0, 1];
-  leftUpperLegM.rotate( -g_upperLeftLegAngle, 0, 0, 1);
+  let leftUpperLegC = [1*0.9, 1*0.9, 0, 1];
+  leftUpperLegM.rotate( g_upperLeftLegAngle, 0, 0, 1);
   leftUpperLegM.translate(0.0, -0.1, -0.01);
 
   // Set reference for lower left and right legs
@@ -326,7 +430,7 @@ function renderScene() {
   /***
   // Draw left arm lower
   leftArmLowerM.translate(0.0, 0.65, 0.0);
-  leftArmLowerM.rotate(g_magentaAngle, 0, 0, 1);
+  leftArmLowerM.rotate(g_moveXPosition, 0, 0, 1);
   leftArmLowerM.scale(0.3, 0.3, 0.3);
   leftArmLowerM.translate(-0.5, 0, -0.001); // Last value is to remove z-fight flicker
   leftArmLowerC = [1, 0, 1, 1];
