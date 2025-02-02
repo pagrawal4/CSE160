@@ -31,7 +31,9 @@ const TRIANGLE = 1;
 const CIRCLE = 2;
 
 // HTML Controls
-let g_animalGlobalRotation=5;
+let g_animalGlobalRotationX=0;
+let g_animalGlobalRotationY=5;
+let g_animalGlobalRotationZ=0;
 let g_upperRightLegAngle=0;
 let g_upperLeftLegAngle=0;
 let g_lowerRightLegAngle=0;
@@ -114,7 +116,9 @@ function connectVariablesToGLSL() {
 function addActionsForHtmlUI() {
 
   // Camera angle slider events
-  document.getElementById("cameraAngle").addEventListener("mousemove", function() { g_animalGlobalRotation = this.value; renderScene();});
+  document.getElementById("cameraAngleX").addEventListener("mousemove", function() { g_animalGlobalRotationX = this.value; renderScene();});
+  document.getElementById("cameraAngleY").addEventListener("mousemove", function() { g_animalGlobalRotationY = this.value; renderScene();});
+  document.getElementById("cameraAngleZ").addEventListener("mousemove", function() { g_animalGlobalRotationZ = this.value; renderScene();});
 
   // Upper leg slider events
   document.getElementById("upperRightLegSlide").addEventListener("mousemove", function() { g_upperRightLegAngle = this.value; renderScene();});
@@ -212,7 +216,9 @@ function tick() {
 }
 
 function resetState() {
-  g_animalGlobalRotation = 5;
+  g_animalGlobalRotationX = 0;
+  g_animalGlobalRotationY = 5;
+  g_animalGlobalRotationZ = 0;
   g_upperRightLegAngle = 0;
   g_upperLeftLegAngle = 0;
   g_lowerRightLegAngle = 0;
@@ -233,7 +239,6 @@ function updateAnimationAngles() {
 
   if (g_tickNum == -1) {
     //resetState();
-    //g_animalGlobalRotation=5;
     g_moveXPosition += 60;
     g_moveYPosition += 3;
   }
@@ -307,7 +312,11 @@ function renderScene() {
   var startTime = performance.now()
 
   // Connect the matrix to u_ModelMatrix attribute
-  var globalRotMat = new Matrix4().rotate(g_animalGlobalRotation, 0, 1, 0);
+  var globalRotMat = new Matrix4();
+  globalRotMat.rotate(g_animalGlobalRotationZ, 0, 0, 1);
+  globalRotMat.rotate(g_animalGlobalRotationY, 0, 1, 0);
+  globalRotMat.rotate(g_animalGlobalRotationX, 1, 0, 0);
+
   gl.uniformMatrix4fv(u_GlobalRotation, false, globalRotMat.elements);
 
   // Clear canvas
