@@ -303,12 +303,16 @@ function renderScene() {
   // Clear canvas
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+  // V IMP: The transformation that is specified first is the last transformation on the points!!!
+
+  // FLOOR
+
   // Draw the floor
   let floorM = new Matrix4().translate(0, -0.95, 0).scale(1.9, 0.05, 1.9);
   drawCube(floorM, [1, 0, 1, 1]);
 
-  // Find coordinate frame for body to be used by leg
-  // V V IMP: The transformation that is specified first is the last transformation on the points!!!
+  // BODY
+
   let bodyM = new Matrix4();
   bodyM.translate(g_moveXPosition/100, g_moveYPosition/100, 0);// -0.1, -0.25, -0.15);
 
@@ -321,55 +325,61 @@ function renderScene() {
   bodyC = [1, 0, 0, 1];
   drawCube(bodyM, bodyC);
 
+  // HEAD and HAT
+
   // Set reference for head
-  let headM = new Matrix4(bodyM).translate(0.1, 0.85, 0);
+  let headM = new Matrix4(bodyM).translate(0, 0.85, 0);
   // Scale and draw head
   headM.scale(1, 0.5, 0.9);
-  headC = [0.72, 0.62, 0.39];
+  headC = [1, 1, 1, 1];
   drawCube(headM, headC);
 
   // Set reference for neck
   let neckM = new Matrix4(bodyM).translate(0, 0.75, 0);
   // Scale and draw neck
   neckM.scale(0.6, 0.5, 0.6);
-  neckC = [150, 75, 0, 1];
+  neckC = [1, 1, 0, 1];
   drawCube(neckM, neckC);
 
   // Set reference for right ear
-  let rightEarM = new Matrix4(bodyM).translate(0, 0.85, -0.6);
+  let rightEarM = new Matrix4(bodyM).translate(0, 0.85, -0.5);
   // Scale and draw rightEar
-  rightEarM.scale(0.15, 0.25, 0.3);
+  rightEarM.scale(0.15, 0.25, 0.2);
   rightEarC = [1, 0.9, 0.1, 1];
   drawCube(rightEarM, rightEarC);
 
   // Set reference for left ear
-  let leftEarM = new Matrix4(bodyM).translate(0, 0.85, 0.6);
+  let leftEarM = new Matrix4(bodyM).translate(0, 0.85, 0.5);
   // Scale and draw leftEar
-  leftEarM.scale(0.15, 0.25, 0.3);
+  leftEarM.scale(0.15, 0.25, 0.2);
   leftEarC = [1, 0.9, 0.1, 1];
   drawCube(leftEarM, leftEarC);
 
   // Set reference for nose
-  let noseM = new Matrix4(bodyM).translate(0.6, 0.83, 0);
+  let noseM = new Matrix4(bodyM).translate(0.5, 0.85, 0);
+  noseM.rotate(25, 0, 0, 1);
   // Scale and draw nose
-  noseM.scale(0.1, 0.25, 0.3);
+  noseM.scale(0.15, 0.25, 0.25);
   noseC = [1, 0.8, 0, 1];
   drawCube(noseM, noseC);
 
+  // HAT
+
   // Set reference for brim of hat
-  let brimM = new Matrix4(headM).translate(0.05, 0.55, -0.1);
+  let brimM = new Matrix4(headM).translate(0, 0.55, 0);
   // Scale and draw brim
   brimM.scale(1.8, 0.1, 1.8);
-  brimC = [1, 0, 0.5, 1];
+  brimC = [1, 0, 0, 1];
   drawCube(brimM, brimC);
 
   // Set reference for hat
-  let hatM = new Matrix4(headM).translate(0, 0.9, -0.1);
+  let hatM = new Matrix4(headM).translate(0, 0.9, 0);
   // Scale and draw hat
   hatM.scale(1.1, 0.7, 1.1);
   hatC = [1, 0, 0.5, 1];
   drawCube(hatM, hatC);
 
+  // LEGS
 
   // Rotate and translate right leg
   let rightUpperLegC = [1, 1, 0, 1];
