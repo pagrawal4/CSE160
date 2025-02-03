@@ -175,21 +175,20 @@ function main() {
   // canvas.onmousemove = click;
   //canvas.onmousemove = function(ev) { if(ev.buttons == 1) {}
 
-  /*
   var lastX = 0;
   var lastY = 0;
   canvas.onmousemove = function(ev) {
     let [x, y] = convertEventCoordinatesToGL(ev);
 
     if(ev.buttons == 1) {
-      g_animalGlobalRotationX -= (x - lastX) * 180;
-      g_animalGlobalRotationY -= (y - lastY) * 180;
-      renderScene();
+      // Moving parallel to x-axis should rotate along y-aix
+      // and vice versa to look natural
+      g_animalGlobalRotationY -= (x - lastX) * 180;
+      g_animalGlobalRotationX -= (y - lastY) * 180;
     }
     lastX = x;
     lastY = y;
   }
-  */
 
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
