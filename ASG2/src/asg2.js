@@ -219,7 +219,7 @@ function tick() {
 
   // Update Animation Angles
   if (g_animationOn) {
-    updateAnimationAngles();
+    updateAnimationAnglesNormalWalk();
   }
 
   // Draw everything
@@ -227,6 +227,26 @@ function tick() {
 
   // Tell the browser to call me again
   requestAnimationFrame(tick);
+}
+
+function updateAnimationAnglesNormalWalk() {
+  if (g_tickNum == -1) {
+    g_moveXPosition += -60;
+    g_moveYPosition += 2.5*Math.sin(g_time);
+  }
+  g_upperRightLegAngle = 45*Math.sin(g_time);
+  g_upperLeftLegAngle = -45*Math.sin(g_time);
+  g_lowerRightLegAngle = -Math.abs((20*Math.sin(g_time)));
+  g_lowerLeftLegAngle = -Math.abs((20*Math.sin(g_time)));
+
+  g_upperRightArmAngle = -45*Math.sin(g_time);
+  g_upperLeftArmAngle = 45*Math.sin(g_time);
+  g_lowerRightArmAngle = Math.abs((20*Math.sin(g_time)));
+  g_lowerLeftArmAngle = Math.abs((20*Math.sin(g_time)));
+
+  g_moveXPosition += 0.5;
+  if (g_moveXPosition > 85) g_moveXPosition = -60;
+  g_tickNum++;
 }
 
 function updateAnimationAngles() {
