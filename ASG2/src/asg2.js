@@ -47,7 +47,7 @@ let g_leftFeetAngle=0;
 let g_rightHandAngle=0;
 let g_leftHandAngle=0;
 let g_moveXPosition=0;
-let g_moveYPosition=0;
+let g_moveYPosition=8;
 let g_animationOn=false;
 
 // Performance
@@ -219,7 +219,7 @@ function tick() {
 
   // Update Animation Angles
   if (g_animationOn) {
-    updateAnimationAnglesNormalWalk();
+    updateAnimationAngles();
   }
 
   // Draw everything
@@ -232,10 +232,10 @@ function tick() {
 function updateAnimationAnglesNormalWalk() {
   if (g_tickNum == -1) {
     g_moveXPosition += -60;
-    g_moveYPosition += 2.5*Math.sin(g_time);
+    g_moveYPosition += 1*Math.sin(g_time);
   }
-  g_upperRightLegAngle = 45*Math.sin(g_time);
-  g_upperLeftLegAngle = -45*Math.sin(g_time);
+  g_upperRightLegAngle = 35*Math.sin(g_time) + 5;
+  g_upperLeftLegAngle = -35*Math.sin(g_time) + 5;
   g_lowerRightLegAngle = -Math.abs((20*Math.sin(g_time)));
   g_lowerLeftLegAngle = -Math.abs((20*Math.sin(g_time)));
 
@@ -250,74 +250,23 @@ function updateAnimationAnglesNormalWalk() {
 }
 
 function updateAnimationAngles() {
-
   if (g_tickNum == -1) {
     g_moveXPosition += 60;
-    g_moveYPosition += 3;
+    g_moveYPosition += 2*Math.sin(g_time);
   }
-  else if ((g_tickNum/10) % 6 == 0) {  // frame 0
-    // g_upperRightLegAngle = (45*Math.sin(g_time));
-    g_moveXPosition += -5;
-    if (g_moveXPosition < -85) g_moveXPosition = 60;
-    g_moveYPosition = 3;
-    g_upperRightLegAngle = 50;
-    g_upperLeftLegAngle = 0;
-    g_lowerRightLegAngle = -45;
-    g_lowerLeftLegAngle = 0;
-    g_rightFeetAngle = -50;
-    g_leftFeetAngle = 0;
-  } 
-  else if ((g_tickNum/10) % 6  == 1) {   // frame 1
-    // frame 1
-    g_moveXPosition += -5;
-    if (g_moveXPosition < -85) g_moveXPosition = 60;
-    g_moveYPosition += 0
-    g_upperLeftLegAngle = -25;
-  } 
-  else if ((g_tickNum/10) % 6  == 2) {   // frame 2
-    // frame 1
-    g_moveXPosition += -5;
-    if (g_moveXPosition < -85) g_moveXPosition = 60;
-    g_moveYPosition += 5
-    g_upperRightLegAngle = 20;
-    g_upperLeftLegAngle = 10;
-    g_lowerRightLegAngle = -20;
-    g_lowerLeftLegAngle = -30;
-    g_rightFeetAngle = -25;
-    g_leftFeetAngle = -20;
-  } 
- else if ((g_tickNum/10) % 6  == 3) {  // frame 2
-    g_moveXPosition += -5;
-    if (g_moveXPosition < -85) g_moveXPosition = 60;
-    g_moveYPosition -= 5
-    g_upperRightLegAngle = 0;
-    g_upperLeftLegAngle = 50;
-    g_lowerRightLegAngle = 0;
-    g_lowerLeftLegAngle = -45;
-    g_rightFeetAngle = 0;
-    g_leftFeetAngle = -50;
-  } 
-  else if ((g_tickNum/10) % 6  == 4) {   // frame 1
-    // frame 1
-    g_moveXPosition += -5;
-    if (g_moveXPosition < -85) g_moveXPosition = 60;
-    g_moveYPosition += 0
-    g_upperRightLegAngle = -25;
-  } 
-  else if ((g_tickNum/10) % 6  == 5) {   // frame 2
-    // frame 1
-    g_moveXPosition += -5;
-    if (g_moveXPosition < -85) g_moveXPosition = 60;
-    g_moveYPosition += 5
-    g_upperLeftLegAngle = 20;
-    g_upperRightLegAngle = 10;
-    g_lowerLeftLegAngle = -20;
-    g_lowerRightLegAngle = -30;
-    g_leftFeetAngle = -25;
-    g_rightFeetAngle = -20;
-  } 
-  g_tickNum++;
+  g_upperRightLegAngle = 20*Math.sin(g_time)-5;
+  g_upperLeftLegAngle = -20*Math.sin(g_time)-5;
+  g_lowerRightLegAngle = -Math.abs((20*Math.sin(g_time)));
+  g_lowerLeftLegAngle = -Math.abs((20*Math.sin(g_time)));
 
+  g_upperLeftArmAngle = 90;
+
+  g_rightFeetAngle = -15*Math.sin(g_time);
+  g_leftFeetAngle = 15*Math.sin(g_time);
+
+  g_moveXPosition -= 0.5;
+  if (g_moveXPosition < -85) g_moveXPosition = 60;
+  g_tickNum++;
 }
 
 function renderScene() {
@@ -461,7 +410,7 @@ function renderScene() {
   // Scale and translate left feet
   let rightFeetC = [0, 0, 1, 1];
   rightFeetM.rotate( g_rightFeetAngle, 0, 0, 1);
-  rightFeetM.translate(0.1, 0.05, 0);
+  rightFeetM.translate(0.1, 0.0, 0);
 
   rightFeetM.scale(0.25, 0.11, 0.101);
   drawCube(rightFeetM, rightFeetC);
@@ -492,7 +441,7 @@ function renderScene() {
   // Scale and translate right feet
   let leftFeetC = [0, 0, 1, 1];
   leftFeetM.rotate( g_leftFeetAngle, 0, 0, 1);
-  leftFeetM.translate(0.1, 0.05, 0);
+  leftFeetM.translate(0.1, 0.0, 0);
 
   leftFeetM.scale(0.25, 0.11, 0.101);
   drawCube(leftFeetM, leftFeetC);
