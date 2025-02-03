@@ -151,13 +151,9 @@ function addActionsForHtmlUI() {
   // Hand slider events
   document.getElementById("leftHandSlide").addEventListener("mousemove", function() { g_leftHandAngle = this.value; renderScene();});
 
-  // Camera moveX slider events
-  document.getElementById("moveXSlide").addEventListener("mousemove", function() { g_moveXPosition = this.value; renderScene();});
-  // Camera moveY slider events
-  document.getElementById("moveYSlide").addEventListener("mousemove", function() { g_moveYPosition = this.value; renderScene();});
-
-  document.getElementById("animationOnOff").onclick = function() {g_animationOn = !g_animationOn};
-  document.getElementById("altAnimationOnOff").onclick = function() {g_altAnimationOn = !g_altAnimationOn};
+  document.getElementById("animationOnOff").onclick = function() {g_animationOn = !g_animationOn; if (g_animationOn) {g_altAnimationOn = false}};
+  document.getElementById("altAnimationOnOff").onclick = function() {g_altAnimationOn = !g_altAnimationOn; if (g_altAnimationOn) {g_animationOn = false;}
+  };
 
   // Handle moving camera mouse event
   var lastX = 0;

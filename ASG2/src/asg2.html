@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>CSE160 Assignment 2</title>
+    <title>CSE160 Assignment 2: Moonwalking Humanoid Robot</title>
   </head>
 
   <body onload="main()">
@@ -10,7 +10,19 @@
     <br>
     pagrawa4@ucsc.edu
     <br><br>
-    Notes to Grader: None
+    Notes to Grader:
+    <ul>
+      <li>Viewing angle can be changed with x, y, z sliders or by moving mouse in down mode on canvas</li>
+      <li>Each leg and arm of the robot has 3 joints each movable by a corresponding slider</li>
+      <li>A triangular prism (alternate to cube) has been used for the nose</li>
+      <li>Normal animation (humanoid walk) uses all joints except the feet joints</li>
+      <li>Alternate animation (moonwalk) uses the feet joints</li>
+      <li>Alternate animation can be done with its own button or by shift-click on canvas</li>
+      <li>The animation buttons can be toggled on and off</li>
+    </ul>
+
+    </p>
+ 
     <br><br>
 
     <canvas id="webgl" width="400" height="400">
@@ -45,11 +57,6 @@
     Left Arm: Upper <input type="range" min="-45" max="180" value="-45" class="slider" id="upperLeftArmSlide">
               Lower <input type="range" min="0" max="90" value="45" class="slider" id="lowerLeftArmSlide">
               Hand <input type="range" min="-45" max="45" value="0" class="slider" id="leftHandSlide">
-    </p>
-
-    <p>
-    Move Left/Right <input type="range" min="-85" max="85" value="0" class="slider" id="moveXSlide">
-    Move Up/Down <input type="range" min="0" max="30" value="8" class="slider" id="moveYSlide">
     </p>
 
     <p id="performance">  </p>
