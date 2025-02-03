@@ -6,50 +6,64 @@ class Cube {
         // this.size = 5.0;
         // this.segments = 10;
         this.matrix = new Matrix4(); // default identity
+
+        this.vertexBuffer = null;
+        this.vertices = new Float32Array([
+            // Right face
+            0.5,-0.5, 0.5,   0.5,-0.5,-0.5,   0.5, 0.5,-0.5,
+            0.5,-0.5, 0.5,   0.5, 0.5,-0.5,   0.5, 0.5, 0.5,
+            // Left face
+            -0.5,-0.5, 0.5,  -0.5,-0.5,-0.5,  -0.5, 0.5,-0.5,
+            -0.5,-0.5, 0.5,  -0.5, 0.5,-0.5,  -0.5, 0.5, 0.5,
+            // Top face
+            0.5, 0.5,-0.5,  -0.5, 0.5,-0.5,  -0.5, 0.5, 0.5,
+            0.5, 0.5,-0.5,   0.5, 0.5, 0.5,  -0.5, 0.5, 0.5,
+            // Bottom face
+            0.5,-0.5,-0.5,  -0.5,-0.5,-0.5,  -0.5,-0.5, 0.5,
+            0.5,-0.5,-0.5,   0.5,-0.5, 0.5,  -0.5,-0.5, 0.5,
+            // Front face
+            0.5,-0.5,-0.5,  -0.5,-0.5,-0.5,  -0.5, 0.5,-0.5,
+            0.5,-0.5,-0.5,  -0.5, 0.5,-0.5,   0.5, 0.5,-0.5,
+            // Back face
+            0.5,-0.5, 0.5,  -0.5,-0.5, 0.5,  -0.5, 0.5, 0.5,
+            0.5,-0.5, 0.5,  -0.5, 0.5, 0.5,   0.5, 0.5, 0.5
+        ]);
     }
 
     render() {
-        // var xy = this.position;
         var rgba = this.color;
-        // var size = this.size;
-    
-
-        // Pass the color of a point to u_FragColor variable
-        gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
 
         // Pass the matrix to u_ModelMatrix attribute
         gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);
 	
-        // Right face (red)
-        //gl.uniform4f(u_FragColor, 1,0,0,1);
-        drawTriangle3D( [ 0.5,-0.5, 0.5,   0.5,-0.5,-0.5,   0.5, 0.5,-0.5 ]);
-        drawTriangle3D( [ 0.5,-0.5, 0.5,   0.5, 0.5,-0.5,   0.5, 0.5, 0.5 ]);
+        // Create a buffer object
+        if (this.buffer == null) {
+            this.buffer = gl.createBuffer();
+            if (!this.buffer) {
+                console.log('Failed to create the buffer object');
+                return -1;
+            }
+        }
+        // Bind the buffer object to target
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+        // Write date into the buffer object
+        // DYNAMIC chosen for better performance
+        gl.bufferData(gl.ARRAY_BUFFER, this.vertices, gl.DYNAMIC_DRAW);
 
-        // Left face (cyan)
-        //gl.uniform4f(u_FragColor, 0,1,1,1);
-        drawTriangle3D( [-0.5,-0.5, 0.5,  -0.5,-0.5,-0.5,  -0.5, 0.5,-0.5 ]);
-        drawTriangle3D( [-0.5,-0.5, 0.5,  -0.5, 0.5,-0.5,  -0.5, 0.5, 0.5 ]);
+        // Assign the buffer object to a_Position variable
+        gl.vertexAttribPointer(a_Position, 3, gl.FLOAT, false, 0, 0);
 
-        // Top face (green)
-        //gl.uniform4f(u_FragColor, 0,1,0,1);
-        drawTriangle3D( [ 0.5, 0.5,-0.5,  -0.5, 0.5,-0.5,  -0.5, 0.5, 0.5 ]);
-        drawTriangle3D( [ 0.5, 0.5,-0.5,   0.5, 0.5, 0.5,  -0.5, 0.5, 0.5 ]);
+        // Enable the assignment to a_Position variable
+        gl.enableVertexAttribArray(a_Position);
 
-        // Bottom face (purple)
-        //gl.uniform4f(u_FragColor, 1,0,1,1);
-        drawTriangle3D( [ 0.5,-0.5,-0.5,  -0.5,-0.5,-0.5,  -0.5,-0.5, 0.5 ]);
-        drawTriangle3D( [ 0.5,-0.5,-0.5,   0.5,-0.5, 0.5,  -0.5,-0.5, 0.5 ]);
+        // Pass the color of a point to u_FragColor variable
+        // Draw 4 faces with actual rgb
+        gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
+        gl.drawArrays(gl.TRIANGLES, 0, 24);
 
-        // Front face (blue)
-        //gl.uniform4f(u_FragColor, 0,0,1,1);
+        // Draw other two with reduced values of rgb to show difference
         gl.uniform4f(u_FragColor, rgba[0]*.9,  rgba[1]*.9, rgba[2]*.9, rgba[3]);
-        drawTriangle3D( [ 0.5,-0.5,-0.5,  -0.5,-0.5,-0.5,  -0.5, 0.5,-0.5 ]);
-        drawTriangle3D( [ 0.5,-0.5,-0.5,  -0.5, 0.5,-0.5,   0.5, 0.5,-0.5 ]);
-
-        // Back face (yellow)
-        //gl.uniform4f(u_FragColor, 1,1,0,1);
-        drawTriangle3D( [ 0.5,-0.5, 0.5,  -0.5,-0.5, 0.5,  -0.5, 0.5, 0.5 ]);
-        drawTriangle3D( [ 0.5,-0.5, 0.5,  -0.5, 0.5, 0.5,   0.5, 0.5, 0.5 ]);
+        gl.drawArrays(gl.TRIANGLES, 24, 12);
     }
 }
 

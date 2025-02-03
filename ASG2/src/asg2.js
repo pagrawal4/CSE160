@@ -32,7 +32,7 @@ const CIRCLE = 2;
 
 // HTML Controls
 let g_animalGlobalRotationX=0;
-let g_animalGlobalRotationY=5;
+let g_animalGlobalRotationY=90;
 let g_animalGlobalRotationZ=0;
 let g_upperRightLegAngle=0;
 let g_upperLeftLegAngle=0;
@@ -155,8 +155,7 @@ function addActionsForHtmlUI() {
   // Camera moveY slider events
   document.getElementById("moveYSlide").addEventListener("mousemove", function() { g_moveYPosition = this.value; renderScene();});
 
-  document.getElementById("animationOnButton").onclick = function() {g_animationOn = true};
-  document.getElementById("animationOffButton").onclick = function() {g_animationOn = false};
+  document.getElementById("animationOnOff").onclick = function() {g_animationOn = !g_animationOn};
 
 }
 
@@ -174,7 +173,23 @@ function main() {
   // Register function (event handler) to be called on a mouse press
   //canvas.onmousedown = tick;
   // canvas.onmousemove = click;
-  //canvas.onmousemove = function(ev) { if(ev.buttons == 1) {tick()}}
+  //canvas.onmousemove = function(ev) { if(ev.buttons == 1) {handleViewing()}}
+
+  /*
+  var lastX = 0;
+  var lastY = 0;
+  canvas.onmousemove = function(ev) {
+    var x = ev.clientX;
+    var y = ev.clientY;
+    if (ev.buttons == 1) {
+      //g_animalGlobalRotationX -= (x - lastX)/4;
+      g_animalGlobalRotationY -= (y - lastY);
+      renderScene();
+    }
+    lastX = x;
+    lastY = y;
+  };
+  */
 
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -215,30 +230,10 @@ function tick() {
   requestAnimationFrame(tick);
 }
 
-function resetState() {
-  g_animalGlobalRotationX = 0;
-  g_animalGlobalRotationY = 5;
-  g_animalGlobalRotationZ = 0;
-  g_upperRightLegAngle = 0;
-  g_upperLeftLegAngle = 0;
-  g_lowerRightLegAngle = 0;
-  g_lowerLeftLegAngle = 0;
-  g_upperRightArmAngle = -45;
-  g_upperLeftArmAngle = -45;
-  g_lowerRightArmAngle = 90;
-  g_lowerLeftArmAngle = 90;
-  g_rightFeetAngle = 0;
-  g_leftFeetAngle = 0;
-  g_rightHandAngle = 0;
-  g_leftHandAngle = 0;
-  g_moveXPosition = 0;
-  g_moveYPosition = 0;
-}
-
 function updateAnimationAngles() {
 
   if (g_tickNum == -1) {
-    //resetState();
+    g_animalGlobalRotationY = 0;
     g_moveXPosition += 60;
     g_moveYPosition += 3;
   }
@@ -338,7 +333,7 @@ function renderScene() {
   //baseBodyM.rotate(g_time*10, 0, 1, 0);
 
   // Scale and draw body
-  let bodyM = new Matrix4(baseBodyM).scale(0.3, 0.5, 0.3);
+  let bodyM = new Matrix4(baseBodyM).scale(0.35, 0.5, 0.3);
   let bodyC = [1, 0, 0, 1];
   drawCube(bodyM, bodyC);
 
@@ -350,7 +345,7 @@ function renderScene() {
   // Scale and draw head
   let headM = new Matrix4(baseHeadM);
   headM.scale(0.3, 0.25, 0.27);
-  let headC = [0, 1, 1, 1];
+  let headC = [1, 1, 1, 1];
   drawCube(headM, headC);
 
   // Set reference for neck
@@ -395,7 +390,7 @@ function renderScene() {
   let hatM = new Matrix4(baseHeadM).translate(0, 0.275, 0);
   // Scale and draw hat
   hatM.scale(0.3, 0.20, 0.3);
-  let hatC = [1, 0, 0.5, 1];
+  let hatC = [1, 0, 0, 1];
   drawCube(hatM, hatC);
 
   // RIGHT LEG
@@ -403,7 +398,7 @@ function renderScene() {
   // Set reference for upper right leg
   let rightUpperLegM = new Matrix4(baseBodyM).translate(0, -0.2, -0.1);
   // Rotate and translate right leg
-  let rightUpperLegC = [1, 1, 0, 1];
+  let rightUpperLegC = [0, 1, 1, 1];
   rightUpperLegM.rotate( g_upperRightLegAngle, 0, 0, 1);
   rightUpperLegM.translate(0.0, -0.1, 0.01);
 
@@ -412,7 +407,7 @@ function renderScene() {
   rightUpperLegM.scale(0.12, 0.5, 0.11);
 
   // Scale and translate left leg
-  let rightLowerLegC = [1, 1, 0, 1];
+  let rightLowerLegC = [0, 1, 1, 1];
   rightLowerLegM.rotate( g_lowerRightLegAngle, 0, 0, 1);
   rightLowerLegM.translate(-0.06, -0.2, 0);
 
@@ -435,7 +430,7 @@ function renderScene() {
 
   let leftUpperLegM = new Matrix4(baseBodyM).translate(0, -0.2, 0.1);
   // Rotate and translate left leg
-  let leftUpperLegC = [1*0.9, 1*0.9, 0, 1];
+  let leftUpperLegC = [0, 1*0.9, 1*0.9, 1];
   leftUpperLegM.rotate( g_upperLeftLegAngle, 0, 0, 1);
   leftUpperLegM.translate(0.0, -0.1, -0.01);
 
@@ -443,7 +438,7 @@ function renderScene() {
   leftUpperLegM.scale(0.12, 0.5, 0.11);
 
   // Scale and translate right leg
-  let leftLowerLegC = [1, 1, 0, 1];
+  let leftLowerLegC = [0, 1, 1, 1];
   leftLowerLegM.rotate( g_lowerLeftLegAngle, 0, 0, 1);
   leftLowerLegM.translate(-0.06, -0.2, 0);
 
@@ -526,14 +521,13 @@ function renderScene() {
   let leftHandC = [1, 1, 1, 1];
   leftHandM.rotate(g_leftHandAngle, 0, 0, 1);
   //leftHandM.translate(0.1, 0.05, 0);
-
   leftHandM.scale(0.09, 0.09, 0.09);
   drawCube(leftHandM, leftHandC);
 
   // Use the start and current time to record duration (in ms)
   var duration = performance.now() - startTime;
-  //sendTextToUI("Points = " + len + ", time = " + Math.floor(duration*1000) + " us" /*+ ", fps: " + Math.floor(10000/duration)/10*/, "numdot");
-  sendTextToUI("time = " + Math.floor(duration*1000) + " us" + ", fps: " + Math.floor(10000/duration)/10, "numdot");
+  sendTextToUI("ms: " + Math.floor(duration) + ", fps: " + Math.floor(10000/duration)/10, "performance");
+
 
 }
 

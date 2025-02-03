@@ -18,14 +18,13 @@
     </canvas>
 
     <p>
-      <button type="button" id="animationOnButton">Animation ON</button> <button type="button" id="animationOffButton">Animation OFF</button>
+    <button type="button" id="animationOnOff">Animation ON</button>
     </p>
 
     <p>
-    Camera Angle: X <input type="range" min="-90" max="90" value="5" class="slider" id="cameraAngleX">
-                  Y <input type="range" min="-90" max="90" value="5" class="slider" id="cameraAngleY">
-                  Z <input type="range" min="-90" max="90" value="5" class="slider" id="cameraAngleZ">
-
+    Camera Angle: Y <input type="range" min="-180" max="180" value="90" class="slider" id="cameraAngleY">
+                  Z <input type="range" min="-180" max="180" value="0" class="slider" id="cameraAngleZ">
+                  X <input type="range" min="-180" max="180" value="0" class="slider" id="cameraAngleX">
     <p>
     Right Leg: Upper <input type="range" min="-45" max="45" value="0" class="slider" id="upperRightLegSlide">
                Lower <input type="range" min="-90" max="0" value="0" class="slider" id="lowerRightLegSlide">
@@ -37,13 +36,13 @@
     </p>
 
     <p>
-    Right Arm: Upper <input type="range" min="-45" max="120" value="-45" class="slider" id="upperRightArmSlide">
+    Right Arm: Upper <input type="range" min="-45" max="180" value="-45" class="slider" id="upperRightArmSlide">
                Lower <input type="range" min="0" max="90" value="45" class="slider" id="lowerRightArmSlide">
                Hand <input type="range" min="-45" max="45" value="0" class="slider" id="rightHandSlide">
 
     <p>
-    Left Arm: Upper <input type="range" min="-45" max="120" value="90" class="slider" id="upperLeftArmSlide">
-              Lower <input type="range" min="0" max="90" value="90" class="slider" id="lowerLeftArmSlide">
+    Left Arm: Upper <input type="range" min="-45" max="180" value="-45" class="slider" id="upperLeftArmSlide">
+              Lower <input type="range" min="0" max="90" value="45" class="slider" id="lowerLeftArmSlide">
               Hand <input type="range" min="-45" max="45" value="0" class="slider" id="leftHandSlide">
     </p>
 
@@ -51,7 +50,7 @@
     Move Left/Right <input type="range" min="-85" max="85" value="0" class="slider" id="moveXSlide">  Move Up/Down <input type="range" min="0" max="30" value="0" class="slider" id="moveYSlide">
     </p>
 
-    <p id="numdot">  </p>
+    <p id="performance">  </p>
 
     <script src="../lib/webgl-utils.js"></script>
     <script src="../lib/webgl-debug.js"></script>
