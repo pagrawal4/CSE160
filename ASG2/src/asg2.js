@@ -32,7 +32,7 @@ const CIRCLE = 2;
 
 // HTML Controls
 let g_animalGlobalRotationX=0;
-let g_animalGlobalRotationY=10;
+let g_animalGlobalRotationY=30;
 let g_animalGlobalRotationZ=0;
 let g_upperRightLegAngle=0;
 let g_upperLeftLegAngle=0;
@@ -173,22 +173,22 @@ function main() {
   // Register function (event handler) to be called on a mouse press
   //canvas.onmousedown = tick;
   // canvas.onmousemove = click;
-  //canvas.onmousemove = function(ev) { if(ev.buttons == 1) {handleViewing()}}
+  //canvas.onmousemove = function(ev) { if(ev.buttons == 1) {}
 
   /*
   var lastX = 0;
   var lastY = 0;
   canvas.onmousemove = function(ev) {
-    var x = ev.clientX;
-    var y = ev.clientY;
-    if (ev.buttons == 1) {
-      //g_animalGlobalRotationX -= (x - lastX)/4;
-      g_animalGlobalRotationY -= (y - lastY);
+    let [x, y] = convertEventCoordinatesToGL(ev);
+
+    if(ev.buttons == 1) {
+      g_animalGlobalRotationX -= (x - lastX) * 180;
+      g_animalGlobalRotationY -= (y - lastY) * 180;
       renderScene();
     }
     lastX = x;
     lastY = y;
-  };
+  }
   */
 
   // Specify the color for clearing <canvas>
@@ -322,7 +322,7 @@ function renderScene() {
   // FLOOR
 
   // Draw the floor
-  let floorM = new Matrix4().translate(0, -0.95, 0).scale(1.9, 0.05, 1.9);
+  let floorM = new Matrix4().translate(0, -0.95, 0).scale(1.5, 0.05, 1.5);
   drawCube(floorM, [1, 0, 1, 1]);
 
   // BODY
