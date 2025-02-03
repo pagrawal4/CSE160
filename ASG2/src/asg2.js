@@ -32,7 +32,7 @@ const CIRCLE = 2;
 
 // HTML Controls
 let g_animalGlobalRotationX=0;
-let g_animalGlobalRotationY=90;
+let g_animalGlobalRotationY=10;
 let g_animalGlobalRotationZ=0;
 let g_upperRightLegAngle=0;
 let g_upperLeftLegAngle=0;
@@ -233,7 +233,6 @@ function tick() {
 function updateAnimationAngles() {
 
   if (g_tickNum == -1) {
-    g_animalGlobalRotationY = 0;
     g_moveXPosition += 60;
     g_moveYPosition += 3;
   }
@@ -370,12 +369,34 @@ function renderScene() {
   drawCube(leftEarM, leftEarC);
 
   // Set reference for nose
-  let noseM = new Matrix4(baseHeadM).translate(0.15, 0, 0);
-  noseM.rotate(25, 0, 0, 1);
+  let noseM = new Matrix4(baseHeadM).translate(0.18, 0.04, 0);
+  //noseM.rotate(25, 0, 0, 1);
+  noseM.rotate(-90, 0, 1, 0);
   // Scale and draw nose
-  noseM.scale(0.045, 0.125, 0.075);
+  noseM.scale(0.05, 0.125, 0.075);
   let noseC = [1, 0.8, 0, 1];
-  drawCube(noseM, noseC);
+  drawTriangularPrism(noseM, noseC);
+
+  // Set reference for right eye
+  let rightEyeM = new Matrix4(baseHeadM).translate(0.15, 0.04, -0.08);
+  // Scale and draw rightEye
+  rightEyeM.scale(0.02, 0.08, 0.06);
+  let rightEyeC = [0, 0, 0, 1];
+  drawCube(rightEyeM, rightEyeC);
+
+  // Set reference for left eye
+  let leftEyeM = new Matrix4(baseHeadM).translate(0.15, 0.04, 0.08);
+  // Scale and draw leftEye
+  leftEyeM.scale(0.02, 0.08, 0.06);
+  let leftEyeC = [0, 0, 0, 1];
+  drawCube(leftEyeM, leftEyeC);
+
+  // Set reference for mouth
+  let mouthM = new Matrix4(baseHeadM).translate(0.15, -0.05, 0.00);
+  // Scale and draw mouth
+  mouthM.scale(0.08, 0.02, 0.15);
+  let mouthC = [0, 0, 0, 1];
+  drawCube(mouthM, mouthC);
 
   // HAT
 
