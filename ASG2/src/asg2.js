@@ -261,7 +261,7 @@ function updateAnimationAngles() {
 function updateAnimationAnglesMoonWalk() {
   if (g_tickNum == -1) {
     g_moveXPosition += 60;
-    g_moveYPosition += 2*Math.sin(g_time);
+    g_moveYPosition += 2; // *Math.sin(g_time);
   }
   g_upperRightLegAngle = 20*Math.sin(g_time)-5;
   g_upperLeftLegAngle = -20*Math.sin(g_time)-5;
@@ -273,8 +273,8 @@ function updateAnimationAnglesMoonWalk() {
   g_upperLeftArmAngle = 90;
   g_lowerLeftArmAngle=90;
 
-  g_rightFeetAngle = -15*Math.sin(g_time);
-  g_leftFeetAngle = 15*Math.sin(g_time);
+  g_rightFeetAngle = (g_upperRightLegAngle + g_lowerRightLegAngle);
+  g_leftFeetAngle = (g_upperLeftLegAngle + g_lowerLeftLegAngle);
 
   g_moveXPosition -= 0.5;
   if (g_moveXPosition < -85) g_moveXPosition = 60;
@@ -302,7 +302,7 @@ function renderScene() {
   // FLOOR
 
   // Draw the floor
-  let floorM = new Matrix4().translate(0, -0.95, 0).scale(1.5, 0.05, 1.5);
+  let floorM = new Matrix4().translate(0, -0.95, 0).scale(1.4, 0.05, 1.4);
   drawCube(floorM, [1, 0, 1, 1]);
 
   // BODY
