@@ -49,6 +49,7 @@ let g_leftHandAngle=0;
 let g_moveXPosition=0;
 let g_moveYPosition=8;
 let g_animationOn=false;
+let g_altAnimationOn=false;
 
 // Performance
 var g_startTime = performance.now()/1000.0;
@@ -156,6 +157,30 @@ function addActionsForHtmlUI() {
   document.getElementById("moveYSlide").addEventListener("mousemove", function() { g_moveYPosition = this.value; renderScene();});
 
   document.getElementById("animationOnOff").onclick = function() {g_animationOn = !g_animationOn};
+  document.getElementById("altAnimationOnOff").onclick = function() {g_altAnimationOn = !g_altAnimationOn};
+
+  // Handle moving camera mouse event
+  var lastX = 0;
+  var lastY = 0;
+  canvas.onmousemove = function(ev) {
+    let [x, y] = convertEventCoordinatesToGL(ev);
+
+    if(ev.buttons == 1) {
+      // Moving parallel to x-axis should rotate along y-aix
+      // and vice versa to look natural
+      g_animalGlobalRotationY -= (x - lastX) * 180;
+      g_animalGlobalRotationX -= (y - lastY) * 180;
+    }
+    lastX = x;
+    lastY = y;
+  }
+
+  // Handle shift click alt animation
+  canvas.onmousedown = function(ev) {
+    if (ev.shiftKey) {
+      g_altAnimationOn = !g_altAnimationOn;
+    }
+  }
 
 }
 
@@ -174,21 +199,6 @@ function main() {
   //canvas.onmousedown = tick;
   // canvas.onmousemove = click;
   //canvas.onmousemove = function(ev) { if(ev.buttons == 1) {}
-
-  var lastX = 0;
-  var lastY = 0;
-  canvas.onmousemove = function(ev) {
-    let [x, y] = convertEventCoordinatesToGL(ev);
-
-    if(ev.buttons == 1) {
-      // Moving parallel to x-axis should rotate along y-aix
-      // and vice versa to look natural
-      g_animalGlobalRotationY -= (x - lastX) * 180;
-      g_animalGlobalRotationX -= (y - lastY) * 180;
-    }
-    lastX = x;
-    lastY = y;
-  }
 
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -220,6 +230,9 @@ function tick() {
   // Update Animation Angles
   if (g_animationOn) {
     updateAnimationAngles();
+  } 
+  else if (g_altAnimationOn) {
+    updateAnimationAnglesMoonWalk();
   }
 
   // Draw everything
@@ -229,7 +242,7 @@ function tick() {
   requestAnimationFrame(tick);
 }
 
-function updateAnimationAnglesNormalWalk() {
+function updateAnimationAngles() {
   if (g_tickNum == -1) {
     g_moveXPosition += -60;
     g_moveYPosition += 1*Math.sin(g_time);
@@ -249,7 +262,7 @@ function updateAnimationAnglesNormalWalk() {
   g_tickNum++;
 }
 
-function updateAnimationAngles() {
+function updateAnimationAnglesMoonWalk() {
   if (g_tickNum == -1) {
     g_moveXPosition += 60;
     g_moveYPosition += 2*Math.sin(g_time);
@@ -259,7 +272,10 @@ function updateAnimationAngles() {
   g_lowerRightLegAngle = -Math.abs((20*Math.sin(g_time)));
   g_lowerLeftLegAngle = -Math.abs((20*Math.sin(g_time)));
 
+  g_upperRightArmAngle=-45;
+  g_lowerRightArmAngle=90;
   g_upperLeftArmAngle = 90;
+  g_lowerLeftArmAngle=90;
 
   g_rightFeetAngle = -15*Math.sin(g_time);
   g_leftFeetAngle = 15*Math.sin(g_time);
