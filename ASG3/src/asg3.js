@@ -26,7 +26,7 @@ var FSHADER_SOURCE = `
     // Passing R and G values and B and alpha auto set to 1
     gl_FragColor = vec4(v_UV,1.0,1.0);
     // look up color from the sample
-    //gl_FragColor = texture2D(u_Sampler0, v_UV);
+    gl_FragColor = texture2D(u_Sampler0, v_UV);
   }`
 
 // Global Variables
@@ -202,7 +202,6 @@ function addActionsForHtmlUI() {
 }
 
 // Following 2 functions for texture are from TexturedQuad.js
-/*
 function initTextures(gl, n) {
   var texture = gl.createTexture();   // Create a texture object
   if (!texture) {
@@ -249,7 +248,7 @@ function loadTexture(gl, n, texture, u_Sampler, image) {
   //gl.drawArrays(gl.TRIANGLE_STRIP, 0, n); // Draw the rectangle
   console.log("Finished loadTexture");
 }
-*/
+
 
 function main() {
   // Set up canvas and gl variables
@@ -266,7 +265,7 @@ function main() {
   // canvas.onmousemove = click;
   //canvas.onmousemove = function(ev) { if(ev.buttons == 1) {}
 
-  //initTextures(gl, 0);
+  initTextures(gl, 0);
 
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
