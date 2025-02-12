@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>CSE160 Assignment 2: Moonwalking Humanoid Robot</title>
+  </head>
+
+  <body onload="main()">
+    Pranjal Agrawal
+    <br>
+    pagrawa4@ucsc.edu
+    <br><br>
+    Notes to Grader:
+    <ul>
+    </ul>
+
+    </p>
+ 
+    <br><br>
+
+    <canvas id="webgl" width="400" height="400">
+    Please use a browser that supports "canvas"
+    </canvas>
+
+    <p>
+    <button type="button" id="animationOnOff">Animation ON/OFF</button>
+    <button type="button" id="altAnimationOnOff">Poke (Shift) Animation ON/OFF</button>
+    </p>
+
+    <p>
+    Camera Angle: Y <input type="range" min="-180" max="180" value="30" class="slider" id="cameraAngleY">
+                  Z <input type="range" min="-180" max="180" value="0" class="slider" id="cameraAngleZ">
+                  X <input type="range" min="-180" max="180" value="0" class="slider" id="cameraAngleX">
+    <p>
+    Right Leg: Upper <input type="range" min="-45" max="45" value="0" class="slider" id="upperRightLegSlide">
+               Lower <input type="range" min="-90" max="0" value="0" class="slider" id="lowerRightLegSlide">
+               Feet<input type="range" min="-70" max="0" value="0" class="slider" id="rightFeetSlide">
+    <p>
+    Left Leg: Upper <input type="range" min="-45" max="45" value="0" class="slider" id="upperLeftLegSlide">
+              Lower <input type="range" min="-90" max="0" value="0" class="slider" id="lowerLeftLegSlide">
+              Feet <input type="range" min="-70" max="0" value="0" class="slider" id="leftFeetSlide">
+    </p>
+
+    <p>
+    Right Arm: Upper <input type="range" min="-45" max="180" value="-45" class="slider" id="upperRightArmSlide">
+               Lower <input type="range" min="0" max="90" value="45" class="slider" id="lowerRightArmSlide">
+               Hand <input type="range" min="-45" max="45" value="0" class="slider" id="rightHandSlide">
+
+    <p>
+    Left Arm: Upper <input type="range" min="-45" max="180" value="-45" class="slider" id="upperLeftArmSlide">
+              Lower <input type="range" min="0" max="90" value="45" class="slider" id="lowerLeftArmSlide">
+              Hand <input type="range" min="-45" max="45" value="0" class="slider" id="leftHandSlide">
+    </p>
+
+    <p id="performance">  </p>
+
+    <script src="../lib/webgl-utils.js"></script>
+    <script src="../lib/webgl-debug.js"></script>
+    <script src="../lib/cuon-utils.js"></script>
+    <script src="../lib/cuon-matrix-cse160.js"></script>
+    <script src="point.js"></script>
+    <script src="triangular-prism.js"></script>
+    <script src="cube.js"></script>
+    <script src="asg3.js"></script>
+  </body>
+</html>
