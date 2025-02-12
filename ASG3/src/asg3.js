@@ -38,6 +38,7 @@ let a_UV;
 let u_FragColor;
 let u_ModelMatrix;
 let u_GlobalRotation; // For camera action
+let u_Sampler0;
 
 // Constants
 const POINT = 0;
@@ -129,6 +130,13 @@ function connectVariablesToGLSL() {
     return;
   }
 
+  // Get the storage location of u_Sampler0
+  u_Sampler0 = gl.getUniformLocation(gl.program, 'u_Sampler0');
+  if (!u_Sampler0) {
+    console.log('Failed to get the storage location of u_Sampler0');
+    return false;
+  }
+
   // Pass the Identity matrix to u_ModelMatrix attribute
   var identityM = new Matrix4();
   gl.uniformMatrix4fv(u_ModelMatrix, false, identityM.elements);
@@ -202,35 +210,30 @@ function addActionsForHtmlUI() {
 }
 
 // Following 2 functions for texture are from TexturedQuad.js
-function initTextures(gl, n) {
-  var texture = gl.createTexture();   // Create a texture object
-  if (!texture) {
-    console.log('Failed to create the texture object');
-    return false;
-  }
-
-  // Get the storage location of u_Sampler0
-  var u_Sampler0 = gl.getUniformLocation(gl.program, 'u_Sampler0');
-  if (!u_Sampler0) {
-    console.log('Failed to get the storage location of u_Sampler0');
-    return false;
-  }
+function initTextures(n) {
   var image = new Image();  // Create the image object
   if (!image) {
     console.log('Failed to create the image object');
     return false;
   }
   // Register the event handler to be called on loading an image
-  image.onload = function(){ loadTexture(gl, n, texture, u_Sampler0, image); };
+  image.onload = function(){ sendImageToTexture0(image); };
   // Tell the browser to load an image
   image.src = '../textures/block.jpg';
 
+  // Add more texture loading here if needed
   return true;
 }
 
-function loadTexture(gl, n, texture, u_Sampler, image) {
+function sendImageToTexture0(image) {
+  var texture = gl.createTexture();   // Create a texture object
+  if (!texture) {
+    console.log('Failed to create the texture object');
+    return false;
+  }
+
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
-  // Enable texture unit0
+  // Enable texture unit0. Can have 8 texture units
   gl.activeTexture(gl.TEXTURE0);
   // Bind the texture object to the target
   gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -241,7 +244,7 @@ function loadTexture(gl, n, texture, u_Sampler, image) {
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
   
   // Set the texture unit 0 to the sampler
-  gl.uniform1i(u_Sampler, 0);
+  gl.uniform1i(u_Sampler0, 0);
   
   //gl.clear(gl.COLOR_BUFFER_BIT);   // Clear <canvas>
 
