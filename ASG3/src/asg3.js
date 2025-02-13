@@ -395,8 +395,19 @@ function renderScene() {
   // FLOOR
 
   // Draw the floor
-    let floorM = new Matrix4().scale(0.5,0.5,0.5);
-  drawCube(floorM, [1, 0, 1, 1]);
+  //  let floorM = new Matrix4().scale(0.5,0.5,0.5);
+  // drawCube(floorM, [1, 0, 1, 1]);
+
+  let cube1 = new Cube();
+  cube1.color = [1.0,0.0,0.0,1.0];
+  cube1.matrix.setScale(0.5,0.5,0.5).translate(0,0.5,0);
+  cube1.textureNum = -1;
+  cube1.render();
+
+  let cube2 = new Cube();
+  cube2.matrix.setScale(0.5,0.5,0.5).translate(0,-0.5,0);
+  cube2.textureNum = 0;
+  cube2.render();
 
 
   // Use the start and current time to record duration (in ms)

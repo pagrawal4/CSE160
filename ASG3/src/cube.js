@@ -7,7 +7,7 @@ class Cube {
         // this.size = 5.0;
         // this.segments = 10;
         this.matrix = new Matrix4(); // default identity
-        this.textureNum = -1;
+        this.textureNum = 0;
 
         this.vertexBuffer = null;
         this.vertices = new Float32Array([
