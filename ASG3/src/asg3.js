@@ -21,12 +21,22 @@ var FSHADER_SOURCE = `
   varying vec2 v_UV;
   uniform vec4 u_FragColor;
   uniform sampler2D u_Sampler0;
+  uniform int u_TextureSelect;
   void main() {
-    gl_FragColor = u_FragColor;
-    // Passing R and G values and B and alpha auto set to 1
-    gl_FragColor = vec4(v_UV,1.0,1.0);
-    // look up color from the sample
-    gl_FragColor = texture2D(u_Sampler0, v_UV);
+    if (u_TextureSelect == -2) {
+      gl_FragColor = u_FragColor;
+    }
+    else if (u_TextureSelect == -1) {
+      // Passing R and G values and B and alpha auto set to 1
+      gl_FragColor = vec4(v_UV,1.0,1.0);
+    }
+    else if (u_TextureSelect == 0) {
+      // look up color from the sample
+      gl_FragColor = texture2D(u_Sampler0, v_UV);
+    }
+    else {
+      gl_FragColor = vec4(1,0.2,0.2,1);
+    }
   }`
 
 // Global Variables
@@ -39,6 +49,7 @@ let u_FragColor;
 let u_ModelMatrix;
 let u_GlobalRotation; // For camera action
 let u_Sampler0;
+let u_TextureSelect;
 
 // Constants
 const POINT = 0;
@@ -136,6 +147,14 @@ function connectVariablesToGLSL() {
     console.log('Failed to get the storage location of u_Sampler0');
     return false;
   }
+
+  // Get the storage location of u_TextureSelect
+  u_TextureSelect = gl.getUniformLocation(gl.program, 'u_TextureSelect');
+  if (!u_TextureSelect) {
+    console.log('Failed to get the storage location of u_TextureSelect');
+    return false;
+  }
+
 
   // Pass the Identity matrix to u_ModelMatrix attribute
   var identityM = new Matrix4();

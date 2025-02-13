@@ -1,3 +1,4 @@
+
 class Cube {
     constructor() {
         this.type = "cube";
@@ -6,6 +7,7 @@ class Cube {
         // this.size = 5.0;
         // this.segments = 10;
         this.matrix = new Matrix4(); // default identity
+        this.textureNum = -1;
 
         this.vertexBuffer = null;
         this.vertices = new Float32Array([
@@ -52,6 +54,9 @@ class Cube {
 
     render() {
         var rgba = this.color;
+
+        // Set the textureSelect to textureNum
+        gl.uniform1i(u_TextureSelect, this.textureNum);
 
         // Pass the color of a point to u_FragColor variable
         gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
