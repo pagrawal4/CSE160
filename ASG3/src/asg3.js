@@ -400,21 +400,15 @@ function renderScene() {
   // Record the start time
   var startTime = performance.now()
 
-  // Pass the projection, view, and global rotation matrices
-  var viewMat = new Matrix4();
-  var projectionMat = new Matrix4();
+  var camera = new Camera();
+
   var globalRotMat = new Matrix4();
   globalRotMat.rotate(g_animalGlobalRotationZ, 0, 0, 1);
   globalRotMat.rotate(g_animalGlobalRotationY, 0, 1, 0);
   globalRotMat.rotate(g_animalGlobalRotationX, 1, 0, 0);
 
-  // IMP: Right after setting the view matrix, the near and far things start
-  // to cause issues with things clipping off of showiping up as transparent
-  // Setting the perspective fixes this problem.
-  projectionMat.setPerspective(90, 1*canvas.width/canvas.height, 0.1, 100);// angle width, aspect ratio, near, far
-  viewMat.setLookAt([0],g_eye[1],g_eye[2], g_at[0],g_at[1],g_at[2],  g_up[0],g_up[1],g_up[2]); // (eye at, looking at, direction of up)
-  gl.uniformMatrix4fv(u_ProjectionMatrix, false, projectionMat.elements);
-  gl.uniformMatrix4fv(u_ViewMatrix, false, viewMat.elements);
+  gl.uniformMatrix4fv(u_ProjectionMatrix, false, camera.projectionMatrix.elements);
+  gl.uniformMatrix4fv(u_ViewMatrix, false, camera.viewMatrix.elements);
   gl.uniformMatrix4fv(u_GlobalRotation, false, globalRotMat.elements);
 
   // Clear canvas
