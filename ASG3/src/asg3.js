@@ -10,8 +10,10 @@ var VSHADER_SOURCE = `
 
   uniform mat4 u_ModelMatrix;
   uniform mat4 u_GlobalRotation;
+  uniform mat4 u_ViewMatrix;
+  uniform mat4 u_ProjectionMatrix;
   void main() {
-    gl_Position = u_GlobalRotation * u_ModelMatrix * a_Position;
+    gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_GlobalRotation * u_ModelMatrix * a_Position;
     v_UV = a_UV;
   }`
 
@@ -27,7 +29,7 @@ var FSHADER_SOURCE = `
       gl_FragColor = u_FragColor;
     }
     else if (u_TextureSelect == -1) {
-      // Passing R and G values and B and alpha auto set to 1
+      // Passing R and G values through v_UV and B and alpha set to 1
       gl_FragColor = vec4(v_UV,1.0,1.0);
     }
     else if (u_TextureSelect == 0) {
@@ -35,7 +37,8 @@ var FSHADER_SOURCE = `
       gl_FragColor = texture2D(u_Sampler0, v_UV);
     }
     else {
-      gl_FragColor = vec4(1,0.2,0.2,1);
+      //gl_FragColor = vec4(1,0.2,0.2,1);
+      gl_FragColor = (1.0 - 0.8) * u_FragColor + 0.8 * texture2D(u_Sampler0, v_UV);
     }
   }`
 
@@ -46,10 +49,12 @@ let gl;
 let a_Position;
 let a_UV;
 let u_FragColor;
-let u_ModelMatrix;
-let u_GlobalRotation; // For camera action
 let u_Sampler0;
 let u_TextureSelect;
+let u_ModelMatrix;
+let u_GlobalRotation; // For camera action
+let u_ViewMatrix;
+let u_ProjectionMatrix;
 
 // Constants
 const POINT = 0;
@@ -57,6 +62,10 @@ const TRIANGLE = 1;
 const CIRCLE = 2;
 
 // HTML Controls
+var g_eye=[0,0,-1];
+var g_at=[0,0,0];
+var g_up=[0,1,0];
+
 let g_animalGlobalRotationX=0;
 let g_animalGlobalRotationY=30;
 let g_animalGlobalRotationZ=0;
@@ -155,6 +164,19 @@ function connectVariablesToGLSL() {
     return false;
   }
 
+  // Get the storage location of u_ViewMatrix
+  u_ViewMatrix = gl.getUniformLocation(gl.program, 'u_ViewMatrix');
+  if (!u_ViewMatrix) {
+    console.log('Failed to get the storage location of u_ViewMatrix');
+    return;
+  }
+
+  // Get the storage location of u_ProjectionMatrix
+  u_ProjectionMatrix = gl.getUniformLocation(gl.program, 'u_ProjectionMatrix');
+  if (!u_ProjectionMatrix) {
+    console.log('Failed to get the storage location of u_ProjectionMatrix');
+    return;
+  }
 
   // Pass the Identity matrix to u_ModelMatrix attribute
   var identityM = new Matrix4();
@@ -378,12 +400,21 @@ function renderScene() {
   // Record the start time
   var startTime = performance.now()
 
-  // Connect the matrix to u_ModelMatrix attribute
+  // Pass the projection, view, and global rotation matrices
+  var viewMat = new Matrix4();
+  var projectionMat = new Matrix4();
   var globalRotMat = new Matrix4();
   globalRotMat.rotate(g_animalGlobalRotationZ, 0, 0, 1);
   globalRotMat.rotate(g_animalGlobalRotationY, 0, 1, 0);
   globalRotMat.rotate(g_animalGlobalRotationX, 1, 0, 0);
 
+  // IMP: Right after setting the view matrix, the near and far things start
+  // to cause issues with things clipping off of showiping up as transparent
+  // Setting the perspective fixes this problem.
+  projectionMat.setPerspective(90, 1*canvas.width/canvas.height, 0.1, 100);// angle width, aspect ratio, near, far
+  viewMat.setLookAt([0],g_eye[1],g_eye[2], g_at[0],g_at[1],g_at[2],  g_up[0],g_up[1],g_up[2]); // (eye at, looking at, direction of up)
+  gl.uniformMatrix4fv(u_ProjectionMatrix, false, projectionMat.elements);
+  gl.uniformMatrix4fv(u_ViewMatrix, false, viewMat.elements);
   gl.uniformMatrix4fv(u_GlobalRotation, false, globalRotMat.elements);
 
   // Clear canvas
@@ -405,8 +436,9 @@ function renderScene() {
   cube1.render();
 
   let cube2 = new Cube();
+  cube2.color = [1.0,0.0,0.0,1.0];
   cube2.matrix.setScale(0.5,0.5,0.5).translate(0,-0.5,0);
-  cube2.textureNum = 0;
+  cube2.textureNum = 1;
   cube2.render();
 
 
