@@ -24,6 +24,7 @@ var FSHADER_SOURCE = `
   uniform vec4 u_FragColor;
   uniform sampler2D u_Sampler0;
   uniform int u_TextureSelect;
+  uniform float u_texColorWeight;
   void main() {
     if (u_TextureSelect == -2) {
       gl_FragColor = u_FragColor;
@@ -38,7 +39,7 @@ var FSHADER_SOURCE = `
     }
     else {
       //gl_FragColor = vec4(1,0.2,0.2,1);
-      gl_FragColor = (1.0 - 0.8) * u_FragColor + 0.8 * texture2D(u_Sampler0, v_UV);
+      gl_FragColor = (1.0 - u_texColorWeight) * u_FragColor + u_texColorWeight * texture2D(u_Sampler0, v_UV);
     }
   }`
 
@@ -46,11 +47,13 @@ var FSHADER_SOURCE = `
 // Canvas items
 let canvas;
 let gl;
+let camera;
 let a_Position;
 let a_UV;
 let u_FragColor;
 let u_Sampler0;
 let u_TextureSelect;
+let u_texColorWeight;
 let u_ModelMatrix;
 let u_GlobalRotation; // For camera action
 let u_ViewMatrix;
@@ -62,10 +65,6 @@ const TRIANGLE = 1;
 const CIRCLE = 2;
 
 // HTML Controls
-var g_eye=[0,0,-1];
-var g_at=[0,0,0];
-var g_up=[0,1,0];
-
 let g_animalGlobalRotationX=0;
 let g_animalGlobalRotationY=30;
 let g_animalGlobalRotationZ=0;
@@ -161,6 +160,13 @@ function connectVariablesToGLSL() {
   u_TextureSelect = gl.getUniformLocation(gl.program, 'u_TextureSelect');
   if (!u_TextureSelect) {
     console.log('Failed to get the storage location of u_TextureSelect');
+    return false;
+  }
+
+  // Get the storage location of u_texColorWeight
+  u_texColorWeight = gl.getUniformLocation(gl.program, 'u_texColorWeight');
+  if (!u_texColorWeight) {
+    console.log('Failed to get the storage location of u_texColorWeight');
     return false;
   }
 
@@ -293,17 +299,37 @@ function sendImageToTexture0(image) {
   console.log("Finished loadTexture");
 }
 
+function addActionsForCameraMoveKeys() {
+  // Move the camera based on the key pressed
+  document.addEventListener('keydown', function(event) {
+    //console.log('Key pressed:', event.key);
+    //console.log('Key code:', event.code);
+    movecamera(event);
+  });
+}
+
+function movecamera(ev) {
+  if(ev.code === "KeyW") {
+    camera.moveForward();
+  } else if (ev.code === "KeyS") {
+    camera.moveBackwards()
+  }
+}
 
 function main() {
   // Set up canvas and gl variables
   setupWebGL();
+
+  // Create the camera
+  camera = new Camera();
 
   // Set up GLSL shader programs and connect
   connectVariablesToGLSL();
 
   // Register the actions for the controls in HTML
   addActionsForHtmlUI();
-    
+  addActionsForCameraMoveKeys();
+
   // Register function (event handler) to be called on a mouse press
   //canvas.onmousedown = tick;
   // canvas.onmousemove = click;
@@ -399,8 +425,6 @@ function updateAnimationAnglesMoonWalk() {
 function renderScene() {
   // Record the start time
   var startTime = performance.now()
-
-  var camera = new Camera();
 
   var globalRotMat = new Matrix4();
   globalRotMat.rotate(g_animalGlobalRotationZ, 0, 0, 1);
