@@ -309,10 +309,14 @@ function addActionsForCameraMoveKeys() {
 }
 
 function movecamera(ev) {
-  if(ev.code === "KeyW") {
+  if (ev.code === "KeyW") {
     camera.moveForward();
   } else if (ev.code === "KeyS") {
-    camera.moveBackwards()
+    camera.moveBackwards();
+  } else if (ev.code === "KeyA") {
+    camera.moveLeft();
+  } else if (ev.code === "KeyD") {
+    camera.moveRight();
   }
 }
 

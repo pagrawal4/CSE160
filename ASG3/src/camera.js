@@ -49,7 +49,28 @@ class Camera {
     this.at.add(b);
     this.updateMatrices();
   }
-  moveLeft() {}
+  moveLeft() {
+    let f = new Vector3(this.at); // forward vector
+    f.set(this.at);
+    f.sub(this.eye);
+    let s = Vector3.cross(this.up, f);
+    s.normalize();
+    s.mul(this.speed);
+    this.eye.add(s);
+    this.at.add(s);
+    this.updateMatrices();
+  }
+  moveRight() {
+    let f = new Vector3(this.at); // forward vector
+    f.set(this.at);
+    f.sub(this.eye);
+    let s = Vector3.cross(this.up, f).mul(-1);
+    s.normalize();
+    s.mul(this.speed);
+    this.eye.add(s);
+    this.at.add(s);
+    this.updateMatrices();
+  }
   panLeft() {}
   panRight() {}
 
