@@ -66,8 +66,8 @@ const TRIANGLE = 1;
 const CIRCLE = 2;
 
 // HTML Controls
-let g_animalGlobalRotationX=0;
-let g_animalGlobalRotationY=30;
+let g_animalGlobalRotationX=-10;
+let g_animalGlobalRotationY=20;
 let g_animalGlobalRotationZ=0;
 let g_upperRightLegAngle=0;
 let g_upperLeftLegAngle=0;
@@ -201,36 +201,6 @@ function addActionsForHtmlUI() {
   document.getElementById("cameraAngleY").addEventListener("mousemove", function() { g_animalGlobalRotationY = this.value; renderScene();});
   document.getElementById("cameraAngleZ").addEventListener("mousemove", function() { g_animalGlobalRotationZ = this.value; renderScene();});
 
-  // Upper leg slider events
-  document.getElementById("upperRightLegSlide").addEventListener("mousemove", function() { g_upperRightLegAngle = this.value; renderScene();});
-  // Upper leg slider events
-  document.getElementById("upperLeftLegSlide").addEventListener("mousemove", function() { g_upperLeftLegAngle = this.value; renderScene();});
-
-  // Lower leg slider events
-  document.getElementById("lowerRightLegSlide").addEventListener("mousemove", function() { g_lowerRightLegAngle = this.value; renderScene();});
-  // Lower leg slider events
-  document.getElementById("lowerLeftLegSlide").addEventListener("mousemove", function() { g_lowerLeftLegAngle = this.value; renderScene();});
-
-  // Feet slider events
-  document.getElementById("rightFeetSlide").addEventListener("mousemove", function() { g_rightFeetAngle = this.value; renderScene();});
-  // Feet slider events
-  document.getElementById("leftFeetSlide").addEventListener("mousemove", function() { g_leftFeetAngle = this.value; renderScene();});
-
-  // Upper arm slider events
-  document.getElementById("upperRightArmSlide").addEventListener("mousemove", function() { g_upperRightArmAngle = this.value; renderScene();});
-  // Upper arm slider events
-  document.getElementById("upperLeftArmSlide").addEventListener("mousemove", function() { g_upperLeftArmAngle = this.value; renderScene();});
-
-  // Lower arm slider events
-  document.getElementById("lowerRightArmSlide").addEventListener("mousemove", function() { g_lowerRightArmAngle = this.value; renderScene();});
-  // Lower arm slider events
-  document.getElementById("lowerLeftArmSlide").addEventListener("mousemove", function() { g_lowerLeftArmAngle = this.value; renderScene();});
-
-  // Hand slider events
-  document.getElementById("rightHandSlide").addEventListener("mousemove", function() { g_rightHandAngle = this.value; renderScene();});
-  // Hand slider events
-  document.getElementById("leftHandSlide").addEventListener("mousemove", function() { g_leftHandAngle = this.value; renderScene();});
-
   document.getElementById("animationOnOff").onclick = function() {g_animationOn = !g_animationOn; if (g_animationOn) {g_altAnimationOn = false}};
   document.getElementById("altAnimationOnOff").onclick = function() {g_altAnimationOn = !g_altAnimationOn; if (g_altAnimationOn) {g_animationOn = false;}
   };
@@ -321,7 +291,10 @@ function moveCamera(ev) {
     g_camera.panLeft();
   } else if (ev.code == "KeyE") {
     g_camera.panRight();
+  } else if (ev.code == "KeyR") {
+    g_camera.reset();
   }
+
   renderScene();
 }
 
@@ -473,13 +446,13 @@ function renderScene() {
 
   let cube1 = new Cube();
   cube1.color = [1.0,0.0,0.0,1.0];
-  cube1.matrix.setScale(0.5,0.5,0.5).translate(0,0.5,0);
+  cube1.matrix.setScale(0.5,0.5,0.5).translate(0,1.5,0);
   cube1.textureNum = -1;
   cube1.render();
 
   let cube2 = new Cube();
   cube2.color = [1.0,0.0,0.0,1.0];
-  cube2.matrix.setScale(0.5,0.5,0.5).translate(0,-0.5,0);
+  cube2.matrix.setScale(0.5,0.5,0.5).translate(0,0.5,0);
   cube2.textureNum = 1;
   cube2.render();
 

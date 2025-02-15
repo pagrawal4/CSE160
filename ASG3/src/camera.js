@@ -1,16 +1,17 @@
 class Camera {
   constructor() {
+    this.viewMatrix = new Matrix4();
+    this.projectionMatrix = new Matrix4();
+    this.reset();
+  }
+
+  reset() {
     this.speed = 0.1;  // move speed
     this.panAlpha = 5; // pan increment angle in degrees
     this.fov = 60.0;                  // field of view (angle width)
-    this.eye = new Vector3([0,0,-1]); // eye positioned at
+    this.eye = new Vector3([0,0,-2]); // eye positioned at
     this.at = new Vector3([0,0,0]);   // eye looking at
     this.up = new Vector3([0,1,0]);   // direction of up
-    //console.log("Eye0: [" + this.eye.elements[0] + "," + this.eye.elements[1] + "," + this.eye.elements[2] + "]");
-    //console.log("At0: [" + this.at.elements[0] + "," + this.at.elements[1] + "," + this.at.elements[2] + "]");
-
-    this.viewMatrix = new Matrix4();
-    this.projectionMatrix = new Matrix4();
     this.updateMatrices();
   }
 
