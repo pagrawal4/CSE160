@@ -317,6 +317,10 @@ function movecamera(ev) {
     camera.moveLeft();
   } else if (ev.code === "KeyD") {
     camera.moveRight();
+  } else if (ev.code == "KeyQ") {
+    camera.panLeft();
+  } else if (ev.code == "KeyE") {
+    camera.panRight();
   }
 }
 
