@@ -4,11 +4,11 @@ class Map {
         this.size = [10, 4, 10]; // map is size[0]x[size[2] and height is size[1]
         this.objectsInPosition = [];
         this.map = [
-            [1,0,1,0,1,1,1,1,1,1],
+            [1,0,1,0,2,1,1,1,1,1],
             [0,0,0,0,0,0,0,0,0,1],
             [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,1],
-            [0,0,0,0,0,0,0,0,0,1],
+            [0,0,0,0,0,0,0,0,0,2],
+            [0,0,0,0,0,0,0,0,0,3],
             [0,0,0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0,0,1],
             [0,0,0,0,0,0,0,0,0,1],
@@ -25,12 +25,15 @@ class Map {
         for (let x = 0; x < nx; x++) {
             let row = [];
             for (let z = 0; z < nz; z++) {
-                if (this.map[x][z]==1) {
+                let vert = [];
+                let ny = this.map[x][z];
+                for (let y = 0; y < ny; y++) {
                     let c = new Cube();
                     c.textureNum = 0;
-                    c.matrix.translate(x-nx/2,0.5,z-nz/2);
-                    row.push(c);
+                    c.matrix.translate(x-nx/2,0.5+1*y,z-nz/2);
+                    vert.push(c);
                 }
+                row.push(vert);
             }
             this.objectsInPosition.push(row);
         }
@@ -42,9 +45,12 @@ class Map {
         for (let x = 0; x < nx; x++) {
             let row = this.objectsInPosition[x];
             for (let z = 0; z < nz; z++) {
-                let c = row[z];
-                if (c != null) {
-                    c.render();
+                let vert = row[z]
+                for (let y = 0; y < vert.length; y++) {
+                    let c = vert[y];
+                    if (c != null) {
+                        c.render();
+                    }
                 }
             }
         }
