@@ -444,6 +444,9 @@ function renderScene() {
   //  let floorM = new Matrix4().scale(0.5,0.5,0.5);
   // drawCube(floorM, [1, 0, 1, 1]);
 
+  let map = new Map();
+  map.render();
+/*
   let cube1 = new Cube();
   cube1.color = [1.0,0.0,0.0,1.0];
   cube1.matrix.scale(0.5,0.5,0.5).translate(0,1.5,0);
@@ -455,7 +458,7 @@ function renderScene() {
   cube2.matrix.scale(0.5,0.5,0.5).translate(0,0.5,0);
   cube2.textureNum = 1;
   cube2.render();
-
+*/
 
   // Use the start and current time to record duration (in ms)
   var duration = performance.now() - startTime;
