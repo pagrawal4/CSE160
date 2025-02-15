@@ -71,12 +71,29 @@ class Camera {
     this.at.add(s);
     this.updateMatrices();
   }
-  panLeft() {
+  rotate(xAlpha, yAlpha, zAlpha) {
+    let rotationMatrix = new Matrix4();
+    rotationMatrix.rotate(zAlpha, 0, 0, 1);
+    rotationMatrix.rotate(yAlpha, 0, 1, 0);
+    rotationMatrix.rotate(xAlpha, 1, 0, 0);
+
+    let f = new Vector3();
+    f.set(this.at);
+    f.sub(this.eye);
+    let f_prime = rotationMatrix.multiplyVector3(f);
+    f_prime.normalize();
+    this.at.set(this.eye);
+    this.at.add(f_prime);
+    this.updateMatrices();
+  }
+
+  panLeft(angle) {
+    let alpha = angle ? angle : this.panAlpha;
     let f = new Vector3();
     f.set(this.at);
     f.sub(this.eye);
     let rotationMatrix = new Matrix4();
-    rotationMatrix.setRotate(this.panAlpha,
+    rotationMatrix.setRotate(alpha,
                              this.up.elements[0], this.up.elements[1], this.up.elements[2]);
     let f_prime = rotationMatrix.multiplyVector3(f);
     f_prime.normalize();
@@ -84,19 +101,30 @@ class Camera {
     this.at.add(f_prime);
     this.updateMatrices();
   }
-  panRight() {
+  panRight(angle) {
+    let alpha = angle ? angle : this.panAlpha;
+    this.panLeft(-alpha);
+  }
+  panUp(angle) {
+    let alpha = angle ? angle : this.panAlpha;
     let f = new Vector3();
     f.set(this.at);
     f.sub(this.eye);
+    let axis = Vector3.cross(f, this.up);
     let rotationMatrix = new Matrix4();
-    rotationMatrix.setRotate(-(this.panAlpha),
-                               this.up.elements[0], this.up.elements[1], this.up.elements[2]);
+    rotationMatrix.setRotate(alpha,
+                             axis.elements[0], axis.elements[1], axis.elements[2]);
     let f_prime = rotationMatrix.multiplyVector3(f);
     f_prime.normalize();
     this.at.set(this.eye);
     this.at.add(f_prime);
     this.updateMatrices();
   }
+  panDown(angle) {
+    let alpha = angle ? angle : this.panAlpha;
+    this.panUp(-alpha);
+  }
+
   changeFov(fov) {
     this.fov = fov;
     this.updateMatrices();

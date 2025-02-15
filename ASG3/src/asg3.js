@@ -9,11 +9,10 @@ var VSHADER_SOURCE = `
   varying vec2 v_UV;
 
   uniform mat4 u_ModelMatrix;
-  uniform mat4 u_GlobalRotation;
   uniform mat4 u_ViewMatrix;
   uniform mat4 u_ProjectionMatrix;
   void main() {
-    gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_GlobalRotation * u_ModelMatrix * a_Position;
+    gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_ModelMatrix * a_Position;
     v_UV = a_UV;
   }`
 
@@ -56,7 +55,6 @@ let u_Sampler0;
 let u_TextureSelect;
 let u_texColorWeight;
 let u_ModelMatrix;
-let u_GlobalRotation; // For camera action
 let u_ViewMatrix;
 let u_ProjectionMatrix;
 
@@ -66,9 +64,6 @@ const TRIANGLE = 1;
 const CIRCLE = 2;
 
 // HTML Controls
-let g_animalGlobalRotationX=-10;
-let g_animalGlobalRotationY=20;
-let g_animalGlobalRotationZ=0;
 let g_upperRightLegAngle=0;
 let g_upperLeftLegAngle=0;
 let g_lowerRightLegAngle=0;
@@ -143,13 +138,6 @@ function connectVariablesToGLSL() {
     return;
   }
 
-  // Get the storage location of u_GlobalRotation
-  u_GlobalRotation = gl.getUniformLocation(gl.program, 'u_GlobalRotation');
-  if (!u_GlobalRotation) {
-    console.log('Failed to get the storage location of u_GlobalRotation');
-    return;
-  }
-
   // Get the storage location of u_Sampler0
   u_Sampler0 = gl.getUniformLocation(gl.program, 'u_Sampler0');
   if (!u_Sampler0) {
@@ -195,12 +183,6 @@ function addActionsForHtmlUI() {
 
   // Field of view element
   document.getElementById("fov").addEventListener("mousemove", function() { g_camera.fov = this.value; renderScene();});
-
-  // Camera angle slider events
-  document.getElementById("cameraAngleX").addEventListener("mousemove", function() { g_animalGlobalRotationX = this.value; renderScene();});
-  document.getElementById("cameraAngleY").addEventListener("mousemove", function() { g_animalGlobalRotationY = this.value; renderScene();});
-  document.getElementById("cameraAngleZ").addEventListener("mousemove", function() { g_animalGlobalRotationZ = this.value; renderScene();});
-
   document.getElementById("animationOnOff").onclick = function() {g_animationOn = !g_animationOn; if (g_animationOn) {g_altAnimationOn = false}};
   document.getElementById("altAnimationOnOff").onclick = function() {g_altAnimationOn = !g_altAnimationOn; if (g_altAnimationOn) {g_animationOn = false;}
   };
@@ -214,8 +196,7 @@ function addActionsForHtmlUI() {
     if(ev.buttons == 1) {
       // Moving parallel to x-axis should rotate along y-aix
       // and vice versa to look natural
-      g_animalGlobalRotationY -= (x - lastX) * 180;
-      g_animalGlobalRotationX -= (y - lastY) * 180;
+      g_camera.rotate((y - lastY) * 135, (x - lastX) * 135, 0);
     }
     lastX = x;
     lastY = y;
@@ -410,14 +391,8 @@ function renderScene() {
 
   g_camera.updateMatrices();
 
-  var globalRotMat = new Matrix4();
-  globalRotMat.rotate(g_animalGlobalRotationZ, 0, 0, 1);
-  globalRotMat.rotate(g_animalGlobalRotationY, 0, 1, 0);
-  globalRotMat.rotate(g_animalGlobalRotationX, 1, 0, 0);
-
   gl.uniformMatrix4fv(u_ProjectionMatrix, false, g_camera.projectionMatrix.elements);
   gl.uniformMatrix4fv(u_ViewMatrix, false, g_camera.viewMatrix.elements);
-  gl.uniformMatrix4fv(u_GlobalRotation, false, globalRotMat.elements);
 
   // Clear canvas
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
