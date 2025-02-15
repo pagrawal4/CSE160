@@ -403,8 +403,9 @@ function renderScene() {
 
   // SKY
   let sky = new Cube();
-  sky.color = [0,0,1,1];
-  sky.textureNum = -2;
+  sky.color = [0.5,0.85,1,1];
+  sky.texColorWeight = 0.0;
+  sky.textureNum = 1;
   sky.matrix.scale(100,100,100);
   sky.render();
 
