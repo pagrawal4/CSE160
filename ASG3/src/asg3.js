@@ -305,10 +305,10 @@ function sendImageToTexture0(image) {
 
 function addActionsForCameraMoveKeys() {
   // Move the camera based on the key pressed
-  document.onkeydown = movecamera;
+  document.onkeydown = moveCamera;
 }
 
-function movecamera(ev) {
+function moveCamera(ev) {
   if (ev.code === "KeyW") {
     g_camera.moveForward();
   } else if (ev.code === "KeyS") {
@@ -322,6 +322,7 @@ function movecamera(ev) {
   } else if (ev.code == "KeyE") {
     g_camera.panRight();
   }
+  renderScene();
 }
 
 function main() {
