@@ -452,7 +452,20 @@ function renderScene() {
   // V IMP: The transformation that is specified first is the last transformation 
   // on the points!!!
 
+
+  // SKY
+  let sky = new Cube();
+  sky.color = [0,0,1,1];
+  sky.textureNum = -2;
+  sky.matrix.scale(100,100,100);
+  sky.render();
+
   // FLOOR
+  let floor = new Cube();
+  floor.color = [1,0,0,1];
+  floor.textureNum = -2;
+  floor.matrix.setScale(32,0.1,32);
+  floor.render();
 
   // Draw the floor
   //  let floorM = new Matrix4().scale(0.5,0.5,0.5);

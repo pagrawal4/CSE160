@@ -96,4 +96,8 @@ class Camera {
     this.at.add(f_prime);
     this.updateMatrices();
   }
+  changeFov(fov) {
+    this.fov = fov;
+    this.updateMatrices();
+  }
 }
