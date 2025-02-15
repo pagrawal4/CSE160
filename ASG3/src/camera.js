@@ -9,7 +9,7 @@ class Camera {
     this.speed = 0.1;  // move speed
     this.panAlpha = 5; // pan increment angle in degrees
     this.fov = 60.0;                  // field of view (angle width)
-    this.eye = new Vector3([0,1,-2]); // eye positioned at
+    this.eye = new Vector3([0,1,-5]); // eye positioned at
     this.at = new Vector3([0,1,0]);   // eye looking at
     this.up = new Vector3([0,1,0]);   // direction of up
     this.updateMatrices();

@@ -7,10 +7,10 @@ class Map {
             [1,0,1,0,2,1,1,1,1,1],
             [0,0,0,0,0,0,0,0,0,1],
             [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,2],
             [0,0,0,0,0,0,0,0,0,3],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,1],
+            [0,0,0,0,0,0,0,0,0,4],
+            [0,0,0,0,0,0,0,0,0,5],
+            [0,0,0,0,0,0,0,0,0,5],
             [0,0,0,0,0,0,0,0,0,1],
             [0,0,0,0,0,0,0,0,0,0],
             [1,1,1,0,1,1,1,0,1,1],
@@ -21,13 +21,14 @@ class Map {
     // Do as much work upfront as possible to speed up rendering
     positionObjects() {
         let nx = this.size[0];
+        let ny = this.size[1];
         let nz = this.size[2];
         for (let x = 0; x < nx; x++) {
             let row = [];
             for (let z = 0; z < nz; z++) {
                 let vert = [];
-                let ny = this.map[x][z];
-                for (let y = 0; y < ny; y++) {
+                let nc = this.map[x][z] < ny ? this.map[x][z]: ny;
+                for (let y = 0; y < nc; y++) {
                     let c = new Cube();
                     c.textureNum = 0;
                     c.matrix.translate(x-nx/2,0.5+1*y,z-nz/2);
