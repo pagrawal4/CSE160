@@ -44,10 +44,11 @@ var FSHADER_SOURCE = `
   }`
 
 // Global Variables
+let g_camera;
+
 // Canvas items
 let canvas;
 let gl;
-let camera;
 let a_Position;
 let a_UV;
 let u_FragColor;
@@ -192,6 +193,9 @@ function connectVariablesToGLSL() {
 
 function addActionsForHtmlUI() {
 
+  // Field of view element
+  document.getElementById("fov").addEventListener("mousemove", function() { g_camera.fov = this.value; renderScene();});
+
   // Camera angle slider events
   document.getElementById("cameraAngleX").addEventListener("mousemove", function() { g_animalGlobalRotationX = this.value; renderScene();});
   document.getElementById("cameraAngleY").addEventListener("mousemove", function() { g_animalGlobalRotationY = this.value; renderScene();});
@@ -310,17 +314,17 @@ function addActionsForCameraMoveKeys() {
 
 function movecamera(ev) {
   if (ev.code === "KeyW") {
-    camera.moveForward();
+    g_camera.moveForward();
   } else if (ev.code === "KeyS") {
-    camera.moveBackwards();
+    g_camera.moveBackwards();
   } else if (ev.code === "KeyA") {
-    camera.moveLeft();
+    g_camera.moveLeft();
   } else if (ev.code === "KeyD") {
-    camera.moveRight();
+    g_camera.moveRight();
   } else if (ev.code == "KeyQ") {
-    camera.panLeft();
+    g_camera.panLeft();
   } else if (ev.code == "KeyE") {
-    camera.panRight();
+    g_camera.panRight();
   }
 }
 
@@ -329,7 +333,7 @@ function main() {
   setupWebGL();
 
   // Create the camera
-  camera = new Camera();
+  g_camera = new Camera();
 
   // Set up GLSL shader programs and connect
   connectVariablesToGLSL();
@@ -434,13 +438,15 @@ function renderScene() {
   // Record the start time
   var startTime = performance.now()
 
+  g_camera.updateMatrices();
+
   var globalRotMat = new Matrix4();
   globalRotMat.rotate(g_animalGlobalRotationZ, 0, 0, 1);
   globalRotMat.rotate(g_animalGlobalRotationY, 0, 1, 0);
   globalRotMat.rotate(g_animalGlobalRotationX, 1, 0, 0);
 
-  gl.uniformMatrix4fv(u_ProjectionMatrix, false, camera.projectionMatrix.elements);
-  gl.uniformMatrix4fv(u_ViewMatrix, false, camera.viewMatrix.elements);
+  gl.uniformMatrix4fv(u_ProjectionMatrix, false, g_camera.projectionMatrix.elements);
+  gl.uniformMatrix4fv(u_ViewMatrix, false, g_camera.viewMatrix.elements);
   gl.uniformMatrix4fv(u_GlobalRotation, false, globalRotMat.elements);
 
   // Clear canvas
