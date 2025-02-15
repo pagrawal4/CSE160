@@ -437,7 +437,7 @@ function renderScene() {
   let floor = new Cube();
   floor.color = [1,0,0,1];
   floor.textureNum = -2;
-  floor.matrix.setScale(32,0.1,32);
+  floor.matrix.scale(32,0,32);
   floor.render();
 
   // Draw the floor
@@ -446,13 +446,13 @@ function renderScene() {
 
   let cube1 = new Cube();
   cube1.color = [1.0,0.0,0.0,1.0];
-  cube1.matrix.setScale(0.5,0.5,0.5).translate(0,1.5,0);
+  cube1.matrix.scale(0.5,0.5,0.5).translate(0,1.5,0);
   cube1.textureNum = -1;
   cube1.render();
 
   let cube2 = new Cube();
   cube2.color = [1.0,0.0,0.0,1.0];
-  cube2.matrix.setScale(0.5,0.5,0.5).translate(0,0.5,0);
+  cube2.matrix.scale(0.5,0.5,0.5).translate(0,0.5,0);
   cube2.textureNum = 1;
   cube2.render();
 
