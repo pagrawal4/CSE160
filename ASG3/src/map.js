@@ -6,14 +6,27 @@ class Map {
         this.map = [
             [1,0,1,0,2,1,1,1,1,1],
             [0,0,0,0,0,0,0,0,0,1],
-            [0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,1],
             [0,0,0,0,0,0,0,0,0,3],
             [0,0,0,0,0,0,0,0,0,4],
             [0,0,0,0,0,0,0,0,0,5],
             [0,0,0,0,0,0,0,0,0,5],
             [0,0,0,0,0,0,0,0,0,1],
-            [0,0,0,0,0,0,0,0,0,0],
-            [1,1,1,0,1,1,1,0,1,1],
+            [0,0,0,0,0,0,0,0,0,1],
+            [0,0,0,0,0,0,0,0,0,1],
+           /*
+            [0,1,0,0,0,0,0,0,0,3],
+            [0,0,0,0,0,0,0,0,0,1],
+            [0,0,0,0,0,0,0,0,0,1],
+            [0,0,0,0,0,0,0,0,0,3],
+            [0,0,0,0,0,0,0,0,0,4],
+            [0,0,0,0,0,0,0,0,0,5],
+            [0,0,0,0,0,0,0,0,0,5],
+            [0,0,0,0,0,0,0,0,0,1],
+            [0,0,0,0,0,0,0,0,0,1],
+            [0,0,0,0,0,0,0,0,0,3],
+            */
+
         ]
         this.positionObjects();
     }
@@ -23,14 +36,15 @@ class Map {
         let nx = this.size[0];
         let ny = this.size[1];
         let nz = this.size[2];
-        for (let x = 0; x < nx; x++) {
+        for (let z = 0; z < nz; z++) {
             let row = [];
-            for (let z = 0; z < nz; z++) {
+            for (let x = 0; x < nx; x++) {
                 let vert = [];
-                let nc = this.map[x][z] < ny ? this.map[x][z]: ny;
+                let nc = this.map[z][x] < ny ? this.map[z][x]: ny;
                 for (let y = 0; y < nc; y++) {
                     let c = new Cube();
                     c.textureNum = 0;
+                    //c.matrix.translate(x,y,z);
                     c.matrix.translate(x-nx/2,0.5+1*y,z-nz/2);
                     vert.push(c);
                 }
@@ -43,10 +57,10 @@ class Map {
     render() {
         let nx = this.size[0];
         let nz = this.size[2];
-        for (let x = 0; x < nx; x++) {
-            let row = this.objectsInPosition[x];
-            for (let z = 0; z < nz; z++) {
-                let vert = row[z]
+        for (let z = 0; z < nz; z++) {
+            let row = this.objectsInPosition[z];
+            for (let x = 0; x < nx; x++) {
+                let vert = row[x]
                 for (let y = 0; y < vert.length; y++) {
                     let c = vert[y];
                     if (c != null) {
