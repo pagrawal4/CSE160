@@ -305,11 +305,7 @@ function sendImageToTexture0(image) {
 
 function addActionsForCameraMoveKeys() {
   // Move the camera based on the key pressed
-  document.addEventListener('keydown', function(event) {
-    //console.log('Key pressed:', event.key);
-    //console.log('Key code:', event.code);
-    movecamera(event);
-  });
+  document.onkeydown = movecamera;
 }
 
 function movecamera(ev) {
