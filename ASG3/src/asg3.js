@@ -184,8 +184,7 @@ function addActionsForHtmlUI() {
   // Field of view element
   document.getElementById("fov").addEventListener("mousemove", function() { g_camera.fov = this.value; renderScene();});
   document.getElementById("animationOnOff").onclick = function() {g_animationOn = !g_animationOn; if (g_animationOn) {g_altAnimationOn = false}};
-  document.getElementById("altAnimationOnOff").onclick = function() {g_altAnimationOn = !g_altAnimationOn; if (g_altAnimationOn) {g_animationOn = false;}
-  };
+  document.getElementById("altAnimationOnOff").onclick = function() {g_altAnimationOn = !g_altAnimationOn; if (g_altAnimationOn) {g_animationOn = false;}};
 
   // Handle moving camera mouse event
   var lastX = 0;
