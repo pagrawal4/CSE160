@@ -221,7 +221,7 @@ function initTextures(n) {
   // Register the event handler to be called on loading an image
   image.onload = function(){ sendImageToTexture0(image); };
   // Tell the browser to load an image
-  image.src = '../textures/block.jpg';
+  image.src = '../textures/grass.jpg';
 
   // Add more texture loading here if needed
   return true;
@@ -407,7 +407,6 @@ function renderScene() {
   // V IMP: The transformation that is specified first is the last transformation 
   // on the points!!!
 
-
   // SKY
   let sky = new Cube();
   sky.color = [0.5,0.85,1,1];
@@ -428,6 +427,7 @@ function renderScene() {
   // drawCube(floorM, [1, 0, 1, 1]);
 
   map.render();
+
 /*
   let cube1 = new Cube();
   cube1.color = [1.0,0.0,0.0,1.0];
@@ -438,7 +438,7 @@ function renderScene() {
   let cube2 = new Cube();
   cube2.color = [1.0,0.0,0.0,1.0];
   cube2.matrix.scale(0.5,0.5,0.5).translate(0,0.5,0);
-  cube2.textureNum = 1;
+  cube2.textureNum = 0;
   cube2.render();
 */
 
