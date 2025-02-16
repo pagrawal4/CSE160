@@ -44,6 +44,7 @@ var FSHADER_SOURCE = `
 
 // Global Variables
 let g_camera;
+let map;
 
 // Canvas items
 let canvas;
@@ -273,6 +274,10 @@ function moveCamera(ev) {
     g_camera.panRight();
   } else if (ev.code == "KeyR") {
     g_camera.reset();
+  } else if (ev.code == "Equal") {
+    map.addObject(3, 0, 0);
+  } else if (ev.code == "Minus") {
+    map.removeObject(3, 0);
   }
 
   renderScene();
@@ -284,6 +289,9 @@ function main() {
 
   // Create the camera
   g_camera = new Camera();
+
+  // Create the map
+  map = new Map();
 
   // Set up GLSL shader programs and connect
   connectVariablesToGLSL();
@@ -419,7 +427,6 @@ function renderScene() {
   //  let floorM = new Matrix4().scale(0.5,0.5,0.5);
   // drawCube(floorM, [1, 0, 1, 1]);
 
-  let map = new Map();
   map.render();
 /*
   let cube1 = new Cube();
