@@ -22,6 +22,10 @@ var FSHADER_SOURCE = `
   varying vec2 v_UV;
   uniform vec4 u_FragColor;
   uniform sampler2D u_Sampler0;
+  uniform sampler2D u_Sampler1;
+  uniform sampler2D u_Sampler2;
+  uniform sampler2D u_Sampler3;
+  uniform sampler2D u_Sampler4;
   uniform int u_TextureSelect;
   uniform float u_texColorWeight;
   void main() {
@@ -35,6 +39,22 @@ var FSHADER_SOURCE = `
     else if (u_TextureSelect == 0) {
       // look up color from the sample
       gl_FragColor = texture2D(u_Sampler0, v_UV);
+    }
+    else if (u_TextureSelect == 1) {
+      // look up color from the sample
+      gl_FragColor = texture2D(u_Sampler1, v_UV);
+    }
+    else if (u_TextureSelect == 2) {
+      // look up color from the sample
+      gl_FragColor = texture2D(u_Sampler2, v_UV);
+    }
+    else if (u_TextureSelect == 3) {
+      // look up color from the sample
+      gl_FragColor = texture2D(u_Sampler3, v_UV);
+    }
+    else if (u_TextureSelect == 4) {
+      // look up color from the sample
+      gl_FragColor = texture2D(u_Sampler4, v_UV);
     }
     else {
       //gl_FragColor = vec4(1,0.2,0.2,1);
@@ -54,6 +74,10 @@ let a_Position;
 let a_UV;
 let u_FragColor;
 let u_Sampler0;
+let u_Sampler1;
+let u_Sampler2;
+let u_Sampler3;
+let u_Sampler4;
 let u_TextureSelect;
 let u_texColorWeight;
 let u_ModelMatrix;
@@ -130,6 +154,30 @@ function connectVariablesToGLSL() {
   u_Sampler0 = gl.getUniformLocation(gl.program, 'u_Sampler0');
   if (!u_Sampler0) {
     console.log('Failed to get the storage location of u_Sampler0');
+    return false;
+  }
+  // Get the storage location of u_Sampler1
+  u_Sampler1 = gl.getUniformLocation(gl.program, 'u_Sampler1');
+  if (!u_Sampler1) {
+    console.log('Failed to get the storage location of u_Sampler1');
+    return false;
+  }
+  // Get the storage location of u_Sampler2
+  u_Sampler2 = gl.getUniformLocation(gl.program, 'u_Sampler2');
+  if (!u_Sampler2) {
+    console.log('Failed to get the storage location of u_Sampler2');
+    return false;
+  }
+  // Get the storage location of u_Sampler3
+  u_Sampler3 = gl.getUniformLocation(gl.program, 'u_Sampler3');
+  if (!u_Sampler3) {
+    console.log('Failed to get the storage location of u_Sampler3');
+    return false;
+  }
+  // Get the storage location of u_Sampler4
+  u_Sampler4 = gl.getUniformLocation(gl.program, 'u_Sampler4');
+  if (!u_Sampler4) {
+    console.log('Failed to get the storage location of u_Sampler4');
     return false;
   }
 
@@ -210,6 +258,38 @@ function initTextures(n) {
   // Tell the browser to load an image
   image.src = '../textures/grass.jpg';
 
+  var image1 = new Image();
+  if (!image1) {
+    console.log('Failed to create the image object');
+    return false;
+  }
+  image1.onload = function(){ sendImageToTexture1(image1); };
+  image1.src = '../textures/tinyhome-pink.jpg';
+
+  var image2 = new Image();
+  if (!image2) {
+    console.log('Failed to create the image object');
+    return false;
+  }
+  image2.onload = function(){ sendImageToTexture2(image2); };
+  image2.src = '../textures/tinyhome-blue.jpg';
+
+  var image3 = new Image();
+  if (!image3) {
+    console.log('Failed to create the image object');
+    return false;
+  }
+  image3.onload = function(){ sendImageToTexture3(image3); };
+  image3.src = '../textures/tinyhome-orange.jpg';
+
+  var image4 = new Image();
+  if (!image4) {
+    console.log('Failed to create the image object');
+    return false;
+  }
+  image4.onload = function(){ sendImageToTexture4(image4); };
+  image4.src = '../textures/tinyhome-lavender.jpg';
+
   // Add more texture loading here if needed
   return true;
 }
@@ -238,7 +318,63 @@ function sendImageToTexture0(image) {
   //gl.clear(gl.COLOR_BUFFER_BIT);   // Clear <canvas>
 
   //gl.drawArrays(gl.TRIANGLE_STRIP, 0, n); // Draw the rectangle
-  console.log("Finished loadTexture");
+  console.log("Finished loadTexture 0");
+}
+function sendImageToTexture1(image) {
+  var texture = gl.createTexture();
+  if (!texture) {
+    console.log('Failed to create the texture object');
+    return false;
+  }
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+  gl.activeTexture(gl.TEXTURE1);
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+  gl.uniform1i(u_Sampler1, 1);
+  console.log("Finished loadTexture 1");
+}
+function sendImageToTexture2(image) {
+  var texture = gl.createTexture();
+  if (!texture) {
+    console.log('Failed to create the texture object');
+    return false;
+  }
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+  gl.activeTexture(gl.TEXTURE2);
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+  gl.uniform1i(u_Sampler2, 2);
+  console.log("Finished loadTexture 2");
+}
+function sendImageToTexture3(image) {
+  var texture = gl.createTexture();
+  if (!texture) {
+    console.log('Failed to create the texture object');
+    return false;
+  }
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+  gl.activeTexture(gl.TEXTURE3);
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+  gl.uniform1i(u_Sampler3, 3);
+  console.log("Finished loadTexture 3");
+}
+function sendImageToTexture4(image) {
+  var texture = gl.createTexture();
+  if (!texture) {
+    console.log('Failed to create the texture object');
+    return false;
+  }
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+  gl.activeTexture(gl.TEXTURE4);
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+  gl.uniform1i(u_Sampler4, 4);
+  console.log("Finished loadTexture 4");
 }
 
 function addActionsForCameraMoveKeys() {
@@ -354,23 +490,20 @@ function renderScene() {
   // V IMP: The transformation that is specified first is the last transformation 
   // on the points!!!
 
-  g_robot.render();
-
   // SKY
   let sky = new Cube();
   sky.color = [0.5,0.85,1,1];
   sky.texColorWeight = 0.0;
-  sky.textureNum = 1;
+  sky.textureNum = -2;
   sky.matrix.scale(100,100,100);
   sky.render();
 
   // GROUND
   let ground = new Cube();
-  ground.color = [0,1,0,1];
+  ground.color = [0.15, 0.54, 0.15, 1]; // [0,1,0,1];
   ground.textureNum = -2;
   ground.matrix.scale(32,0.001,32);
   ground.render();
-
 
   // Draw the floor
   //  let floorM = new Matrix4().scale(0.5,0.5,0.5);
@@ -378,6 +511,12 @@ function renderScene() {
 
   map.selectObject(g_camera.eye.elements[0], g_camera.eye.elements[2]);
   map.render();
+
+  let home = new Home();
+  home.matrix.translate(-2,2,0).scale(2,1.5,2);
+  home.render();
+
+  g_robot.render();
 
 /*
   let cube1 = new Cube();
