@@ -113,4 +113,13 @@ class Camera {
     this.fov = fov;
     this.updateMatrices();
   }
+
+  viewPointOnGround() {
+    let f = new Vector3();
+    f.set(this.at);
+    f.sub(this.eye);
+    f.mul(1-this.at.elements[1]/this.eye.elements[1]);
+    f.add(this.eye);
+    return f;
+  }
 }

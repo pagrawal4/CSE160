@@ -64,8 +64,15 @@ var FSHADER_SOURCE = `
 
 // Global Variables
 let g_camera;
-let map;
+let g_map;
 let g_robot = new Robot();
+let g_sky = new Cube();
+let g_ground = new Cube();
+let g_home1 = new Home();
+let g_home2 = new Home();
+let g_home3 = new Home();
+let g_home4 = new Home();
+
 
 // Canvas items
 let canvas;
@@ -398,11 +405,11 @@ function moveCamera(ev) {
   } else if (ev.code == "KeyR") {
     g_camera.reset();
   } else if (ev.code == "Equal") {
-    map.addObject(g_camera.eye.elements[0], g_camera.eye.elements[2], 0);
-    // map.addObject(3, 0, 0);
-    } else if (ev.code == "Minus") {
-    map.removeObject(g_camera.eye.elements[0], g_camera.eye.elements[2], 0);
-    // map.removeObject(3, 0);
+    let viewpt = g_camera.viewPointOnGround();
+    g_map.addObject(viewpt.elements[0] + g_map.size[0]/2, viewpt.elements[2] + g_map.size[2]/2, 0);
+  } else if (ev.code == "Minus") {
+    let viewpt = g_camera.viewPointOnGround();
+    g_map.removeObject(viewpt.elements[0] + g_map.size[0]/2, viewpt.elements[2] + g_map.size[2]/2);
   }
 
   renderScene();
@@ -416,7 +423,7 @@ function main() {
   g_camera = new Camera();
 
   // Create the map
-  map = new Map();
+  g_map = new Map();
 
   // Set up GLSL shader programs and connect
   connectVariablesToGLSL();
@@ -491,46 +498,47 @@ function renderScene() {
   // on the points!!!
 
   // SKY
-  let sky = new Cube();
-  sky.color = [0.5,0.85,1,1];
-  sky.texColorWeight = 0.0;
-  sky.textureNum = -2;
-  sky.matrix.scale(100,100,100);
-  sky.render();
+  g_sky = new Cube();
+  g_sky.color = [0.5,0.85,1,1];
+  g_sky.texColorWeight = 0.0;
+  g_sky.textureNum = -2;
+  g_sky.matrix.scale(100,100,100);
+  g_sky.render();
 
   // GROUND
-  let ground = new Cube();
-  ground.color = [0.15, 0.54, 0.15, 1]; // [0,1,0,1];
-  ground.textureNum = -2;
-  ground.matrix.scale(32,0.001,32);
-  ground.render();
+  g_ground = new Cube();
+  g_ground.color = [0.15, 0.54, 0.15, 1]; // [0,1,0,1];
+  g_ground.textureNum = -2;
+  g_ground.matrix.translate(0,-0.0005,0).scale(32,0.001,32);
+  g_ground.render();
 
   // Draw the floor
   //  let floorM = new Matrix4().scale(0.5,0.5,0.5);
   // drawCube(floorM, [1, 0, 1, 1]);
 
-  map.selectObject(g_camera.eye.elements[0], g_camera.eye.elements[2]);
-  map.render();
+  let viewpt = g_camera.viewPointOnGround();
+  g_map.selectObject(viewpt.elements[0] + g_map.size[0]/2, viewpt.elements[2] + g_map.size[2]/2);
+  g_map.render();
 
-  let home1 = new Home();
-  home1.textureNum = 1;
-  home1.matrix.translate(11,2.1,-8).rotate(-70, 0,1,0).scale(3,2,3);
-  home1.render();
+  g_home1 = new Home();
+  g_home1.textureNum = 1;
+  g_home1.matrix.translate(11,2.5,-8).rotate(-70, 0,1,0).scale(3,3,3);
+  g_home1.render();
 
-  let home2 = new Home();
-  home2.textureNum = 2;
-  home2.matrix.translate(12,2.1,-2).rotate(-70, 0,1,0).scale(3,2,3);
-  home2.render();
+  g_home2 = new Home();
+  g_home2.textureNum = 2;
+  g_home2.matrix.translate(12,2.5,-2).rotate(-70, 0,1,0).scale(3,3,3);
+  g_home2.render();
 
-  let home3 = new Home();
-  home3.textureNum = 3;
-  home3.matrix.translate(12,2.1,4).rotate(-70, 0,1,0).scale(3,2,3);
-  home3.render();
+  g_home3 = new Home();
+  g_home3.textureNum = 3;
+  g_home3.matrix.translate(12,2.5,4).rotate(-70, 0,1,0).scale(3,3,3);
+  g_home3.render();
 
-  let home4 = new Home();
-  home4.textureNum = 4;
-  home4.matrix.translate(11,2.1,10).rotate(-70, 0,1,0).scale(3,2,3);
-  home4.render();
+  g_home4 = new Home();
+  g_home4.textureNum = 4;
+  g_home4.matrix.translate(11,2.5,10).rotate(-70, 0,1,0).scale(3,3,3);
+  g_home4.render();
 
   g_robot.render();
 
