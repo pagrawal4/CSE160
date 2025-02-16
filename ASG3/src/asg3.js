@@ -512,9 +512,25 @@ function renderScene() {
   map.selectObject(g_camera.eye.elements[0], g_camera.eye.elements[2]);
   map.render();
 
-  let home = new Home();
-  home.matrix.translate(-2,2,0).scale(2,1.5,2);
-  home.render();
+  let home1 = new Home();
+  home1.textureNum = 1;
+  home1.matrix.translate(11,2.1,-8).rotate(-70, 0,1,0).scale(3,2,3);
+  home1.render();
+
+  let home2 = new Home();
+  home2.textureNum = 2;
+  home2.matrix.translate(12,2.1,-2).rotate(-70, 0,1,0).scale(3,2,3);
+  home2.render();
+
+  let home3 = new Home();
+  home3.textureNum = 3;
+  home3.matrix.translate(12,2.1,4).rotate(-70, 0,1,0).scale(3,2,3);
+  home3.render();
+
+  let home4 = new Home();
+  home4.textureNum = 4;
+  home4.matrix.translate(11,2.1,10).rotate(-70, 0,1,0).scale(3,2,3);
+  home4.render();
 
   g_robot.render();
 

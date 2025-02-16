@@ -95,7 +95,7 @@ class Home {
       // DYNAMIC gives better performance, but changing back to STATIC
       // because getting "Vertex buffer is not big enough for the draw call"
       // error after changiing code to put all vertices in the buffer.
-      gl.bufferData(gl.ARRAY_BUFFER, this.vertices, gl.STATIC_DRAW);
+      gl.bufferData(gl.ARRAY_BUFFER, this.vertices, gl.DYNAMIC_DRAW);
 
       // Assign the buffer object to a_Position variable
       gl.vertexAttribPointer(a_Position, 3, gl.FLOAT, false, 0, 0);

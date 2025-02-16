@@ -14,7 +14,7 @@ class Robot {
         this.rightHandAngle=0;
         this.leftHandAngle=0;
         this.moveXPosition=0;
-        this.moveYPosition=8;
+        this.moveYPosition=4;
     }
 
     updateAnimationAngles() {
@@ -70,7 +70,7 @@ class Robot {
         // BODY
 
         let baseBodyM = new Matrix4();
-        baseBodyM.translate(0,2.3,0).scale(1.3,1.3,1.3);
+        baseBodyM.translate(0,2.3,0).scale(1.2,1.2,1.2);
         baseBodyM.translate(this.moveXPosition/100, this.moveYPosition/100, 0);// -0.1, -0.25, -0.15);
         //baseBodyM.rotate(g_time*10, 0, 1, 0);
 
