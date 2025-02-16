@@ -45,6 +45,7 @@ var FSHADER_SOURCE = `
 // Global Variables
 let g_camera;
 let map;
+let g_robot = new Robot();
 
 // Canvas items
 let canvas;
@@ -65,20 +66,6 @@ const TRIANGLE = 1;
 const CIRCLE = 2;
 
 // HTML Controls
-let g_upperRightLegAngle=0;
-let g_upperLeftLegAngle=0;
-let g_lowerRightLegAngle=0;
-let g_lowerLeftLegAngle=0;
-let g_upperRightArmAngle=-45;
-let g_upperLeftArmAngle=-45;
-let g_lowerRightArmAngle=90;
-let g_lowerLeftArmAngle=90;
-let g_rightFeetAngle=0;
-let g_leftFeetAngle=0;
-let g_rightHandAngle=0;
-let g_leftHandAngle=0;
-let g_moveXPosition=0;
-let g_moveYPosition=8;
 let g_animationOn=false;
 let g_altAnimationOn=false;
 
@@ -338,10 +325,10 @@ function tick() {
 
   // Update Animation Angles
   if (g_animationOn) {
-    updateAnimationAngles();
+    g_robot.updateAnimationAngles();
   } 
   else if (g_altAnimationOn) {
-    updateAnimationAnglesMoonWalk();
+    g_robot.updateAnimationAnglesMoonWalk();
   }
 
   // Draw everything
@@ -351,48 +338,6 @@ function tick() {
   requestAnimationFrame(tick);
 }
 
-function updateAnimationAngles() {
-  if (g_tickNum == -1) {
-    g_moveXPosition += -60;
-    g_moveYPosition += 1*Math.sin(g_time);
-  }
-  g_upperRightLegAngle = 35*Math.sin(g_time) + 5;
-  g_upperLeftLegAngle = -35*Math.sin(g_time) + 5;
-  g_lowerRightLegAngle = -Math.abs((20*Math.sin(g_time)));
-  g_lowerLeftLegAngle = -Math.abs((20*Math.sin(g_time)));
-
-  g_upperRightArmAngle = -45*Math.sin(g_time);
-  g_upperLeftArmAngle = 45*Math.sin(g_time);
-  g_lowerRightArmAngle = Math.abs((20*Math.sin(g_time)));
-  g_lowerLeftArmAngle = Math.abs((20*Math.sin(g_time)));
-
-  g_moveXPosition += 0.5;
-  if (g_moveXPosition > 85) g_moveXPosition = -60;
-  g_tickNum++;
-}
-
-function updateAnimationAnglesMoonWalk() {
-  if (g_tickNum == -1) {
-    g_moveXPosition += 60;
-    g_moveYPosition += 2; // *Math.sin(g_time);
-  }
-  g_upperRightLegAngle = 20*Math.sin(g_time)-5;
-  g_upperLeftLegAngle = -20*Math.sin(g_time)-5;
-  g_lowerRightLegAngle = -Math.abs((20*Math.sin(g_time)));
-  g_lowerLeftLegAngle = -Math.abs((20*Math.sin(g_time)));
-
-  g_upperRightArmAngle=-45;
-  g_lowerRightArmAngle=90;
-  g_upperLeftArmAngle = 90;
-  g_lowerLeftArmAngle=90;
-
-  g_rightFeetAngle = (g_upperRightLegAngle + g_lowerRightLegAngle);
-  g_leftFeetAngle = (g_upperLeftLegAngle + g_lowerLeftLegAngle);
-
-  g_moveXPosition -= 0.5;
-  if (g_moveXPosition < -85) g_moveXPosition = 60;
-  g_tickNum++;
-}
 
 function renderScene() {
   // Record the start time
@@ -409,6 +354,8 @@ function renderScene() {
   // V IMP: The transformation that is specified first is the last transformation 
   // on the points!!!
 
+  g_robot.render();
+
   // SKY
   let sky = new Cube();
   sky.color = [0.5,0.85,1,1];
@@ -424,11 +371,12 @@ function renderScene() {
   ground.matrix.scale(32,0.001,32);
   ground.render();
 
+
   // Draw the floor
   //  let floorM = new Matrix4().scale(0.5,0.5,0.5);
   // drawCube(floorM, [1, 0, 1, 1]);
-  map.selectObject(g_camera.eye.elements[0], g_camera.eye.elements[2]);
 
+  map.selectObject(g_camera.eye.elements[0], g_camera.eye.elements[2]);
   map.render();
 
 /*
