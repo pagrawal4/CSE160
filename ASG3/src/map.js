@@ -91,7 +91,7 @@ class Map {
         let cubesAtPos = this.objectmap[z][x];
         let y = cubesAtPos.length;
         if (y > 0) {
-            console.log("Selecting cube at location x=" + x + " z=" + z);
+            //console.log("Selecting cube at location x=" + x + " z=" + z);
             let c = cubesAtPos[y-1];
             c.textureNum = 1;
             c.color = [0.7,0.3,0,1];

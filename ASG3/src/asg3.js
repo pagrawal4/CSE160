@@ -275,9 +275,11 @@ function moveCamera(ev) {
   } else if (ev.code == "KeyR") {
     g_camera.reset();
   } else if (ev.code == "Equal") {
-    map.addObject(3, 0, 0);
-  } else if (ev.code == "Minus") {
-    map.removeObject(3, 0);
+    map.addObject(g_camera.eye.elements[0], g_camera.eye.elements[2], 0);
+    // map.addObject(3, 0, 0);
+    } else if (ev.code == "Minus") {
+    map.removeObject(g_camera.eye.elements[0], g_camera.eye.elements[2], 0);
+    // map.removeObject(3, 0);
   }
 
   renderScene();
