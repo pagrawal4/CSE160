@@ -415,12 +415,12 @@ function renderScene() {
   sky.matrix.scale(100,100,100);
   sky.render();
 
-  // FLOOR
-  let floor = new Cube();
-  floor.color = [1,0,0,1];
-  floor.textureNum = -2;
-  floor.matrix.scale(32,0,32);
-  floor.render();
+  // GROUND
+  let ground = new Cube();
+  ground.color = [0,1,0,1];
+  ground.textureNum = -2;
+  ground.matrix.scale(32,0.001,32);
+  ground.render();
 
   // Draw the floor
   //  let floorM = new Matrix4().scale(0.5,0.5,0.5);
