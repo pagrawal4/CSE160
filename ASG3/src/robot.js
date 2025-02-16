@@ -87,14 +87,14 @@ class Robot {
         // Scale and draw head
         let headM = new Matrix4(baseHeadM);
         headM.scale(0.3, 0.25, 0.27);
-        let headC = [1, 1, 1, 1];
+        let headC = [0.9, 0.9, 0.9, 1];
         drawCube(headM, headC);
 
         // Set reference for neck
         let neckM = new Matrix4(baseBodyM).translate(0, 0.375, 0);
         // Scale and draw neck
         neckM.scale(0.18, 0.35, 0.18);
-        let neckC = [1, 1, 0, 1];
+        let neckC = [0.6, 0.6, 0.6, 1];
         drawCube(neckM, neckC);
 
         // Set reference for right ear
@@ -147,14 +147,14 @@ class Robot {
         let brimM = new Matrix4(baseHeadM).translate(0, 0.15, 0);
         // Scale and draw brim
         brimM.scale(0.54, 0.05, 0.54);
-        let brimC = [1, 0, 0, 1];
+        let brimC = [0.6, 0.3, 0, 1];
         drawCube(brimM, brimC);
 
         // Set reference for hat
         let hatM = new Matrix4(baseHeadM).translate(0, 0.275, 0);
         // Scale and draw hat
         hatM.scale(0.3, 0.20, 0.3);
-        let hatC = [1, 0, 0, 1];
+        let hatC = [0.6, 0.3, 0, 1];
         drawCube(hatM, hatC);
 
         // RIGHT LEG
@@ -194,7 +194,7 @@ class Robot {
 
         let leftUpperLegM = new Matrix4(baseBodyM).translate(0, -0.2, 0.1);
         // Rotate and translate left leg
-        let leftUpperLegC = [0, 1*0.9, 1*0.9, 1];
+        let leftUpperLegC = [0, 1, 1, 1];
         leftUpperLegM.rotate( this.upperLeftLegAngle, 0, 0, 1);
         leftUpperLegM.translate(0.0, -0.1, -0.01);
 
@@ -249,7 +249,7 @@ class Robot {
         drawCube(rightLowerArmM, rightLowerArmC);
 
         // Scale and translate right hand
-        let rightHandC = [1, 1, 1, 1];
+        let rightHandC = [0.9, 0.9, 0.9, 1];
         rightHandM.rotate(this.rightHandAngle, 0, 0, 1);
         //rightHandM.translate(0.1, 0.05, 0);
 
@@ -282,7 +282,7 @@ class Robot {
         drawCube(leftLowerArmM, leftLowerArmC);
 
         // Scale and translate left hand
-        let leftHandC = [1, 1, 1, 1];
+        let leftHandC = [0.9, 0.9, 0.9, 1];
         leftHandM.rotate(this.leftHandAngle, 0, 0, 1);
         //leftHandM.translate(0.1, 0.05, 0);
         leftHandM.scale(0.09, 0.09, 0.09);
