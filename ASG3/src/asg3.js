@@ -425,6 +425,7 @@ function renderScene() {
   // Draw the floor
   //  let floorM = new Matrix4().scale(0.5,0.5,0.5);
   // drawCube(floorM, [1, 0, 1, 1]);
+  map.selectObject(g_camera.eye.elements[0], g_camera.eye.elements[2]);
 
   map.render();
 
