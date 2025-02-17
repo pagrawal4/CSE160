@@ -122,7 +122,7 @@ class Camera {
     f.set(this.at);
     f.sub(this.eye);
     f.mul(1-this.at.elements[1]/this.eye.elements[1]);
-    f.mul(3);
+    f.mul(4);
     f.add(this.eye);
     return f;
   }
