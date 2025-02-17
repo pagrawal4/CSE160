@@ -70,7 +70,7 @@ class Robot {
         // BODY
 
         let baseBodyM = new Matrix4();
-        baseBodyM.translate(0,2.3,0).scale(1.2,1.2,1.2);
+        baseBodyM.translate(-6,2.3,0).scale(1.2,1.2,1.2);
         baseBodyM.translate(this.moveXPosition/100, this.moveYPosition/100, 0);// -0.1, -0.25, -0.15);
         //baseBodyM.rotate(g_time*10, 0, 1, 0);
 
@@ -147,14 +147,14 @@ class Robot {
         let brimM = new Matrix4(baseHeadM).translate(0, 0.15, 0);
         // Scale and draw brim
         brimM.scale(0.54, 0.05, 0.54);
-        let brimC = [0.6, 0.3, 0, 1];
+        let brimC = [1, 0, 0, 1];
         drawCube(brimM, brimC);
 
         // Set reference for hat
         let hatM = new Matrix4(baseHeadM).translate(0, 0.275, 0);
         // Scale and draw hat
         hatM.scale(0.3, 0.20, 0.3);
-        let hatC = [0.6, 0.3, 0, 1];
+        let hatC = [1, 0, 0, 1];
         drawCube(hatM, hatC);
 
         // RIGHT LEG
