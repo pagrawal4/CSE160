@@ -81,28 +81,6 @@ class Home {
       // Pass the matrix to u_ModelMatrix attribute
       gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);
 
-      // Create a buffer object
-      if (this.buffer == null) {
-          this.buffer = gl.createBuffer();
-          if (!this.buffer) {
-              console.log('Failed to create the buffer object');
-              return -1;
-          }
-      }
-      // Bind the buffer object to target
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
-      // Write date into the buffer object
-      // DYNAMIC gives better performance, but changing back to STATIC
-      // because getting "Vertex buffer is not big enough for the draw call"
-      // error after changiing code to put all vertices in the buffer.
-      gl.bufferData(gl.ARRAY_BUFFER, this.vertices, gl.DYNAMIC_DRAW);
-
-      // Assign the buffer object to a_Position variable
-      gl.vertexAttribPointer(a_Position, 3, gl.FLOAT, false, 0, 0);
-
-      // Enable the assignment to a_Position variable
-      gl.enableVertexAttribArray(a_Position);
-
      // Create a buffer object
       if (this.buffer == null) {
           this.buffer = gl.createBuffer();

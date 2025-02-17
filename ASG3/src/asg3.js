@@ -65,14 +65,11 @@ var FSHADER_SOURCE = `
 // Global Variables
 let g_camera;
 let g_map;
-let g_robot = new Robot();
-let g_sky = new Cube();
 let g_ground = new Cube();
-let g_home1 = new Home();
-let g_home2 = new Home();
-let g_home3 = new Home();
-let g_home4 = new Home();
+let g_sky = new Cube();
+let g_robot = new Robot();
 
+let g_homeTexture = 1;
 
 // Canvas items
 let canvas;
@@ -410,6 +407,14 @@ function moveCamera(ev) {
   } else if (ev.code == "Minus") {
     let viewpt = g_camera.viewPointOnGround();
     g_map.removeObject(viewpt.elements[0] + g_map.size[0]/2, viewpt.elements[2] + g_map.size[2]/2);
+  }  else if (ev.code == "KeyH") {
+    let viewpt = g_camera.viewPointOnGround();
+    g_map.addHome(viewpt.elements[0] + g_map.size[0]/2, viewpt.elements[2] + g_map.size[2]/2, g_homeTexture);
+    if (g_homeTexture == 4) {
+      g_homeTexture = 1;
+    } else {
+    g_homeTexture++;
+    }
   }
 
   renderScene();
@@ -519,27 +524,6 @@ function renderScene() {
   let viewpt = g_camera.viewPointOnGround();
   g_map.selectObject(viewpt.elements[0] + g_map.size[0]/2, viewpt.elements[2] + g_map.size[2]/2);
   g_map.render();
-
-  g_home1 = new Home();
-  g_home1.textureNum = 1;
-  g_home1.matrix.translate(11,2.5,-8).rotate(-70, 0,1,0).scale(3,3,3);
-  g_home1.render();
-
-  g_home2 = new Home();
-  g_home2.textureNum = 2;
-  g_home2.matrix.translate(12,2.5,-2).rotate(-70, 0,1,0).scale(3,3,3);
-  g_home2.render();
-
-  g_home3 = new Home();
-  g_home3.textureNum = 3;
-  g_home3.matrix.translate(12,2.5,4).rotate(-70, 0,1,0).scale(3,3,3);
-  g_home3.render();
-
-  g_home4 = new Home();
-  g_home4.textureNum = 4;
-  g_home4.matrix.translate(11,2.5,10).rotate(-70, 0,1,0).scale(3,3,3);
-  g_home4.render();
-
   g_robot.render();
 
 /*

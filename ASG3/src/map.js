@@ -3,6 +3,7 @@ class Map {
         this.size = [32, 4, 32]; // map is size[2]x[size[0] and height is size[1]
         this.objectmap = null;
         this.selected = null;
+        this.homes = Array();
 
         this.map = [
             [1,2,2,2,2,2,2,1,1,1, 1,1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,1,1, 1,1], // z = 0, x = 0-31
@@ -42,7 +43,49 @@ class Map {
             [1,1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,1,1, 1,1],
         ];
 
+        this.homemap = [
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+            [0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0],
+        ];
+
         this.positionObjects();
+        this.addHome(27, 8, 1);
+        this.addHome(28, 14, 2);
+        this.addHome(28, 20, 3);
+        this.addHome(27, 26, 4);
     }
 
     xPosition(x) {
@@ -57,27 +100,79 @@ class Map {
         return (z < 0) ? 0 : (z >= nz) ? nz-1 : z;
     }
 
+    isEmpty(x, z) {
+        x = this.xPosition(x);
+        z = this.zPosition(z);
+        return (this.objectmap[z][x].length <= 1) && (this.homemap[z][x] == 0);
+    }
+
+    isEmptySquare(x, z, len) {
+        x = this.xPosition(x);
+        z = this.zPosition(z);
+        for (let i = 0 ; i < len ; i++) {
+            for (let j = 0 ; j < len ; j++) {
+                if (!this.isEmpty(x+i, z+j)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    addHome(x, z, textureNum) {
+        x = this.xPosition(x);
+        z = this.zPosition(z);
+        let len = 5;
+        let corner_x = x - Math.floor(len/2);
+        let corner_z = z - Math.floor(len/2);
+        if (this.isEmptySquare(corner_x, corner_z, len)) {
+            console.log("Adding home at location x=" + x + " z=" + z);
+            for (let i = 0 ; i < len ; i++) {
+                for (let j = 0 ; j < len ; j++) {
+                    this.homemap[corner_z + j][corner_x + i] = 1;
+                    let cubesAtPos = this.objectmap[corner_z + j][corner_x + i];
+                    let c = cubesAtPos[cubesAtPos.length - 1];
+                    c.textureNum = 10;
+                    c.color = [0.7,0.3,0.7,1];
+                }
+            }
+            let nx = this.size[0];
+            let nz = this.size[2];
+            let home = new Home();
+            home.textureNum = textureNum;
+            home.matrix.translate(x-nx/2,2.1,z-nz/2).rotate(-70, 0,1,0).scale(3,2,3);
+            this.homes.push(home);
+            return home;
+        }
+    return null;
+    }
+
     addObject(x, z, textureNum) {
         x = this.xPosition(x);
         z = this.zPosition(z);
-        //console.log("Adding cube at location x=" + x + " z=" + z);
-        let cubesAtPos = this.objectmap[z][x];
-        let y = cubesAtPos.length;
-        let nx = this.size[0];
-        let nz = this.size[2];
-        let c = new Cube();
-        c.textureNum = textureNum;
-        c.matrix.translate(x-nx/2,0.5+1*y,z-nz/2);
-        cubesAtPos.push(c);
+        if (this.homemap[z][x] == 0) {
+            //console.log("Adding cube at location x=" + x + " z=" + z);
+            let cubesAtPos = this.objectmap[z][x];
+            let y = cubesAtPos.length;
+            let nx = this.size[0];
+            let nz = this.size[2];
+            let c = new Cube();
+            c.textureNum = textureNum;
+            c.matrix.translate(x-nx/2,0.5+1*y,z-nz/2);
+            cubesAtPos.push(c);
+        }
     }
 
     removeObject(x, z) {
         x = this.xPosition(x);
         z = this.zPosition(z);
         //console.log("Removing cube at location x=" + x + " z=" + z);
-        let c = this.objectmap[z][x].pop();
-        if (c == this.selected) {
-            this.selected = null;
+        let cubesAtPos = this.objectmap[z][x];
+        if (cubesAtPos.length > 1) {
+            let c = cubesAtPos.pop();
+            if (c == this.selected) {
+                this.selected = null;
+            }
         }
     }
 
@@ -94,7 +189,7 @@ class Map {
             //console.log("Selecting cube at location x=" + x + " z=" + z);
             let c = cubesAtPos[y-1];
             c.textureNum = 10;
-            c.texColorWeight = 0.5;
+            //c.texColorWeight = 0.5;
             c.color = [0.7,0.3,0,1];
             this.selected = c;
         }
@@ -136,6 +231,10 @@ class Map {
                     }
                 }
             }
+        }
+        for (let i = 0 ; i < this.homes.length ; i++) {
+            console.log("Rendering home " + i);
+            this.homes[i].render();
         }
     }
 }

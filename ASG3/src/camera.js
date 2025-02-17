@@ -6,11 +6,13 @@ class Camera {
   }
 
   reset() {
-    this.speed = 0.1;  // move speed
+    this.speed = 0.5;  // move speed
     this.panAlpha = 5; // pan increment angle in degrees
     this.fov = 90.0;                    // field of view (angle width)
     this.eye = new Vector3([0,3,5]);    // eye positioned at
-    this.at = new Vector3([0,0.1,-1]);  // eye looking at
+    this.away = 6;
+    this.at = new Vector3([0,2.5,this.eye.elements[2] - this.away]);  // eye looking at
+    //this.at = new Vector3([0,0.1,this.eye.elements[2] - this.away]);  // eye looking at
     this.up = new Vector3([0,1,0]);     // direction of up
     this.updateMatrices();
   }
@@ -99,6 +101,7 @@ class Camera {
                              this.up.elements[0], this.up.elements[1], this.up.elements[2]);
     let f_prime = rotationMatrix.multiplyVector3(f);
     f_prime.normalize();
+    f_prime.mul(this.away);
     this.at.set(this.eye);
     this.at.add(f_prime);
     this.updateMatrices();
@@ -119,6 +122,7 @@ class Camera {
     f.set(this.at);
     f.sub(this.eye);
     f.mul(1-this.at.elements[1]/this.eye.elements[1]);
+    f.mul(3);
     f.add(this.eye);
     return f;
   }
