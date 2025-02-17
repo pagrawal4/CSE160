@@ -407,7 +407,7 @@ function moveCamera(ev) {
   } else if (ev.code == "Minus") {
     let viewpt = g_camera.viewPointOnGround();
     g_map.removeObject(viewpt.elements[0] + g_map.size[0]/2, viewpt.elements[2] + g_map.size[2]/2);
-  }  else if (ev.code == "KeyH") {
+  } else if (ev.code == "KeyH") {
     let viewpt = g_camera.viewPointOnGround();
     g_map.addHome(viewpt.elements[0] + g_map.size[0]/2, viewpt.elements[2] + g_map.size[2]/2, g_homeTexture);
     if (g_homeTexture == 4) {
@@ -415,6 +415,10 @@ function moveCamera(ev) {
     } else {
     g_homeTexture++;
     }
+  } else if (ev.code == "KeyJ") {
+    //console.log("KeyJ pressed");
+    let viewpt = g_camera.viewPointOnGround();
+    g_map.removeHome(viewpt.elements[0] + g_map.size[0]/2, viewpt.elements[2] + g_map.size[2]/2);
   }
 
   renderScene();

@@ -123,14 +123,15 @@ class Map {
         x = this.xPosition(x);
         z = this.zPosition(z);
         let len = 5;
-        let corner_x = x - Math.floor(len/2);
-        let corner_z = z - Math.floor(len/2);
-        if (this.isEmptySquare(corner_x, corner_z, len)) {
+        let cornerX = x - Math.floor(len/2);
+        let cornerZ = z - Math.floor(len/2);
+        if (this.isEmptySquare(cornerX, cornerZ, len)) {
             //console.log("Adding home at location x=" + x + " z=" + z);
+            let homeNum = this.homes.length + 1;
             for (let i = 0 ; i < len ; i++) {
                 for (let j = 0 ; j < len ; j++) {
-                    this.homemap[corner_z + j][corner_x + i] = 1;
-                    let cubesAtPos = this.objectmap[corner_z + j][corner_x + i];
+                    this.homemap[cornerZ + j][cornerX + i] = homeNum;
+                    let cubesAtPos = this.objectmap[cornerZ + j][cornerX + i];
                     let c = cubesAtPos[cubesAtPos.length - 1];
                     c.textureNum = 10;
                     c.color = [0.7,0.3,0.7,1];
@@ -145,6 +146,30 @@ class Map {
             return home;
         }
     return null;
+    }
+
+    removeHome(x, z) {
+        x = this.xPosition(x);
+        z = this.zPosition(z);
+        let homeNum = this.homemap[z][x];
+        if (homeNum > 0) {
+            while (x > 0 && this.homemap[z][x-1] == homeNum) {
+                x--;
+            }
+            while (z > 0 && this.homemap[z-1][x] == homeNum) {
+                z--;
+            }
+            let len = 5;
+            for (let i = 0 ; i < len ; i++) {
+                for (let j = 0 ; j < len ; j++) {
+                    this.homemap[z+j][x+i] = 0;
+                    let cubesAtPos = this.objectmap[z+j][x+i];
+                    let c = cubesAtPos[cubesAtPos.length - 1];
+                    c.textureNum = 0;
+                }
+            }
+            this.homes[homeNum-1] = null;
+        }
     }
 
     addObject(x, z, textureNum) {
@@ -233,8 +258,10 @@ class Map {
             }
         }
         for (let i = 0 ; i < this.homes.length ; i++) {
-            //console.log("Rendering home " + i);
-            this.homes[i].render();
+            if (this.homes[i]) {
+                //console.log("Rendering home " + i);
+                this.homes[i].render();
+            }
         }
     }
 }
