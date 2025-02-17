@@ -126,7 +126,7 @@ class Map {
         let corner_x = x - Math.floor(len/2);
         let corner_z = z - Math.floor(len/2);
         if (this.isEmptySquare(corner_x, corner_z, len)) {
-            console.log("Adding home at location x=" + x + " z=" + z);
+            //console.log("Adding home at location x=" + x + " z=" + z);
             for (let i = 0 ; i < len ; i++) {
                 for (let j = 0 ; j < len ; j++) {
                     this.homemap[corner_z + j][corner_x + i] = 1;
@@ -233,7 +233,7 @@ class Map {
             }
         }
         for (let i = 0 ; i < this.homes.length ; i++) {
-            console.log("Rendering home " + i);
+            //console.log("Rendering home " + i);
             this.homes[i].render();
         }
     }
