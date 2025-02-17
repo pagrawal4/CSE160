@@ -19,7 +19,7 @@ class Robot {
 
     updateAnimationAngles() {
         if (g_tickNum == -1) {
-            this.moveXPosition += -450;
+            this.moveXPosition += -350;
             this.moveYPosition += 1*Math.sin(3*g_time);
         }
         this.upperRightLegAngle = 35*Math.sin(3*g_time) + 5;
@@ -40,7 +40,7 @@ class Robot {
   
     updateAnimationAnglesMoonWalk() {
         if (g_tickNum == -1) {
-            this.moveXPosition += 450;
+            this.moveXPosition += 350;
             this.moveYPosition += 2; // *Math.sin(3*g_time);
         }
         this.upperRightLegAngle = 20*Math.sin(3*g_time)-5;
