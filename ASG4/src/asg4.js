@@ -530,6 +530,13 @@ function renderScene() {
   g_sky.matrix.scale(-50,-50,-50);
   g_sky.render();
 
+  g_sphere = new Sphere();
+  g_sphere.color = [1,0,0,1];
+  g_sphere.texture = -3;
+  //g_sphere.matrix.scale(5,5,5);
+  g_sphere.matrix.translate(3,3,0);
+  g_sphere.render();
+
   // GROUND
   g_ground = new Cube();
   g_ground.color = [0.15, 0.54, 0.15, 1]; // [0,1,0,1];
