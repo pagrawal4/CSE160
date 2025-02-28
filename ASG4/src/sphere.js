@@ -70,8 +70,8 @@ class Sphere {
         if (!this.vertexBuffer) {
             this.vertexBuffer = gl.createBuffer();
             if (!this.vertexBuffer) {
-            console.log('Failed to create the buffer object');
-            return -1;
+                console.log('Failed to create the buffer object');
+                return -1;
             }
         }
       
