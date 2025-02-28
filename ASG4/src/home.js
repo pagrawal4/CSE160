@@ -70,7 +70,11 @@ class Home {
       var rgba = this.color;
 
       // Set the u_TextureSelect to textureNum
-      gl.uniform1i(u_TextureSelect, this.textureNum);
+      if (g_normalsOn) {
+        gl.uniform1i(u_TextureSelect, -3);
+    } else {
+        gl.uniform1i(u_TextureSelect, this.textureNum);
+    }
 
       // Set the u_texColorWeight to texColorWeight
       gl.uniform1f(u_texColorWeight, this.texColorWeight);

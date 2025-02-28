@@ -105,6 +105,7 @@ const CIRCLE = 2;
 // HTML Controls
 let g_animationOn=false;
 let g_altAnimationOn=false;
+let g_normalsOn=false;
 
 // Performance
 var g_startTime = performance.now()/1000.0;
@@ -241,6 +242,7 @@ function addActionsForHtmlUI() {
   document.getElementById("fov").addEventListener("mousemove", function() { g_camera.fov = this.value; renderScene();});
   document.getElementById("animationOnOff").onclick = function() {g_animationOn = !g_animationOn; if (g_animationOn) {g_altAnimationOn = false}};
   document.getElementById("altAnimationOnOff").onclick = function() {g_altAnimationOn = !g_altAnimationOn; if (g_altAnimationOn) {g_animationOn = false;}};
+  document.getElementById("normalsOnOff").onclick = function() {g_normalsOn = !g_normalsOn;};
 
   // Handle moving camera mouse event
   var lastX = 0;
@@ -536,13 +538,6 @@ function renderScene() {
   //g_sphere.matrix.scale(5,5,5);
   g_sphere.matrix.translate(3,3,0);
   g_sphere.render();
-
-  // GROUND
-  g_ground = new Cube();
-  g_ground.color = [0.15, 0.54, 0.15, 1]; // [0,1,0,1];
-  g_ground.textureNum = -2;
-  g_ground.matrix.translate(0,-0.0005,0).scale(32,0.001,32);
-  g_ground.render();
 
   // Draw the floor
   //  let floorM = new Matrix4().scale(0.5,0.5,0.5);

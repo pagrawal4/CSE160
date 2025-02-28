@@ -20,7 +20,11 @@ class Sphere {
         var rgba = this.color;
 
         // Set the u_TextureSelect to textureNum
-        gl.uniform1i(u_TextureSelect, this.textureNum);
+        if (g_normalsOn) {
+            gl.uniform1i(u_TextureSelect, -3);
+        } else {
+            gl.uniform1i(u_TextureSelect, this.textureNum);
+        }
 
         // Set the u_texColorWeight to texColorWeight
         gl.uniform1f(u_texColorWeight, this.texColorWeight);
@@ -89,7 +93,7 @@ class Sphere {
             }
         }
         gl.bindBuffer(gl.ARRAY_BUFFER, this.uvBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.DYNAMIC_DRAW);
         gl.vertexAttribPointer(a_UV, 2, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(a_UV);
     
@@ -102,7 +106,7 @@ class Sphere {
             }
         }
         gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.DYNAMIC_DRAW);
         gl.vertexAttribPointer(a_Normal, 3, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(a_Normal);
     
