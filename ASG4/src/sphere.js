@@ -72,7 +72,7 @@ class Sphere {
         }
     }
 
-    drawTriangle(vertices) {
+    drawTriangle(vertices, uvs, normals) {
         var n = 3; // The number of vertices
       
         // Create a buffer object
@@ -98,7 +98,7 @@ class Sphere {
             }
         }
         gl.bindBuffer(gl.ARRAY_BUFFER, this.uvBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.DYNAMIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs), gl.DYNAMIC_DRAW);
         gl.vertexAttribPointer(a_UV, 2, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(a_UV);
     
@@ -111,7 +111,7 @@ class Sphere {
             }
         }
         gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.DYNAMIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.DYNAMIC_DRAW);
         gl.vertexAttribPointer(a_Normal, 3, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(a_Normal);
     
