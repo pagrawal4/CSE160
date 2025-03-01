@@ -60,7 +60,7 @@ class TriangularPrism {
     gl.drawArrays(gl.TRIANGLES, 0, 24);
 
     // Draw other two with reduced values of rgb to show difference
-    gl.uniform4f(u_FragColor, rgba[0]*.9,  rgba[1]*.9, rgba[2]*.9, rgba[3]);
+    //gl.uniform4f(u_FragColor, rgba[0]*.9,  rgba[1]*.9, rgba[2]*.9, rgba[3]);
     gl.drawArrays(gl.TRIANGLES, 24, 12);
 
   }

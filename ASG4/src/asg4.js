@@ -572,14 +572,17 @@ function renderScene() {
   g_light.color = [1,1,0,1];
   g_light.textureNum = -2;
   g_light.matrix.translate(g_lightPos[0], g_lightPos[1], g_lightPos[2]);
-  g_light.matrix.scale(0.3,0.3,0.3);
+  // Flipping because the light is at the center of the cube (conceptually)
+  // and normals of the cube are outwards and flipping makes it inwards
+  // so that the cube can get lighted up
+  g_light.matrix.scale(-0.3,-0.3,-0.3);
   g_light.render();
 
   // SKY
   g_sky = new Cube();
   g_sky.color = [0.5,0.85,1,1];
   g_sky.texColorWeight = 0.0;
-  g_sky.textureNum = -3;
+  g_sky.textureNum = -2;
   g_sky.matrix.scale(-50,-50,-50);
   g_sky.render();
 
