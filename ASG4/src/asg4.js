@@ -11,12 +11,13 @@ var VSHADER_SOURCE = `
   varying vec3 v_Normal;
   varying vec4 v_VertPos;
   uniform mat4 u_ModelMatrix;
+  uniform mat4 u_NormalMatrix;
   uniform mat4 u_ViewMatrix;
   uniform mat4 u_ProjectionMatrix;
   void main() {
     gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_ModelMatrix * a_Position;
     v_UV = a_UV;
-    v_Normal = a_Normal;
+    v_Normal = normalize(vec3(u_NormalMatrix * vec4(a_Normal, 1)));
     v_VertPos = u_ModelMatrix * a_Position; // position of vertex in world coordinates
   }`
 
@@ -147,6 +148,7 @@ let u_lightPos;
 let u_cameraPos;
 let u_lightOn;
 let u_ModelMatrix;
+let u_NormalMatrix;
 let u_ViewMatrix;
 let u_ProjectionMatrix;
 
@@ -246,6 +248,12 @@ function connectVariablesToGLSL() {
     return;
   }
 
+  u_NormalMatrix = gl.getUniformLocation(gl.program, 'u_NormalMatrix');
+  if (!u_NormalMatrix) {
+    console.log('Failed to get the storage location of u_NormalMatrix');
+    return;
+  }
+
   // Get the storage location of u_Sampler0
   u_Sampler0 = gl.getUniformLocation(gl.program, 'u_Sampler0');
   if (!u_Sampler0) {
@@ -308,7 +316,10 @@ function connectVariablesToGLSL() {
   // Pass the Identity matrix to u_ModelMatrix attribute
   var identityM = new Matrix4();
   gl.uniformMatrix4fv(u_ModelMatrix, false, identityM.elements);
-  
+
+  // Pass the Identity matrix to u_NormalMatrix attribute
+  var identityM = new Matrix4();
+  gl.uniformMatrix4fv(u_NormalMatrix, false, identityM.elements);
 }
 
 function addActionsForHtmlUI() {

@@ -6,6 +6,7 @@ class Cube {
         // this.size = 5.0;
         // this.segments = 10;
         this.matrix = new Matrix4(); // default identity
+        this.normalMatrix = new Matrix4();
         this.textureNum = -2;
         this.texColorWeight = 0.8;
 
@@ -139,6 +140,8 @@ class Cube {
         // Pass the matrix to u_ModelMatrix attribute
         gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);
 
+        gl.uniformMatrix4fv(u_NormalMatrix, false, this.normalMatrix.elements);
+
        // Create a buffer object
         if (this.vertexBuffer == null) {
             this.vertexBuffer = gl.createBuffer();
@@ -199,5 +202,6 @@ function drawCube(matrix, color) {
     if (color) {
         cube.color = color;
     }
+    cube.normalMatrix.setInverseOf(cube.matrix).transpose();
     cube.render();
 }
