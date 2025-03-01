@@ -71,19 +71,29 @@ var FSHADER_SOURCE = `
       //gl_FragColor = vec4(1,0.2,0.2,1);
       gl_FragColor = (1.0 - u_texColorWeight) * u_FragColor + u_texColorWeight * texture2D(u_Sampler0, v_UV);
     }
-    vec3 lightVector = vec3(v_VertPos) - u_lightPos;
+    vec3 lightVector = u_lightPos - vec3(v_VertPos);
     float r = length(lightVector);
+    /*
     if (r<1.0) {
       gl_FragColor = vec4(1,0,0,1);
     } else if (r<2.0){
      gl_FragColor = vec4(0,1,0,1);
     }
+    */
+    //gl_FragColor = vec4(vec3(gl_FragColor)/(r*r),1);
+
+    // N dot L
+    vec3 L = normalize(lightVector);
+    vec3 N = normalize(v_Normal);
+    float nDotL = max(dot(N,L), 0.0);
+    gl_FragColor = gl_FragColor * nDotL;
+    gl_FragColor.a = 1.0; // alpha
   }`
 
 // Global Variables
 let g_camera;
 let g_light;
-let g_lightPos = [0,5,-5];
+let g_lightPos = [0,4,0];
 let g_map;
 let g_ground = new Cube();
 let g_sky = new Cube();
@@ -520,10 +530,14 @@ function tick() {
   // Update Animation Angles
   if (g_animationOn) {
     g_robot.updateAnimationAngles();
+
+    // Animate light position
+    g_lightPos[0] = 10*Math.cos(g_time);
   } 
   else if (g_altAnimationOn) {
     g_robot.updateAnimationAnglesMoonWalk();
   }
+
 
   // Draw everything
   renderScene();
