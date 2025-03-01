@@ -9,6 +9,7 @@ var VSHADER_SOURCE = `
   attribute vec3 a_Normal;
   varying vec2 v_UV;
   varying vec3 v_Normal;
+  varying vec4 v_VertPos;
   uniform mat4 u_ModelMatrix;
   uniform mat4 u_ViewMatrix;
   uniform mat4 u_ProjectionMatrix;
@@ -16,6 +17,7 @@ var VSHADER_SOURCE = `
     gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_ModelMatrix * a_Position;
     v_UV = a_UV;
     v_Normal = a_Normal;
+    v_VertPos = u_ModelMatrix * a_Position; // position of vertex in world coordinates
   }`
 
 // Fragment shader program
@@ -31,6 +33,8 @@ var FSHADER_SOURCE = `
   uniform sampler2D u_Sampler4;
   uniform int u_TextureSelect;
   uniform float u_texColorWeight;
+  uniform vec3 u_lightPos;
+  varying vec4 v_VertPos;
   void main() {
     if (u_TextureSelect == -3) {
       //gl_FragColor = vec4(v_Normal, 1.0); // Use normal
@@ -67,10 +71,19 @@ var FSHADER_SOURCE = `
       //gl_FragColor = vec4(1,0.2,0.2,1);
       gl_FragColor = (1.0 - u_texColorWeight) * u_FragColor + u_texColorWeight * texture2D(u_Sampler0, v_UV);
     }
+    vec3 lightVector = vec3(v_VertPos) - u_lightPos;
+    float r = length(lightVector);
+    if (r<1.0) {
+      gl_FragColor = vec4(1,0,0,1);
+    } else if (r<2.0){
+     gl_FragColor = vec4(0,1,0,1);
+    }
   }`
 
 // Global Variables
 let g_camera;
+let g_light;
+let g_lightPos = [0,5,-5];
 let g_map;
 let g_ground = new Cube();
 let g_sky = new Cube();
@@ -93,6 +106,7 @@ let u_Sampler3;
 let u_Sampler4;
 let u_TextureSelect;
 let u_texColorWeight;
+let u_lightPos;
 let u_ModelMatrix;
 let u_ViewMatrix;
 let u_ProjectionMatrix;
@@ -161,6 +175,13 @@ function connectVariablesToGLSL() {
   u_FragColor = gl.getUniformLocation(gl.program, 'u_FragColor');
   if (!u_FragColor) {
     console.log('Failed to get the storage location of u_FragColor');
+    return;
+  }
+
+  // Get the storage location of u_FragColor
+  u_lightPos = gl.getUniformLocation(gl.program, 'u_lightPos');
+  if (!u_lightPos) {
+    console.log('Failed to get the storage location of u_lightPos');
     return;
   }
 
@@ -240,6 +261,9 @@ function addActionsForHtmlUI() {
 
   // Field of view element
   document.getElementById("fov").addEventListener("mousemove", function() { g_camera.fov = this.value; renderScene();});
+  document.getElementById("lightX").addEventListener("mousemove", function() { g_lightPos[0] = this.value; renderScene();});
+  document.getElementById("lightY").addEventListener("mousemove", function() { g_lightPos[1] = this.value; renderScene();});
+  document.getElementById("lightZ").addEventListener("mousemove", function() { g_lightPos[2] = this.value; renderScene();});
   document.getElementById("animationOnOff").onclick = function() {g_animationOn = !g_animationOn; if (g_animationOn) {g_altAnimationOn = false}};
   document.getElementById("altAnimationOnOff").onclick = function() {g_altAnimationOn = !g_altAnimationOn; if (g_altAnimationOn) {g_animationOn = false;}};
   document.getElementById("normalsOnOff").onclick = function() {g_normalsOn = !g_normalsOn;};
@@ -518,11 +542,20 @@ function renderScene() {
   gl.uniformMatrix4fv(u_ProjectionMatrix, false, g_camera.projectionMatrix.elements);
   gl.uniformMatrix4fv(u_ViewMatrix, false, g_camera.viewMatrix.elements);
 
+  gl.uniform3f(u_lightPos, g_lightPos[0], g_lightPos[1], g_lightPos[2]);
+
   // Clear canvas
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   // V IMP: The transformation that is specified first is the last transformation 
   // on the points!!!
+
+  g_light = new Cube();
+  g_light.color = [1,1,0,1];
+  g_light.textureNum = -2;
+  g_light.matrix.translate(g_lightPos[0], g_lightPos[1], g_lightPos[2]);
+  g_light.matrix.scale(0.3,0.3,0.3);
+  g_light.render();
 
   // SKY
   g_sky = new Cube();
