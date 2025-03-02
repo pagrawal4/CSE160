@@ -14,12 +14,12 @@ class Robot {
         this.rightHandAngle=0;
         this.leftHandAngle=0;
         this.moveXPosition=0;
-        this.moveYPosition=4;
+        this.moveYPosition=1;
     }
 
     updateAnimationAngles() {
         if (g_tickNum == -1) {
-            this.moveXPosition += -350;
+            this.moveXPosition += -50;
             this.moveYPosition += 1*Math.sin(3*g_time);
         }
         this.upperRightLegAngle = 35*Math.sin(3*g_time) + 5;
@@ -33,7 +33,7 @@ class Robot {
         this.lowerLeftArmAngle = Math.abs((20*Math.sin(3*g_time)));
       
         this.moveXPosition += 0.5;
-        if (this.moveXPosition > 450) this.moveXPosition = -450 ;
+        if (this.moveXPosition > 350) this.moveXPosition = -50 ;
         g_tickNum++;
     }
 
@@ -57,7 +57,7 @@ class Robot {
         this.leftFeetAngle = (this.upperLeftLegAngle + this.lowerLeftLegAngle);
 
         this.moveXPosition -= 0.5;
-        if (this.moveXPosition < -450) this.moveXPosition = 450;
+        if (this.moveXPosition < -350) this.moveXPosition = 350;
         g_tickNum++;
     }
 

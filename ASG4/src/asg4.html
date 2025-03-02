@@ -21,17 +21,16 @@
       <button type="button" id="normalsOnOff">Normals ON/OFF</button>
     </p>
     <p>
-      <button type="button" id="lightOnOff">Lights ON/OFF</button>
+      <button type="button" id="lightOnOff">Light ON/OFF</button>
+      <button type="button" id="lightAnimationOnOff">Light Animation ON/OFF</button>
+      Light Position: X: <input type="range" min="-16" max="16" value="0" class="slider" id="lightX">
+      Y: <input type="range" min="1" max="10" value="4" class="slider" id="lightY">
+      Z: <input type="range" min="-16" max="16" value="1" class="slider" id="lightZ">
     </p>
 
-  </p>
-    Light X: <input type="range" min="-16" max="16" value="0" class="slider" id="lightX">
-    Light Y: <input type="range" min="1" max="10" value="4" class="slider" id="lightY">
-    Light Z: <input type="range" min="-16" max="16" value="0" class="slider" id="lightZ">
-
     <p>
-    <button type="button" id="animationOnOff">Animation ON/OFF</button>
-    <button type="button" id="altAnimationOnOff">Mooonwalk Animation ON/OFF</button>
+    <button type="button" id="animationOnOff">Robot Animation ON/OFF</button>
+    <button type="button" id="altAnimationOnOff">Robot Moonwalk Animation ON/OFF</button>
     </p>
     Field of View: <input type="range" min="30.0" max="165.0" value="90.0" class="slider" id="fov">
 
@@ -50,18 +49,20 @@
     <script src="map.js"></script>
     <script src="asg4.js"></script>
 
-    Explore:
+    Controls:
     <ul>
       <li>WASD: move forward/left/backward/right</li>
       <li>QE: pan left/right</li>
       <li>Mouse drag: look around</li>
+      <li>Light ON/OFF: toggle light on/off</li>
+      <li>Light Animation ON/OFF: toggle light animation on/off</li>
+      <li>Robot Animation ON/OFF: toggle robot animation on/off</li>
+      <li>Robot Moonwalk Animation ON/OFF: toggle robot moonwalk on/off</li>
       <li>Plus (+): add block at highlighted space</li>
       <li>Minus (-): remove block from highlighted space</li>
       <li>H: add home at highlighted space</li>
       <li>J: remove home at highlighted space</li>
-      <li>R: reset world</li>
-      <li>Humanoid robot: walks normally or moonwalks</li>
-      <li>Animation: can be toggled on/off</li>
+      <li>R: reset camera</li>
     </ul>
     Notes:
     <ul>

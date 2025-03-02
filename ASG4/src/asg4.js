@@ -121,7 +121,7 @@ var FSHADER_SOURCE = `
 // Global Variables
 let g_camera;
 let g_light;
-let g_lightPos = [0,4,0];
+let g_lightPos = [0,4,1];
 let g_map;
 let g_ground = new Cube();
 let g_sky = new Cube();
@@ -158,10 +158,11 @@ const TRIANGLE = 1;
 const CIRCLE = 2;
 
 // HTML Controls
+let g_lightAnimationOn=true;
 let g_animationOn=false;
 let g_altAnimationOn=false;
 let g_normalsOn=false;
-let g_lightOn=false;
+let g_lightOn=true;
 
 // Performance
 var g_startTime = performance.now()/1000.0;
@@ -329,6 +330,7 @@ function addActionsForHtmlUI() {
   document.getElementById("lightX").addEventListener("mousemove", function() { g_lightPos[0] = this.value; renderScene();});
   document.getElementById("lightY").addEventListener("mousemove", function() { g_lightPos[1] = this.value; renderScene();});
   document.getElementById("lightZ").addEventListener("mousemove", function() { g_lightPos[2] = this.value; renderScene();});
+  document.getElementById("lightAnimationOnOff").onclick = function() {g_lightAnimationOn = !g_lightAnimationOn;};
   document.getElementById("animationOnOff").onclick = function() {g_animationOn = !g_animationOn; if (g_animationOn) {g_altAnimationOn = false}};
   document.getElementById("altAnimationOnOff").onclick = function() {g_altAnimationOn = !g_altAnimationOn; if (g_altAnimationOn) {g_animationOn = false;}};
   document.getElementById("normalsOnOff").onclick = function() {g_normalsOn = !g_normalsOn;};
@@ -583,12 +585,14 @@ function tick() {
   // Print some debug information so we know that it is being called
   //console.log(g_time);
 
+  // Animate light position
+  if (g_lightAnimationOn) {
+    g_lightPos[0] = 5*Math.cos(g_time);
+    //g_lightPos[2] = 4*Math.sin(g_time);
+  }
   // Update Animation Angles
   if (g_animationOn) {
     g_robot.updateAnimationAngles();
-
-    // Animate light position
-    g_lightPos[0] = 10*Math.cos(g_time);
   } 
   else if (g_altAnimationOn) {
     g_robot.updateAnimationAnglesMoonWalk();
@@ -645,7 +649,7 @@ function renderScene() {
   g_sphere.color = [1,0,0,1];
   g_sphere.textureNum = -2;
   //g_sphere.matrix.scale(5,5,5);
-  g_sphere.matrix.translate(0,3,0);
+  g_sphere.matrix.translate(3,2,0);
   g_sphere.render();
 
   // Draw the floor
