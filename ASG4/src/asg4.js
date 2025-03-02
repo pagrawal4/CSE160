@@ -38,6 +38,10 @@ var FSHADER_SOURCE = `
   uniform vec3 u_cameraPos;
   varying vec4 v_VertPos;
   uniform bool u_lightOn;
+  uniform vec3 u_ambientColor;
+  uniform vec3 u_diffuseColor;
+  uniform vec3 u_specularColor;
+
   void main() {
     if (u_TextureSelect == -3) {
       //gl_FragColor = vec4(v_Normal, 1.0); // Use normal
@@ -99,23 +103,13 @@ var FSHADER_SOURCE = `
     vec3 E = normalize(u_cameraPos-vec3(v_VertPos));
 
     // Specular
-    float specular = pow(max(dot(E,R), 0.0),100.0);
-
-    vec3 diffuse = vec3(gl_FragColor) * nDotL * 0.7;
-    vec3 ambient = vec3(gl_FragColor) * 0.3;
+    vec3 ambient = u_ambientColor * vec3(gl_FragColor) * 0.3;
+    vec3 diffuse = u_diffuseColor * vec3(gl_FragColor) * nDotL * 0.7;
+    vec3 specular = u_specularColor * pow(max(dot(E,R), 0.0),100.0);
     if (u_lightOn) {
       gl_FragColor = vec4(specular+diffuse+ambient, 1.0);
     } // else just use gl_FragColor
 
-    /* Teachers code - see question in notes
-    vec3 diffuse = vec3(gl_FragColor) * nDotL * 0.7;
-    vec3 ambient = vec3(gl_FragColor) * 0.3;
-    if (u_lightOn) {
-      gl_FragColor = vec4(specular+diffuse+ambient, 1.0);
-    } else {
-      gl_FragColor = vec4(diffuse+ambient, 1.0);
-    }
-    */
   }`
 
 // Global Variables
@@ -147,6 +141,9 @@ let u_texColorWeight;
 let u_lightPos;
 let u_cameraPos;
 let u_lightOn;
+let u_ambientColor;
+let u_diffuseColor;
+let u_specularColor;
 let u_ModelMatrix;
 let u_NormalMatrix;
 let u_ViewMatrix;
@@ -163,9 +160,9 @@ let g_robotAnimationOn=false;
 let g_robotAltAnimationOn=false;
 let g_normalsOn=false;
 let g_lightOn=true;
-let g_ambientColor=[1,1,0,1]; // yellow
-let g_diffuseColor=[1,1,0,1]; // yellow
-let g_specularColor=[1,1,1,1]; // white
+let g_ambientColor=[1,1,1]; // white
+let g_diffuseColor=[1,1,1]; // white
+let g_specularColor=[1,1,1]; // white
 
 // Performance
 var g_startTime = performance.now()/1000.0;
@@ -242,6 +239,27 @@ function connectVariablesToGLSL() {
   u_lightOn = gl.getUniformLocation(gl.program, 'u_lightOn');
   if (!u_lightOn) {
     console.log('Failed to get the storage location of u_lightOn');
+    return;
+  }
+
+  // Get the storage location of u_ambientColor
+  u_ambientColor = gl.getUniformLocation(gl.program, 'u_ambientColor');
+  if (!u_ambientColor) {
+    console.log('Failed to get the storage location of u_ambientColor');
+    return;
+  }
+
+  // Get the storage location of u_diffuseColor
+  u_diffuseColor = gl.getUniformLocation(gl.program, 'u_diffuseColor');
+  if (!u_diffuseColor) {
+    console.log('Failed to get the storage location of u_diffuseColor');
+    return;
+  }
+
+  // Get the storage location of u_specularColor
+  u_specularColor = gl.getUniformLocation(gl.program, 'u_specularColor');
+  if (!u_specularColor) {
+    console.log('Failed to get the storage location of u_specularColor');
     return;
   }
 
@@ -335,18 +353,15 @@ function addActionsForHtmlUI() {
   document.getElementById("ambientColor").onchange = function() { 
     g_ambientColor[0] = parseInt(this.value.substring(1,3), 16) / 255.0;
     g_ambientColor[1] = parseInt(this.value.substring(3,5), 16) / 255.0;
-    g_ambientColor[2] = parseInt(this.value.substring(5,7), 16) / 255.0;
-    g_ambientColor[3] = 1.0;};
+    g_ambientColor[2] = parseInt(this.value.substring(5,7), 16) / 255.0;};
   document.getElementById("diffuseColor").onchange = function() { 
     g_diffuseColor[0] = parseInt(this.value.substring(1,3), 16) / 255.0;
     g_diffuseColor[1] = parseInt(this.value.substring(3,5), 16) / 255.0;
-    g_diffuseColor[2] = parseInt(this.value.substring(5,7), 16) / 255.0;
-    g_diffuseColor[3] = 1.0;};
+    g_diffuseColor[2] = parseInt(this.value.substring(5,7), 16) / 255.0;};
   document.getElementById("specularColor").onchange = function() { 
     g_specularColor[0] = parseInt(this.value.substring(1,3), 16) / 255.0;
     g_specularColor[1] = parseInt(this.value.substring(3,5), 16) / 255.0;
-    g_specularColor[2] = parseInt(this.value.substring(5,7), 16) / 255.0;
-    g_specularColor[3] = 1.0;};
+    g_specularColor[2] = parseInt(this.value.substring(5,7), 16) / 255.0;};
   document.getElementById("lightX").addEventListener("mousemove", function() { g_lightPos[0] = this.value; renderScene();});
   document.getElementById("lightY").addEventListener("mousemove", function() { g_lightPos[1] = this.value; renderScene();});
   document.getElementById("lightZ").addEventListener("mousemove", function() { g_lightPos[2] = this.value; renderScene();});
@@ -638,6 +653,9 @@ function renderScene() {
   gl.uniform3f(u_cameraPos, g_camera.eye.elements[0], g_camera.eye.elements[1], 
                             g_camera.eye.elements[2]);
   gl.uniform1i(u_lightOn, g_lightOn);
+  gl.uniform3f(u_ambientColor, g_ambientColor[0], g_ambientColor[1], g_ambientColor[2]);
+  gl.uniform3f(u_diffuseColor, g_diffuseColor[0], g_diffuseColor[1], g_diffuseColor[2]);
+  gl.uniform3f(u_specularColor, g_specularColor[0], g_specularColor[1], g_specularColor[2]);
 
   // Clear canvas
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
