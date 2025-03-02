@@ -7,6 +7,7 @@ class Sphere {
         // this.segments = 10;
         this.matrix = new Matrix4(); // default identity
         this.textureNum = -2;
+        this.hasShinySurface = true;
         this.texColorWeight = 0.8;
 
         this.vertexBuffer = null;
@@ -25,6 +26,7 @@ class Sphere {
         } else {
             gl.uniform1i(u_TextureSelect, this.textureNum);
         }
+        gl.uniform1i(u_hasShinySurface, this.hasShinySurface);
 
         // Set the u_texColorWeight to texColorWeight
         gl.uniform1f(u_texColorWeight, this.texColorWeight);

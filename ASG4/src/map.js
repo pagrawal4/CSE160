@@ -135,6 +135,7 @@ class Map {
                     let cubesAtPos = this.objectmap[cornerZ + j][cornerX + i];
                     let c = cubesAtPos[cubesAtPos.length - 1];
                     c.textureNum = 10;
+                    c.hasShinySurface = false;
                     c.color = [0.7,0.3,0.7,1];
                 }
             }
@@ -215,6 +216,7 @@ class Map {
             //console.log("Selecting cube at location x=" + x + " z=" + z);
             let c = cubesAtPos[y-1];
             c.textureNum = 10;
+            c.hasShinySurface = false;
             //c.texColorWeight = 0.5;
             c.color = [0.7,0.3,0,1];
             this.selected = c;

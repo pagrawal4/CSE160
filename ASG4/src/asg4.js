@@ -33,6 +33,7 @@ var FSHADER_SOURCE = `
   uniform sampler2D u_Sampler3;
   uniform sampler2D u_Sampler4;
   uniform int u_TextureSelect;
+  uniform bool u_hasShinySurface;
   uniform float u_texColorWeight;
   uniform vec3 u_lightPos;
   uniform vec3 u_cameraPos;
@@ -107,7 +108,11 @@ var FSHADER_SOURCE = `
     vec3 diffuse = u_diffuseColor * vec3(gl_FragColor) * nDotL * 0.7;
     vec3 specular = u_specularColor * pow(max(dot(E,R), 0.0),100.0);
     if (u_lightOn) {
-      gl_FragColor = vec4(specular+diffuse+ambient, 1.0);
+      if (!u_hasShinySurface || (u_TextureSelect == 0)) {
+        gl_FragColor = vec4(diffuse+ambient, 1.0);
+      } else {
+        gl_FragColor = vec4(specular+diffuse+ambient, 1.0);
+      }
     } // else just use gl_FragColor
 
   }`
@@ -137,6 +142,7 @@ let u_Sampler2;
 let u_Sampler3;
 let u_Sampler4;
 let u_TextureSelect;
+let u_hasShinySurface;
 let u_texColorWeight;
 let u_lightPos;
 let u_cameraPos;
@@ -311,6 +317,13 @@ function connectVariablesToGLSL() {
   u_TextureSelect = gl.getUniformLocation(gl.program, 'u_TextureSelect');
   if (!u_TextureSelect) {
     console.log('Failed to get the storage location of u_TextureSelect');
+    return false;
+  }
+
+  // Get the storage location of u_hasShinySurface
+  u_hasShinySurface = gl.getUniformLocation(gl.program, 'u_hasShinySurface');
+  if (!u_hasShinySurface) {
+    console.log('Failed to get the storage location of u_hasShinySurface');
     return false;
   }
 
@@ -620,8 +633,8 @@ function tick() {
 
   // Animate light position
   if (g_lightAnimationOn) {
-    g_lightPos[0] = 5*Math.cos(g_time);
-    //g_lightPos[2] = 4*Math.sin(g_time);
+    g_lightPos[0] = 5*Math.cos(g_time/1.5);
+    g_lightPos[2] = 5*Math.sin(g_time/1.5);
   }
   // Update Animation Angles
   if (g_robotAnimationOn) {
@@ -678,7 +691,8 @@ function renderScene() {
   g_sky.color = [0.5,0.85,1,1];
   g_sky.texColorWeight = 0.0;
   g_sky.textureNum = -2;
-  g_sky.matrix.scale(-50,-50,-50);
+  g_sky.hasShinySurface = false;
+  g_sky.matrix.scale(-33,-32,-32);
   g_sky.render();
 
   g_sphere = new Sphere();

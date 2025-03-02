@@ -6,6 +6,7 @@ class Home {
       this.matrix = new Matrix4(); // default identity
       this.textureNum = 1;
       this.texColorWeight = 1.0;
+      this.hasShinySurface = false;
 
       this.vertexBuffer = null;
 
@@ -72,9 +73,10 @@ class Home {
       // Set the u_TextureSelect to textureNum
       if (g_normalsOn) {
         gl.uniform1i(u_TextureSelect, -3);
-    } else {
+      } else {
         gl.uniform1i(u_TextureSelect, this.textureNum);
-    }
+      }
+      gl.uniform1i(u_hasShinySurface, this.hasShinySurface);
 
       // Set the u_texColorWeight to texColorWeight
       gl.uniform1f(u_texColorWeight, this.texColorWeight);
