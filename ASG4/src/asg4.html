@@ -23,16 +23,22 @@
     <p>
       <button type="button" id="lightOnOff">Light ON/OFF</button>
       <button type="button" id="lightAnimationOnOff">Light Animation ON/OFF</button>
-      Light Position: X: <input type="range" min="-16" max="16" value="0" class="slider" id="lightX">
-      Y: <input type="range" min="1" max="10" value="4" class="slider" id="lightY">
-      Z: <input type="range" min="-16" max="16" value="1" class="slider" id="lightZ">
+    </p>
+    <p>
+      Light Color: Ambient <input type="color" value="#ffff00" id="ambientColor" />
+      Diffuse <input type="color" value="#ffff00" id="diffuseColor" />
+      Specular <input type="color" value="#ffffff" id="specularColor" />
+      <p>
+      Light Position: X <input type="range" min="-16" max="16" value="0" class="slider" id="lightX">
+      Y <input type="range" min="1" max="10" value="4" class="slider" id="lightY">
+      Z <input type="range" min="-16" max="16" value="1" class="slider" id="lightZ">
     </p>
 
     <p>
-    <button type="button" id="animationOnOff">Robot Animation ON/OFF</button>
-    <button type="button" id="altAnimationOnOff">Robot Moonwalk Animation ON/OFF</button>
+    <button type="button" id="robotAnimationOnOff">Robot Animation ON/OFF</button>
+    <button type="button" id="robotAltAnimationOnOff">Robot Moonwalk Animation ON/OFF</button>
     </p>
-    Field of View: <input type="range" min="30.0" max="165.0" value="90.0" class="slider" id="fov">
+    Field of View <input type="range" min="30.0" max="165.0" value="90.0" class="slider" id="fov">
 
     <p id="performance">  </p>
 

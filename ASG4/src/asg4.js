@@ -159,10 +159,13 @@ const CIRCLE = 2;
 
 // HTML Controls
 let g_lightAnimationOn=true;
-let g_animationOn=false;
-let g_altAnimationOn=false;
+let g_robotAnimationOn=false;
+let g_robotAltAnimationOn=false;
 let g_normalsOn=false;
 let g_lightOn=true;
+let g_ambientColor=[1,1,0,1]; // yellow
+let g_diffuseColor=[1,1,0,1]; // yellow
+let g_specularColor=[1,1,1,1]; // white
 
 // Performance
 var g_startTime = performance.now()/1000.0;
@@ -326,15 +329,30 @@ function connectVariablesToGLSL() {
 function addActionsForHtmlUI() {
 
   // Field of view element
-  document.getElementById("fov").addEventListener("mousemove", function() { g_camera.fov = this.value; renderScene();});
+  document.getElementById("normalsOnOff").onclick = function() {g_normalsOn = !g_normalsOn;};
+  document.getElementById("lightOnOff").onclick = function() {g_lightOn = !g_lightOn;};
+  document.getElementById("lightAnimationOnOff").onclick = function() {g_lightAnimationOn = !g_lightAnimationOn;};
+  document.getElementById("ambientColor").onchange = function() { 
+    g_ambientColor[0] = parseInt(this.value.substring(1,3), 16) / 255.0;
+    g_ambientColor[1] = parseInt(this.value.substring(3,5), 16) / 255.0;
+    g_ambientColor[2] = parseInt(this.value.substring(5,7), 16) / 255.0;
+    g_ambientColor[3] = 1.0;};
+  document.getElementById("diffuseColor").onchange = function() { 
+    g_diffuseColor[0] = parseInt(this.value.substring(1,3), 16) / 255.0;
+    g_diffuseColor[1] = parseInt(this.value.substring(3,5), 16) / 255.0;
+    g_diffuseColor[2] = parseInt(this.value.substring(5,7), 16) / 255.0;
+    g_diffuseColor[3] = 1.0;};
+  document.getElementById("specularColor").onchange = function() { 
+    g_specularColor[0] = parseInt(this.value.substring(1,3), 16) / 255.0;
+    g_specularColor[1] = parseInt(this.value.substring(3,5), 16) / 255.0;
+    g_specularColor[2] = parseInt(this.value.substring(5,7), 16) / 255.0;
+    g_specularColor[3] = 1.0;};
   document.getElementById("lightX").addEventListener("mousemove", function() { g_lightPos[0] = this.value; renderScene();});
   document.getElementById("lightY").addEventListener("mousemove", function() { g_lightPos[1] = this.value; renderScene();});
   document.getElementById("lightZ").addEventListener("mousemove", function() { g_lightPos[2] = this.value; renderScene();});
-  document.getElementById("lightAnimationOnOff").onclick = function() {g_lightAnimationOn = !g_lightAnimationOn;};
-  document.getElementById("animationOnOff").onclick = function() {g_animationOn = !g_animationOn; if (g_animationOn) {g_altAnimationOn = false}};
-  document.getElementById("altAnimationOnOff").onclick = function() {g_altAnimationOn = !g_altAnimationOn; if (g_altAnimationOn) {g_animationOn = false;}};
-  document.getElementById("normalsOnOff").onclick = function() {g_normalsOn = !g_normalsOn;};
-  document.getElementById("lightOnOff").onclick = function() {g_lightOn = !g_lightOn;};
+  document.getElementById("robotAnimationOnOff").onclick = function() {g_robotAnimationOn = !g_robotAnimationOn; if (g_robotAnimationOn) {g_robotAltAnimationOn = false}};
+  document.getElementById("robotAltAnimationOnOff").onclick = function() {g_robotAltAnimationOn = !g_robotAltAnimationOn; if (g_robotAltAnimationOn) {g_robotAnimationOn = false;}};
+  document.getElementById("fov").addEventListener("mousemove", function() { g_camera.fov = this.value; renderScene();});
 
   // Handle moving camera mouse event
   var lastX = 0;
@@ -354,7 +372,7 @@ function addActionsForHtmlUI() {
   // Handle shift click alt animation
   canvas.onmousedown = function(ev) {
     if (ev.shiftKey) {
-      g_altAnimationOn = !g_altAnimationOn;
+      g_robotAltAnimationOn = !g_robotAltAnimationOn;
     }
   }
 
@@ -591,10 +609,10 @@ function tick() {
     //g_lightPos[2] = 4*Math.sin(g_time);
   }
   // Update Animation Angles
-  if (g_animationOn) {
+  if (g_robotAnimationOn) {
     g_robot.updateAnimationAngles();
   } 
-  else if (g_altAnimationOn) {
+  else if (g_robotAltAnimationOn) {
     g_robot.updateAnimationAnglesMoonWalk();
   }
 
