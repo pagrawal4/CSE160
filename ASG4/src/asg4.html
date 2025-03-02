@@ -22,18 +22,23 @@
     </p>
     <p>
       <button type="button" id="lightOnOff">Light ON/OFF</button>
-      <button type="button" id="lightAnimationOnOff">Light Animation ON/OFF</button>
-    </p>
-    <p>
-      Light Color: Ambient <input type="color" value="#ffffff" id="ambientColor" />
-      Diffuse <input type="color" value="#ffffff" id="diffuseColor" />
-      Specular <input type="color" value="#ffffff" id="specularColor" />
-      <p>
       Light Position: X <input type="range" min="-16" max="16" value="0" class="slider" id="lightX">
       Y <input type="range" min="1" max="10" value="4" class="slider" id="lightY">
       Z <input type="range" min="-16" max="16" value="1" class="slider" id="lightZ">
+      Light Color: Ambient <input type="color" value="#ffffff" id="ambientColor" />
+      Diffuse <input type="color" value="#ffffff" id="diffuseColor" />
+      Specular <input type="color" value="#ffffff" id="specularColor" />
+    </p>
+    <p>
+      <button type="button" id="lightAnimationOnOff">Light Animation ON/OFF</button>
     </p>
 
+    <p>
+      <button type="button" id="spotlightOnOff">Spotlight ON/OFF</button>
+      Spotlight Position: X <input type="range" min="-16" max="16" value="0" class="slider" id="spotlightX">
+      Y <input type="range" min="1" max="10" value="3" class="slider" id="spotlightY">
+      Z <input type="range" min="-16" max="16" value="0" class="slider" id="spotlightZ">
+    </p>
     <p>
     <button type="button" id="robotAnimationOnOff">Robot Animation ON/OFF</button>
     <button type="button" id="robotAltAnimationOnOff">Robot Moonwalk Animation ON/OFF</button>
@@ -60,8 +65,9 @@
       <li>WASD: move forward/left/backward/right</li>
       <li>QE: pan left/right</li>
       <li>Mouse drag: look around</li>
-      <li>Light ON/OFF: toggle light on/off</li>
+      <li>Light ON/OFF: toggle light on/off. Turning light off removes the lights effects (works like Assignment 3)</li>
       <li>Light Animation ON/OFF: toggle light animation on/off</li>
+      <li>Turning on Spotlight turns off the other light</li>
       <li>Robot Animation ON/OFF: toggle robot animation on/off</li>
       <li>Robot Moonwalk Animation ON/OFF: toggle robot moonwalk on/off</li>
       <li>Plus (+): add block at highlighted space</li>
@@ -74,6 +80,7 @@
     <ul>
       <li>Sky, grass, and homes are not shiny and have no specular component</li>
       <li>Ball, cube, and robot are shiny and have specular component</li>
+      <li>Changing light position will stop light animation</li>
       <li>Space for adding/removing blocks is highlighted</li>
       <li>The plot that a home sits on is highlighted</li>
       <li>New home that doesn't have enough space at highlighted space will not be placed</li>
