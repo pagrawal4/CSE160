@@ -82,8 +82,8 @@ class Map {
         ];
 
         this.positionObjects();
-        this.addHome(25, 15, 1);
-        this.addHome(25, 20, 3);
+        this.addHome(25, 10 , 1);
+        this.addHome(25, 15, 2);
         //this.addHome(27, 20, 3);
     }
 

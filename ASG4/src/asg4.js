@@ -134,7 +134,7 @@ var FSHADER_SOURCE = `
 // Global Variables
 let g_camera;
 let g_light;
-let g_lightPos = [0,4,1];
+let g_lightPos = [0,3,1];
 let g_spotlight;
 let g_spotlightPos = [0,4,0];
 let g_map;
@@ -469,7 +469,7 @@ function initTextures(n) {
     return false;
   }
   image2.onload = function(){ sendImageToTexture2(image2); };
-  image2.src = '../textures/tinyhome-blue.jpg';
+  image2.src = '../textures/tinyhome-orange.jpg';
 
   var image3 = new Image();
   if (!image3) {
@@ -477,7 +477,7 @@ function initTextures(n) {
     return false;
   }
   image3.onload = function(){ sendImageToTexture3(image3); };
-  image3.src = '../textures/tinyhome-orange.jpg';
+  image3.src = '../textures/steel.jpg';
 
   var image4 = new Image();
   if (!image4) {
@@ -604,7 +604,7 @@ function moveCamera(ev) {
     //let viewpt = g_camera.viewPointOnGround();
     //g_map.addHome(viewpt.elements[0] + g_map.size[0]/2, viewpt.elements[2] + g_map.size[2]/2, g_homeTexture);
     /*
-    if (g_homeTexture == 3) {
+    if (g_homeTexture == 2) {
       g_homeTexture = 1;
     } else {
     g_homeTexture++;
@@ -749,13 +749,14 @@ function renderScene() {
   g_sphere = new Sphere();
   g_sphere.color = [1,0,0,1];
   g_sphere.textureNum = 4;
+  g_sphere.hasShinySurface = true;
   //g_sphere.matrix.scale(5,5,5);
-  g_sphere.matrix.translate(4,2,1);
+  g_sphere.matrix.translate(3,2,1);
   g_sphere.render();
 
   g_cube = new Cube();
   g_cube.color = [1,0,0,1];
-  g_cube.textureNum = -2;
+  g_cube.textureNum = 3;
   g_cube.hasShinySurface = true;
   g_cube.matrix.scale(2,2,2).translate(0,1,0);
   g_cube.render();

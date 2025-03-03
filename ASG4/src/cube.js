@@ -36,7 +36,7 @@ class Cube {
             -0.5,-0.5,0.5,  0.5,-0.5,-0.5,  0.5,-0.5,0.5
           ]);
 
-        this.uv = new Float32Array([
+        this.uv = new Float32Array([ // This works for grass
             // FRONT
             0.25,0.50, 0.25,0.25, 0.05,0.25,
             0.25,0.50, 0.50,0.25, 0.50,0.50,
@@ -77,6 +77,26 @@ class Cube {
             0,-1,0,  0,-1,0,  0,-1,0,
             0,-1,0,  0,-1,0,  0,-1,0,
           ]);
+        this.uv_simple = new Float32Array([ // for simple texture
+            // FRONT
+            0,1,  0,0,  1,0,
+            0,1,  1,0,  1,1,
+            // LEFT
+            0,1,  0,0,  1,0,
+            0,1,  1,0,  1,1,
+            // RIGHT
+            1,0,  0,0,  0,1,
+            1,0,  1,1,  0,1,
+            // TOP
+            1,1,  0,1,  0,0,
+            1,1,  1,0,  0,0,
+            // BACK
+            0,1,  0,0,  1,1,
+            1,1,  0,0,  1,0,
+            // BOTTOM
+            0,0,  1,0,  1,1,
+            0,0,  1,1,  0,1,
+        ]);
         /*
         this.vertices_last = new Float32Array([
             // Right face
@@ -124,12 +144,18 @@ class Cube {
 
     render() {
         var rgba = this.color;
+        var uv = null;
 
         // Set the u_TextureSelect to textureNum
         if (g_normalsOn) {
             gl.uniform1i(u_TextureSelect, -3);
         } else {
             gl.uniform1i(u_TextureSelect, this.textureNum);
+        }
+        if (this.textureNum == 0) {
+            uv = this.uv; // grass
+        } else {
+            uv = this.uv_simple;
         }
         gl.uniform1i(u_hasShinySurface, this.hasShinySurface);
 
@@ -175,7 +201,7 @@ class Cube {
             }
         }
         gl.bindBuffer(gl.ARRAY_BUFFER, this.uvBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this.uv, gl.DYNAMIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, uv, gl.DYNAMIC_DRAW); // Note correct uv is selected earlier
         gl.vertexAttribPointer(a_UV, 2, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(a_UV);
 
