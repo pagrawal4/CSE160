@@ -112,6 +112,7 @@ class Robot {
         drawCube(leftEarM, leftEarC);
 
         // Set reference for nose
+        /*
         let noseM = new Matrix4(baseHeadM).translate(0.18, 0.04, 0);
         //noseM.rotate(25, 0, 0, 1);
         noseM.rotate(-90, 0, 1, 0);
@@ -119,6 +120,7 @@ class Robot {
         noseM.scale(0.05, 0.125, 0.075);
         let noseC = [1, 0.8, 0, 1];
         drawTriangularPrism(noseM, noseC);
+        */
 
         // Set reference for right eye
         let rightEyeM = new Matrix4(baseHeadM).translate(0.15, 0.04, -0.08);

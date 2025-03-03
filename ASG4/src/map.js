@@ -82,10 +82,10 @@ class Map {
         ];
 
         this.positionObjects();
-        this.addHome(26, 8, 1);
-        this.addHome(27, 14, 2);
-        this.addHome(27, 20, 3);
-        this.addHome(26, 26, 4);
+        this.addHome(25, 15, 1);
+        this.addHome(25, 20, 3);
+        //this.addHome(27, 20, 3);
+        //this.addHome(26, 26, 4);
     }
 
     xPosition(x) {

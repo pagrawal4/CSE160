@@ -412,9 +412,9 @@ function addActionsForHtmlUI() {
   document.getElementById("lightY").addEventListener("mousemove", function() { g_lightPos[1] = this.value; g_lightAnimationOn = false; renderScene();});
   document.getElementById("lightZ").addEventListener("mousemove", function() { g_lightPos[2] = this.value; g_lightAnimationOn = false; renderScene();});
   document.getElementById("spotlightOnOff").onclick = function() {g_spotlightOn = !g_spotlightOn; if (g_spotlightOn) {g_lightOn = false; renderScene();}};
-  document.getElementById("spotlightX").addEventListener("mousemove", function() { g_spotlightPos[0] = this.value; renderScene();});
-  document.getElementById("spotlightY").addEventListener("mousemove", function() { g_spotlightPos[1] = this.value; renderScene();});
-  document.getElementById("spotlightZ").addEventListener("mousemove", function() { g_spotlightPos[2] = this.value; renderScene();});
+  //document.getElementById("spotlightX").addEventListener("mousemove", function() { g_spotlightPos[0] = this.value; renderScene();});
+  //document.getElementById("spotlightY").addEventListener("mousemove", function() { g_spotlightPos[1] = this.value; renderScene();});
+  //document.getElementById("spotlightZ").addEventListener("mousemove", function() { g_spotlightPos[2] = this.value; renderScene();});
   document.getElementById("robotAnimationOnOff").onclick = function() {g_robotAnimationOn = !g_robotAnimationOn; if (g_robotAnimationOn) {g_robotAltAnimationOn = false}};
   document.getElementById("robotAltAnimationOnOff").onclick = function() {g_robotAltAnimationOn = !g_robotAltAnimationOn; if (g_robotAltAnimationOn) {g_robotAnimationOn = false;}};
   document.getElementById("fov").addEventListener("mousemove", function() { g_camera.fov = this.value; renderScene();});
@@ -750,7 +750,7 @@ function renderScene() {
   g_sphere.color = [1,0,0,1];
   g_sphere.textureNum = -2;
   //g_sphere.matrix.scale(5,5,5);
-  g_sphere.matrix.translate(3,2,0);
+  g_sphere.matrix.translate(4,2,1);
   g_sphere.render();
 
   g_cube = new Cube();
