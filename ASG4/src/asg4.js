@@ -751,7 +751,7 @@ function renderScene() {
   g_sphere.textureNum = 4;
   g_sphere.hasShinySurface = true;
   //g_sphere.matrix.scale(5,5,5);
-  g_sphere.matrix.translate(3,2,1);
+  g_sphere.matrix.translate(3,2,0);
   g_sphere.render();
 
   g_cube = new Cube();
