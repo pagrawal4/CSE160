@@ -108,7 +108,7 @@ var FSHADER_SOURCE = `
     // Calculate ambient, diffuse, and specular
     vec3 ambient = u_ambientColor * vec3(gl_FragColor) * 0.3;
     vec3 diffuse = u_diffuseColor * vec3(gl_FragColor) * nDotL * 0.7;
-    vec3 specular = u_specularColor * pow(max(dot(E,R), 0.0),100.0);
+    vec3 specular = u_specularColor * pow(max(dot(E,R), 0.0),20.0);
     if (u_lightOn) {
       if (!u_hasShinySurface || (u_TextureSelect == 0)) {
         gl_FragColor = vec4(diffuse+ambient, 1.0);
@@ -185,7 +185,7 @@ let g_robotAltAnimationOn=false;
 let g_normalsOn=false;
 let g_lightOn=true;
 let g_ambientColor=[1,1,1]; // white
-let g_diffuseColor=[1,1,1]; // white
+let g_diffuseColor=[1,1,0.8]; // yellowish
 let g_specularColor=[1,1,1]; // white
 let g_spotlightOn=false;
 
