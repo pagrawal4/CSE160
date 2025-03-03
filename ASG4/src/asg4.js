@@ -485,7 +485,7 @@ function initTextures(n) {
     return false;
   }
   image4.onload = function(){ sendImageToTexture4(image4); };
-  image4.src = '../textures/tinyhome-lavender.jpg';
+  image4.src = '../textures/wood.jpg';
 
   // Add more texture loading here if needed
   return true;
@@ -604,7 +604,7 @@ function moveCamera(ev) {
     //let viewpt = g_camera.viewPointOnGround();
     //g_map.addHome(viewpt.elements[0] + g_map.size[0]/2, viewpt.elements[2] + g_map.size[2]/2, g_homeTexture);
     /*
-    if (g_homeTexture == 4) {
+    if (g_homeTexture == 3) {
       g_homeTexture = 1;
     } else {
     g_homeTexture++;
@@ -748,7 +748,7 @@ function renderScene() {
 
   g_sphere = new Sphere();
   g_sphere.color = [1,0,0,1];
-  g_sphere.textureNum = -2;
+  g_sphere.textureNum = 4;
   //g_sphere.matrix.scale(5,5,5);
   g_sphere.matrix.translate(4,2,1);
   g_sphere.render();
