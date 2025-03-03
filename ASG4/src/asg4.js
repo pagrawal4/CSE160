@@ -123,7 +123,7 @@ var FSHADER_SOURCE = `
       vec3 D = normalize(vec3(0.0,0.0,0.0) - u_spotlightPos);
       vec3 nLS = normalize(vec3(v_VertPos) - u_spotlightPos); // -LS
       float nLSDotD = max(dot(D,nLS), 0.0);
-      if (nLSDotD > cos(20.0)) { // Note total theta is double of 20
+      if (nLSDotD > cos(radians(30.0))) { // Note total theta is double of 20
         spotFactor = pow(nLSDotD,1.1); // spotexp = 3
       }
       gl_FragColor = vec4(spotFactor*vec3(gl_FragColor), 1.0);
@@ -136,7 +136,7 @@ let g_camera;
 let g_light;
 let g_lightPos = [0,3,1];
 let g_spotlight;
-let g_spotlightPos = [0,4,0];
+let g_spotlightPos = [0,7,0];
 let g_map;
 let g_ground = new Cube();
 let g_sky = new Cube();
