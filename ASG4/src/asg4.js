@@ -109,7 +109,9 @@ var FSHADER_SOURCE = `
     vec3 ambient = u_ambientColor * vec3(gl_FragColor) * 0.3;
     vec3 diffuse = u_diffuseColor * vec3(gl_FragColor) * nDotL * 0.7;
     vec3 specular = u_specularColor * pow(max(dot(E,R), 0.0),20.0);
+    float lightFactor = 0.0; // used to have some light when both lights on
     if (u_lightOn) {
+      lightFactor = 0.5;
       if (!u_hasShinySurface || (u_TextureSelect == 0)) {
         gl_FragColor = vec4(diffuse+ambient, 1.0);
       } else {
@@ -126,7 +128,7 @@ var FSHADER_SOURCE = `
       if (nLSDotD > cos(radians(30.0))) { // Note total theta is double of 20
         spotFactor = pow(nLSDotD,1.1); // spotexp = 3
       }
-      gl_FragColor = vec4(spotFactor*vec3(gl_FragColor), 1.0);
+      gl_FragColor = vec4((spotFactor + lightFactor)*vec3(gl_FragColor), 1.0);
     }
 
   }`
@@ -411,7 +413,7 @@ function addActionsForHtmlUI() {
   document.getElementById("lightX").addEventListener("mousemove", function() { g_lightPos[0] = this.value; g_lightAnimationOn = false; renderScene();});
   document.getElementById("lightY").addEventListener("mousemove", function() { g_lightPos[1] = this.value; g_lightAnimationOn = false; renderScene();});
   document.getElementById("lightZ").addEventListener("mousemove", function() { g_lightPos[2] = this.value; g_lightAnimationOn = false; renderScene();});
-  document.getElementById("spotlightOnOff").onclick = function() {g_spotlightOn = !g_spotlightOn; if (g_spotlightOn) {g_lightOn = false; renderScene();}};
+  document.getElementById("spotlightOnOff").onclick = function() {g_spotlightOn = !g_spotlightOn; if (g_spotlightOn) {renderScene();}};
   //document.getElementById("spotlightX").addEventListener("mousemove", function() { g_spotlightPos[0] = this.value; renderScene();});
   //document.getElementById("spotlightY").addEventListener("mousemove", function() { g_spotlightPos[1] = this.value; renderScene();});
   //document.getElementById("spotlightZ").addEventListener("mousemove", function() { g_spotlightPos[2] = this.value; renderScene();});
