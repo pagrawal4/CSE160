@@ -86,7 +86,6 @@ class Map {
         this.addHome(27, 14, 2);
         this.addHome(27, 20, 3);
         this.addHome(26, 26, 4);
-        this.addObject(16,16,-3);
     }
 
     xPosition(x) {
@@ -174,7 +173,7 @@ class Map {
         }
     }
 
-    addObject(x, z, textureNum) {
+    addObject(x, z, textureNum, hasShinySurface = false) {
         x = this.xPosition(x);
         z = this.zPosition(z);
         if (this.homemap[z][x] == 0) {
@@ -185,6 +184,7 @@ class Map {
             let nz = this.size[2];
             let c = new Cube();
             c.textureNum = textureNum;
+            c.hasShinySurface = hasShinySurface;
             c.matrix.translate(x-nx/2,0.5+1*y,z-nz/2);
             cubesAtPos.push(c);
         }
@@ -215,10 +215,10 @@ class Map {
         if (y > 0) {
             //console.log("Selecting cube at location x=" + x + " z=" + z);
             let c = cubesAtPos[y-1];
-            c.textureNum = 10;
-            c.hasShinySurface = false;
+            //c.textureNum = 10;
+            //c.hasShinySurface = false;
             //c.texColorWeight = 0.5;
-            c.color = [0.7,0.3,0,1];
+            //c.color = [0.7,0.3,0,1];
             this.selected = c;
         }
     }
@@ -237,6 +237,7 @@ class Map {
                 for (let y = 0; y < nc; y++) {
                     let c = new Cube();
                     c.textureNum = 0;
+                    c.hasShinySurface = false;
                     //c.matrix.translate(x,y,z);
                     c.matrix.translate(x-nx/2,0.5+1*y,z-nz/2);
                     this.objectmap[z][x][y] = c;

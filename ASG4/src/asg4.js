@@ -136,7 +136,7 @@ let g_camera;
 let g_light;
 let g_lightPos = [0,4,1];
 let g_spotlight;
-let g_spotlightPos = [0,3,0];
+let g_spotlightPos = [0,4,0];
 let g_map;
 let g_ground = new Cube();
 let g_sky = new Cube();
@@ -595,23 +595,25 @@ function moveCamera(ev) {
   } else if (ev.code == "KeyR") {
     g_camera.reset();
   } else if (ev.code == "Equal") {
-    let viewpt = g_camera.viewPointOnGround();
-    g_map.addObject(viewpt.elements[0] + g_map.size[0]/2, viewpt.elements[2] + g_map.size[2]/2, 0);
+    //let viewpt = g_camera.viewPointOnGround();
+    //g_map.addObject(viewpt.elements[0] + g_map.size[0]/2, viewpt.elements[2] + g_map.size[2]/2, 0);
   } else if (ev.code == "Minus") {
-    let viewpt = g_camera.viewPointOnGround();
-    g_map.removeObject(viewpt.elements[0] + g_map.size[0]/2, viewpt.elements[2] + g_map.size[2]/2);
+    //let viewpt = g_camera.viewPointOnGround();
+    //g_map.removeObject(viewpt.elements[0] + g_map.size[0]/2, viewpt.elements[2] + g_map.size[2]/2);
   } else if (ev.code == "KeyH") {
-    let viewpt = g_camera.viewPointOnGround();
-    g_map.addHome(viewpt.elements[0] + g_map.size[0]/2, viewpt.elements[2] + g_map.size[2]/2, g_homeTexture);
+    //let viewpt = g_camera.viewPointOnGround();
+    //g_map.addHome(viewpt.elements[0] + g_map.size[0]/2, viewpt.elements[2] + g_map.size[2]/2, g_homeTexture);
+    /*
     if (g_homeTexture == 4) {
       g_homeTexture = 1;
     } else {
     g_homeTexture++;
     }
+    */
   } else if (ev.code == "KeyJ") {
     //console.log("KeyJ pressed");
-    let viewpt = g_camera.viewPointOnGround();
-    g_map.removeHome(viewpt.elements[0] + g_map.size[0]/2, viewpt.elements[2] + g_map.size[2]/2);
+    //let viewpt = g_camera.viewPointOnGround();
+    //g_map.removeHome(viewpt.elements[0] + g_map.size[0]/2, viewpt.elements[2] + g_map.size[2]/2);
   }
 
   renderScene();
@@ -670,8 +672,8 @@ function tick() {
 
   // Animate light position
   if (g_lightAnimationOn) {
-    g_lightPos[0] = 3*Math.cos(g_time/1.5);
-    g_lightPos[2] = 3*Math.sin(g_time/1.5);
+    g_lightPos[0] = 4*Math.cos(g_time/1.5);
+    g_lightPos[2] = 4*Math.sin(g_time/1.5);
   }
   // Update Animation Angles
   if (g_robotAnimationOn) {
@@ -750,6 +752,13 @@ function renderScene() {
   //g_sphere.matrix.scale(5,5,5);
   g_sphere.matrix.translate(3,2,0);
   g_sphere.render();
+
+  g_cube = new Cube();
+  g_cube.color = [1,0,0,1];
+  g_cube.textureNum = -2;
+  g_cube.hasShinySurface = true;
+  g_cube.matrix.scale(2,2,2).translate(0,1,0);
+  g_cube.render();
 
   // Draw the floor
   //  let floorM = new Matrix4().scale(0.5,0.5,0.5);
