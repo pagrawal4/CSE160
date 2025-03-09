@@ -1,4 +1,7 @@
 import * as THREE from 'three';
+import { makeCube, makeTexturedCube } from "./cube.js";
+//import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
+//import {MTLLoader} from 'three/addons/loaders/MTLLoader.js';
 
 class Globals {
   constructor() {
@@ -13,7 +16,42 @@ class Globals {
       this.camera.position.z = 2;
 
       this.scene = new THREE.Scene();
-      this.cube = null;
+
+      let boxWidth = 1;
+      let boxHeight = 1;
+      let boxDepth = 1;
+      let geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+
+      this.cubes = [
+        /*
+        makeCube(geometry, 0x44aa88,  0),
+        makeCube(geometry, 0x8844aa, -2),
+        makeCube(geometry, 0xaa8844,  2),
+        */
+        makeTexturedCube(geometry, 0),
+      ];
+
+      this.cubes.forEach((cube) => {
+        this.scene.add(cube);
+      });
+
+      let lightColor = 0xFFFFFF;
+      let lightIntensity = 3;
+      this.light = new THREE.DirectionalLight(lightColor, lightIntensity);
+      this.light.position.set(-1, 2, 4);
+      this.scene.add(this.light);
+
+      /*
+      const objLoader = new OBJLoader();
+      const mtlLoader = new MTLLoader();
+      mtlLoader.load('../models/wooden_bowl_02_4k.mtl', (mtl) => {
+        mtl.preload();
+        objLoader.setMaterials(mtl);
+        objLoader.load('../models/wooden_bowl_02_4k.obj', (root) => {
+          this.scene.add(root);
+        });
+      });
+      */
   }
 }
 
@@ -23,8 +61,12 @@ let gs = new Globals();
 function renderCallback(time) {
   time *= 0.001;  // convert time to seconds
  
-  gs.cube.rotation.x = time;
-  gs.cube.rotation.y = time;
+  gs.cubes.forEach((cube, index) => {
+    const speed = 1 + index * 0.1;
+    const rot = time * speed;
+    cube.rotation.x = rot/4;
+    cube.rotation.y = rot/4;
+  });
  
   gs.renderer.render(gs.scene, gs.camera);
  
@@ -32,14 +74,6 @@ function renderCallback(time) {
 }
 
 function main() {
-  const boxWidth = 1;
-  const boxHeight = 1;
-  const boxDepth = 1;
-  const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
-  const material = new THREE.MeshBasicMaterial({color: 0xccaa88});
-  gs.cube = new THREE.Mesh(geometry, material);
-  gs.scene.add(gs.cube);
-
   requestAnimationFrame(renderCallback);
 }
 
