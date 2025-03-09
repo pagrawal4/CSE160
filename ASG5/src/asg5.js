@@ -17,18 +17,10 @@ class Globals {
 
       this.scene = new THREE.Scene();
 
-      let boxWidth = 1;
-      let boxHeight = 1;
-      let boxDepth = 1;
-      let geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
-
       this.cubes = [
-        /*
-        makeCube(geometry, 0x44aa88,  0),
-        makeCube(geometry, 0x8844aa, -2),
-        makeCube(geometry, 0xaa8844,  2),
-        */
-        makeTexturedCube(geometry, 0),
+        makeCube([-2, 0, 0], 0x8844aa),
+        makeCube([2, 0, 0], 0xaa8844),
+        makeTexturedCube(),
       ];
 
       this.cubes.forEach((cube) => {
