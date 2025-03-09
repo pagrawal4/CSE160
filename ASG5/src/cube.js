@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 class Cube {
-    constructor({size = [1, 1, 1], position = [0,0,0], color = 0xffffff, textureFile = null}) {
+    constructor({size = [1, 1, 1], position = [0,0,0], color = 0xffffff, textureFile = null, metalness = 0.0}) {
         this.type = "cube";
         this.boxWidth = size[0];
         this.boxHeight = size[1];
@@ -15,6 +15,18 @@ class Cube {
             const texture = loader.load( this.textureFile );
             texture.colorSpace = THREE.SRGBColorSpace;
             this.material = new THREE.MeshPhongMaterial({color: this.color, map: texture});
+        } else if (metalness > 0.0) {
+            this.material = new THREE.MeshPhysicalMaterial({
+                color: 0xffffff, // White color
+                metalness: metalness,
+                /*
+                roughness: 0.1,
+                clearcoat: 1.0,
+                clearcoatRoughness: 0.03,
+                transmission: 0.2,
+                ior: 1.5,
+                thickness: 2.0,*/
+              });
         } else {
             this.material = new THREE.MeshPhongMaterial({color: this.color});
         }
@@ -36,4 +48,9 @@ function makeTexturedCube() {
     return cube.cube;
 }
 
-export { Cube, makeCube, makeTexturedCube};
+function makeShinyCube(position){
+    var cube = new Cube({position: position, metalness: 0.8});
+    return cube.cube;
+}
+
+export { Cube, makeCube, makeTexturedCube, makeShinyCube};
