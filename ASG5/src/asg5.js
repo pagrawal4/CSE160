@@ -58,7 +58,7 @@ class Globals {
       this.scene = new THREE.Scene();
 
       this.cubes = [
-        makeCube([-2, 0, 0], 0x8844aa),
+        makeCube([-2, 0, 0], 0xff00ff),
         makeTexturedCube(),
         makeShinyCube([2, 0, 0]),
       ];
@@ -114,17 +114,31 @@ class Globals {
       this.gui.add(light3.position, 'z', -10, 10);
 
       // Spot Light - like light bulb
-      /*
+      class DegRadHelper {
+        constructor(obj, prop) {
+          this.obj = obj;
+          this.prop = prop;
+        }
+        get value() {
+          return THREE.MathUtils.radToDeg(this.obj[this.prop]);
+        }
+        set value(v) {
+          this.obj[this.prop] = THREE.MathUtils.degToRad(v);
+        }
+      }
       color = 0xFFFFFF;
-      intensity = 1;
+      intensity = 100;
       const light4 = new THREE.SpotLight(color, intensity);
       light4.position.set(0, 5, 0);
+      light4.target.position.set(-2, 0, 0);
       this.scene.add(light4);
-      this.gui.addColor(new ColorGUIHelper(light4, 'color'), 'value').name('spot color');
-      this.gui.add(light4, 'intensity', 0, 5, 0.01).name('spot intensity');
+      this.scene.add(light4.target);
+      this.gui.addColor(new ColorGUIHelper(light4, 'color'), 'value').name('spotlight color');
+      this.gui.add(light4, 'intensity', 0, 100, 5.0).name('spolightt intensity');
       this.gui.add(light4.position, 'x', -10, 10);
       this.gui.add(light4.position, 'y', -10, 10);
-      */
+      this.gui.add(light4.position, 'z', -10, 10);
+      this.gui.add(new DegRadHelper(light4, 'angle'), 'value', 0, 90).name('spotlight angle').onChange(() => {light4.target.updateMatrixWorld();});
 
       /*
       const objLoader = new OBJLoader();
