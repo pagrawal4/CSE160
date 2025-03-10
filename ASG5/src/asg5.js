@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { makeCube, makeTexturedCube, makeShinyCube } from "./cube.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 //import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
 //import {MTLLoader} from 'three/addons/loaders/MTLLoader.js';
 
@@ -54,8 +55,27 @@ class Globals {
       this.orbitControls = new OrbitControls(this.camera, this.canvas);
 
       ///// End Camera
-
       this.scene = new THREE.Scene();
+      /*
+      const loader = new THREE.CubeTextureLoader();
+      const texture = loader.load([
+        '../textures/px.png',
+        '../textures/nx.png',
+        '../textures/py.png',
+        '../textures/ny.png',
+        '../textures/pz.png',
+        '../textures/nz.png',
+      ]);
+      this.scene.background = texture;
+      */
+      // Use HDRI
+      new RGBELoader()
+      .load('../textures/empty_play_room_1k.hdr', function (texture) { //Note the change to .hdr
+        texture.mapping = THREE.EquirectangularReflectionMapping;
+        gs.scene.background = texture;
+        gs.scene.environment = texture; // important to also set environment.
+      });
+
 
       this.cubes = [
         makeCube([-2, 0, 0], 0xff00ff),
