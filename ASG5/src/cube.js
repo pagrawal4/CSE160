@@ -1,24 +1,26 @@
 import * as THREE from 'three';
 
 class Cube {
-    constructor({size = [1, 1, 1], position = [0,0,0], color = 0xffffff, textureFile = null, metalness = 0.0}) {
+    constructor(options = {}) {
         this.type = "cube";
-        this.boxWidth = size[0];
-        this.boxHeight = size[1];
-        this.boxDepth = size[2];
-        this.color = color;
-        this.textureFile = textureFile;
-        this.geometry = new THREE.BoxGeometry(this.boxWidth, this.boxHeight, this.boxDepth);
+
+        this.size = options.size || [1,1,1];
+        this.color = options.color || 0xffffff;
+        this.textureFile = options.textureFile || null;
+        this.metalness = options.metalness || 0.0;
+        this.position = options.position || [0,0,0];
+
+        this.geometry = new THREE.BoxGeometry(this.size[0], this.size[1], this.size[2]);
 
         if (this.textureFile){
             const loader = new THREE.TextureLoader();
             const texture = loader.load( this.textureFile );
             texture.colorSpace = THREE.SRGBColorSpace;
             this.material = new THREE.MeshPhongMaterial({color: this.color, map: texture});
-        } else if (metalness > 0.0) {
+        } else if (this.metalness > 0.0) {
             this.material = new THREE.MeshPhysicalMaterial({
                 color: 0xffffff, // White color
-                metalness: metalness,
+                metalness: this.metalness,
                 /*
                 roughness: 0.1,
                 clearcoat: 1.0,
@@ -32,9 +34,9 @@ class Cube {
         }
 
         this.cube = new THREE.Mesh(this.geometry, this.material);
-        this.cube.position.x = position[0];
-        this.cube.position.y = position[1];
-        this.cube.position.z = position[2];
+        this.cube.position.x = this.position[0];
+        this.cube.position.y = this.position[1];
+        this.cube.position.z = this.position[2];
     }
 }
 

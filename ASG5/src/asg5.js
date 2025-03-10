@@ -67,10 +67,6 @@ class Globals {
         this.scene.add(cube);
       });
 
-      // Ambient light
-      const light1 = new THREE.AmbientLight({color: 0xFFFFFF, intensity: 1});
-      this.scene.add(light1);
-
       class ColorGUIHelper {
         constructor(object, prop) {
           this.object = object;
@@ -84,11 +80,18 @@ class Globals {
         }
       }
 
+      // Ambient light
+      let color = 0xFFFFFF;
+      let intensity = 0.5;
+      const light1 = new THREE.AmbientLight(color, intensity);
+      this.scene.add(light1);
       this.gui.addColor(new ColorGUIHelper(light1, 'color'), 'value').name('ambient color');
       this.gui.add(light1, 'intensity', 0, 5, 0.01).name('ambient intensity');
 
       // Directional Light - like parallel rays of sun
-      const light2 = new THREE.DirectionalLight({color: 0xFFFFFF, intensity: 3});
+      color = 0xFFFFFF;
+      intensity = 0.5;
+      const light2 = new THREE.DirectionalLight(color, intensity);
       light2.position.set(0, 0, 5);
       // light2.target.position.set(0, 0, 0); // This is default target position
       this.scene.add(light2);
@@ -99,7 +102,9 @@ class Globals {
       this.gui.add(light2.position, 'z', -10, 10);
 
       // Point Light - like light bulb
-      const light3 = new THREE.PointLight({color: 0xFFFFFF, intensity: 4});
+      color = 0xFFFFFF;
+      intensity = 0.5;
+      const light3 = new THREE.PointLight(color, intensity);
       light3.position.set(0, 5, 0);
       this.scene.add(light3);
       this.gui.addColor(new ColorGUIHelper(light3, 'color'), 'value').name('point color');
@@ -108,16 +113,17 @@ class Globals {
       this.gui.add(light3.position, 'y', -10, 10);
       this.gui.add(light3.position, 'z', -10, 10);
 
-      /*
       // Spot Light - like light bulb
-      const light4 = new THREE.SpotLight({color: 0x2222ff, intensity: 5});
+      /*
+      color = 0xFFFFFF;
+      intensity = 1;
+      const light4 = new THREE.SpotLight(color, intensity);
       light4.position.set(0, 5, 0);
       this.scene.add(light4);
       this.gui.addColor(new ColorGUIHelper(light4, 'color'), 'value').name('spot color');
       this.gui.add(light4, 'intensity', 0, 5, 0.01).name('spot intensity');
       this.gui.add(light4.position, 'x', -10, 10);
       this.gui.add(light4.position, 'y', -10, 10);
-      this.gui.add(light4.position, 'z', -10, 10);
       */
 
       /*
