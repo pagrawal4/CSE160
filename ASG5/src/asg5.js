@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { makeCube, makeTexturedCube, makeShinyCube } from "./cube.js";
+import { createFort } from "./fort.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
@@ -16,9 +17,10 @@ class Globals {
       let fov = 75;
       let aspect = 2;  // the canvas default
       let near = 0.1;
-      let far = 5;
+      let far = 1000;
       this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-      this.camera.position.z = 2;
+      this.camera.position.set(0, 5, 50);
+      this.camera.lookAt(0, 0, 0);
 
       class MinMaxGUIHelper {
         constructor( obj, minProp, maxProp, minDif ) {
@@ -56,7 +58,7 @@ class Globals {
 
       ///// End Camera
       this.scene = new THREE.Scene();
-      /*
+
       const loader = new THREE.CubeTextureLoader();
       const texture = loader.load([
         '../textures/px.png',
@@ -67,20 +69,21 @@ class Globals {
         '../textures/nz.png',
       ]);
       this.scene.background = texture;
-      */
+
+     /*
       // Use HDRI
       new RGBELoader()
-      .load('../textures/empty_play_room_1k.hdr', function (texture) { //Note the change to .hdr
+      .load('../textures/birchwood_1k.hdr', function (texture) {
         texture.mapping = THREE.EquirectangularReflectionMapping;
         gs.scene.background = texture;
         gs.scene.environment = texture; // important to also set environment.
       });
-
+    */
 
       this.cubes = [
-        makeCube([-2, 0, 0], 0xff00ff),
+        makeCube([0, 0, -1], 0xff00ff),
         makeTexturedCube(),
-        makeShinyCube([2, 0, 0]),
+        makeShinyCube([-10, 0, 0]),
       ];
 
       this.cubes.forEach((cube) => {
@@ -159,6 +162,12 @@ class Globals {
       this.gui.add(light4.position, 'y', -10, 10);
       this.gui.add(light4.position, 'z', -10, 10);
       this.gui.add(new DegRadHelper(light4, 'angle'), 'value', 0, 90).name('spotlight angle').onChange(() => {light4.target.updateMatrixWorld();});
+
+      const fort = createFort();
+      fort.position.set(-20, -20, -20);
+      fort.scale.set(0.8,0.8,0.8);
+      fort.rotation.y = Math.PI/4;
+      this.scene.add(fort);
 
       /*
       const objLoader = new OBJLoader();
