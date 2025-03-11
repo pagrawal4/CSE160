@@ -1,11 +1,12 @@
 import * as THREE from 'three';
 import { makeCube, makeTexturedCube, makeShinyCube } from "./cube.js";
 import { createFort } from "./fort.js";
+import { createGem } from "./gem.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
-//import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
-//import {MTLLoader} from 'three/addons/loaders/MTLLoader.js';
+import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
+import {MTLLoader} from 'three/addons/loaders/MTLLoader.js';
 
 class Globals {
   constructor() {
@@ -81,9 +82,10 @@ class Globals {
     */
 
       this.cubes = [
-        makeCube([0, 0, -1], 0xff00ff),
-        makeTexturedCube(),
-        makeShinyCube([-10, 0, 0]),
+        createGem(),
+        //makeCube([0, 0, -1], 0xff00ff),
+        //makeTexturedCube(),
+        //makeShinyCube([-10, 0, 0]),
       ];
 
       this.cubes.forEach((cube) => {
@@ -149,11 +151,12 @@ class Globals {
           this.obj[this.prop] = THREE.MathUtils.degToRad(v);
         }
       }
-      color = 0xFFFFFF;
+      color = 0x18dc1c;
       intensity = 100;
       const light4 = new THREE.SpotLight(color, intensity);
-      light4.position.set(0, 5, 0);
+      light4.position.set(-7, 4, 0);
       light4.target.position.set(-2, 0, 0);
+      light4.angle = THREE.MathUtils.degToRad(70.0);
       this.scene.add(light4);
       this.scene.add(light4.target);
       this.gui.addColor(new ColorGUIHelper(light4, 'color'), 'value').name('spotlight color');
@@ -166,20 +169,32 @@ class Globals {
       const fort = createFort();
       fort.position.set(-20, -20, -20);
       fort.scale.set(0.8,0.8,0.8);
-      fort.rotation.y = Math.PI/4;
+      //fort.rotation.y = Math.PI/4;
       this.scene.add(fort);
 
-      /*
       const objLoader = new OBJLoader();
+      /*
+      objLoader.load('../models/lion_head_4k.obj', function(obj) {
+        gs.scene.add(obj);
+        obj.scale.set(50, 50, 50);
+      });
+      */
+
+      /* // Use this, but fix errors
       const mtlLoader = new MTLLoader();
-      mtlLoader.load('../models/wooden_bowl_02_4k.mtl', (mtl) => {
+      mtlLoader.load('../models/lion_head_4k.mtl', (mtl) => {
         mtl.preload();
         objLoader.setMaterials(mtl);
-        objLoader.load('../models/wooden_bowl_02_4k.obj', (root) => {
-          this.scene.add(root);
+        objLoader.load('../models/lion_head_4k.obj', (obj) => {
+          gs.scene.add(obj);
+          obj.scale.set(30, 30, 30);
+          //obj.position.set(55, 0.1, 57);
+          obj.position.set(-5*10, 12.5, 57);
         });
       });
       */
+
+
   }
 }
 
