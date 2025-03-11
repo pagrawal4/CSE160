@@ -115,7 +115,7 @@ class Globals {
 
       // Directional Light - like parallel rays of sun
       color = 0xFFFFFF;
-      intensity = 0.5;
+      intensity = 1.5;
       const light2 = new THREE.DirectionalLight(color, intensity);
       light2.position.set(0, 0, 5);
       // light2.target.position.set(0, 0, 0); // This is default target position

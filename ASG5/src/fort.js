@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 
 const x = 10
+let wallMaterial = null;
 
 function createCornerTower() {
 
@@ -22,8 +23,8 @@ function createCornerTower() {
 
 function createHideout(){
   const geometry = new THREE.BoxGeometry(0.5*x, 0.5*x, 0.5*x);
-  const material = new THREE.MeshStandardMaterial({color: 0xff00ff});
-  const hideout = new THREE.Mesh(geometry, material);
+  //const material = new THREE.MeshStandardMaterial({color: 0xff00ff});
+  const hideout = new THREE.Mesh(geometry, wallMaterial);
   return hideout;
 }
 
@@ -31,8 +32,8 @@ function createInsideWall() {
   const wall = new THREE.Group();
 
   const baseGeometry = new THREE.BoxGeometry(8*x, 3*x, 0.5*x);
-  const baseMaterial = new THREE.MeshStandardMaterial({color: 0xff00ff});
-  const base = new THREE.Mesh(baseGeometry, baseMaterial);
+  //const baseMaterial = new THREE.MeshStandardMaterial({color: 0xff00ff});
+  const base = new THREE.Mesh(baseGeometry, wallMaterial);
   wall.add(base);
 
   for (let i =-3; i <= 3; i++) {
@@ -50,7 +51,7 @@ function createOutsideWall() {
 
   const baseGeometry = new THREE.BoxGeometry(19.5*x, 2.5*x, 0.5*x);
   const baseMaterial = new THREE.MeshStandardMaterial({color: 0xff00ff});
-  const base = new THREE.Mesh(baseGeometry, baseMaterial);
+  const base = new THREE.Mesh(baseGeometry, wallMaterial);
   wall.add(base);
 
   for (let i =-9; i <= 9; i++) {
@@ -82,6 +83,14 @@ function createCenterTower() {
 
 function createFort() {
   const fort = new THREE.Group();
+
+  const loader = new THREE.TextureLoader();
+  const texture = loader.load( '../textures/stonewall.jpg' );
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.wrapS = THREE.RepeatWrapping;
+  //texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(10, 1);
+  wallMaterial = new THREE.MeshPhongMaterial({color: 0xdd55ff, map: texture});
 
   const gndsize = 20*x;
   const gndGeometry = new THREE.BoxGeometry(gndsize, x/10, gndsize);
