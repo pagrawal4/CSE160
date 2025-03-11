@@ -20,13 +20,27 @@ function createCornerTower() {
   return tower;
 }
 
+function createHideout(){
+  const geometry = new THREE.BoxGeometry(0.5*x, 0.5*x, 0.5*x);
+  const material = new THREE.MeshStandardMaterial({color: 0xff00ff});
+  const hideout = new THREE.Mesh(geometry, material);
+  return hideout;
+}
+
 function createWall() {
   const wall = new THREE.Group();
 
-  const baseGeometry = new THREE.BoxGeometry(4*x, 3*x, x);
+  const baseGeometry = new THREE.BoxGeometry(4*x, 3*x, 0.5*x);
   const baseMaterial = new THREE.MeshStandardMaterial({color: 0xff00ff});
   const base = new THREE.Mesh(baseGeometry, baseMaterial);
   wall.add(base);
+
+  for (let i =-1; i <= 2; i++) {
+    const hideout = createHideout();
+    hideout.position.x = i*x;
+    hideout.position.y = 1.75*x;
+    wall.add(hideout);
+  }
 
   return wall;
 }
