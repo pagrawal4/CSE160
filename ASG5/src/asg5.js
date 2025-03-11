@@ -5,8 +5,6 @@ import { createGem } from "./gem.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
-import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
-import {MTLLoader} from 'three/addons/loaders/MTLLoader.js';
 
 class Globals {
   constructor() {
@@ -172,28 +170,13 @@ class Globals {
       //fort.rotation.y = Math.PI/4;
       this.scene.add(fort);
 
-      const objLoader = new OBJLoader();
+      //const objLoader = new OBJLoader();
       /*
       objLoader.load('../models/lion_head_4k.obj', function(obj) {
         gs.scene.add(obj);
         obj.scale.set(50, 50, 50);
       });
       */
-
-      /* // Use this, but fix errors
-      const mtlLoader = new MTLLoader();
-      mtlLoader.load('../models/lion_head_4k.mtl', (mtl) => {
-        mtl.preload();
-        objLoader.setMaterials(mtl);
-        objLoader.load('../models/lion_head_4k.obj', (obj) => {
-          gs.scene.add(obj);
-          obj.scale.set(30, 30, 30);
-          //obj.position.set(55, 0.1, 57);
-          obj.position.set(-5*10, 12.5, 57);
-        });
-      });
-      */
-
 
   }
 }

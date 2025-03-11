@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
+import {MTLLoader} from 'three/addons/loaders/MTLLoader.js';
 
 const x = 10
 let wallMaterial = null;
@@ -153,6 +155,21 @@ function createFort() {
   outsideWall4.rotation.y = Math.PI/2;
   outsideWall4.position.set(-9.75*x, 1.3*x, -0.25*x);
   fort.add(outsideWall4);
+
+  const objLoader = new OBJLoader();
+  const mtlLoader = new MTLLoader();
+  mtlLoader.load('../models/lion_head_1k.mtl', (mtl) => {
+    mtl.preload();
+    objLoader.setMaterials(mtl);
+    objLoader.load('../models/lion_head_1k.obj', (obj) => {
+      obj.scale.set(40, 40, 40);
+      const obj2 = obj.clone();
+      fort.add(obj);
+      fort.add(obj2);
+      obj.position.set(95, 25, 95);
+      obj2.position.set(-95, 25, 95);
+    });
+  });
 
   return fort;
 
