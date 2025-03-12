@@ -85,13 +85,13 @@ class Globals {
     */
 
       this.gems = [
-        createGem([0,-15,2]),
-        createGem([-20,-15,2]),
-        createGem([0,-15,-15]),
-        createGem([0,-15,-40]),
-        createGem([-40,-15,2]),
-        createGem([-40,-15,-15]),
-        createGem([-40,-15,-40]),
+        createGem([5,-10,5]),
+        createGem([-20,-10,5]),
+        createGem([5,-10,-15]),
+        createGem([5,-10,-35]),
+        createGem([-40,-10,5]),
+        createGem([-40,-10,-15]),
+        createGem([-40,-10,-35]),
       ];
 
       this.gemShadows = [];
@@ -127,13 +127,13 @@ class Globals {
       color = 0xFFFFFF;
       intensity = 2.5;
       this.light2 = new THREE.DirectionalLight(color, intensity);
-      this.light2.position.set(-10, 10, 3);
+      this.light2.position.set(-10, 22, 3);
       this.light2.target.position.set(-20, -20, -20);
       this.scene.add(this.light2);
       this.gui.addColor(new ColorGUIHelper(this.light2, 'color'), 'value').name('color (directional)');
       this.gui.add(this.light2, 'intensity', 0, 5, 0.01).name('intensity (directional)');
       this.gui.add(this.light2.position, 'x', -10, 10).name( 'x (directional)');
-      this.gui.add(this.light2.position, 'y', 10, 100).name( 'y (directional)');
+      this.gui.add(this.light2.position, 'y', 22, 100).name( 'y (directional)');
       this.gui.add(this.light2.position, 'z', -10, 10).name( 'z (directional)');
 
       lightPosition4D.x = this.light2.position.x;
@@ -159,7 +159,7 @@ class Globals {
       color = 0x18dc1c;
       intensity = 100;
       this.light4 = new THREE.SpotLight(color, intensity);
-      this.light4.position.set(0, -6, 2.2);
+      this.light4.position.set(0, -0.5, 2.2);
       this.light4.target.position.set(0,-15,0);
       this.light4.angle = THREE.MathUtils.degToRad(45.0);
       this.scene.add(this.light4);
