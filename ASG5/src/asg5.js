@@ -181,7 +181,7 @@ class Globals {
         on: true,
       }
       const fogcolor = 0xD8E3E9;
-      const fognear = 100;
+      const fognear = 80;
       const fogfar = 300;
       this.storedFog = new THREE.Fog(fogcolor, fognear, fogfar); // so no need to create again
       this.scene.fog = this.storedFog

@@ -29,9 +29,9 @@ function createGround() {
     roughness: 1.0,
   })
 
-  texture.wrapS = THREE.RepeatWrapping;
-  texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set(100, 100);
+  //texture.wrapS = THREE.RepeatWrapping;
+  //texture.wrapT = THREE.RepeatWrapping;
+  //texture.repeat.set(100, 100);
   const gnd = new THREE.Mesh(geometry, texture);
   return gnd;
 }
