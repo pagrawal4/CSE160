@@ -5,6 +5,7 @@ import { createGem } from "./gem.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+import { ShadowMesh } from 'three/addons/objects/ShadowMesh.js';
 
 class Globals {
   constructor() {
@@ -80,14 +81,18 @@ class Globals {
     */
 
       this.cubes = [
-        createGem(),
+        createGem([0,-15,2]),
         //makeCube([0, 0, -1], 0xff00ff),
         //makeTexturedCube(),
         //makeShinyCube([-10, 0, 0]),
       ];
 
+      this.cubeShadows = [];
       this.cubes.forEach((cube) => {
         this.scene.add(cube);
+        let cubeShadow = new ShadowMesh(cube);
+        this.cubeShadows.push(cubeShadow);
+        this.scene.add(cubeShadow);
       });
 
       class ColorGUIHelper {
@@ -127,14 +132,22 @@ class Globals {
       // Point Light - like light bulb
       color = 0xFFFFFF;
       intensity = 0.5;
-      const light3 = new THREE.PointLight(color, intensity);
-      light3.position.set(0, 5, 0);
-      this.scene.add(light3);
-      this.gui.addColor(new ColorGUIHelper(light3, 'color'), 'value').name('point color');
-      this.gui.add(light3, 'intensity', 0, 5, 0.01).name('point intensity');
-      this.gui.add(light3.position, 'x', -10, 10);
-      this.gui.add(light3.position, 'y', -10, 10);
-      this.gui.add(light3.position, 'z', -10, 10);
+      this.light3 = new THREE.PointLight(color, intensity);
+      this.light3.position.set(0, 10, 0);
+      //this.light3.lookAt(this.scene.position);
+      this.scene.add(this.light3);
+      this.gui.addColor(new ColorGUIHelper(this.light3, 'color'), 'value').name('point color');
+      this.gui.add(this.light3, 'intensity', 0, 5, 0.01).name('point intensity');
+      this.gui.add(this.light3.position, 'x', -20, 20);
+      this.gui.add(this.light3.position, 'y', 5, 20);
+      this.gui.add(this.light3.position, 'z', -20, 20);
+
+      lightPosition4D.x = this.light3.position.x;
+      lightPosition4D.y = this.light3.position.y;
+      lightPosition4D.z = this.light3.position.z;
+      // amount of light-ray divergence. Ranging from:
+      // 0.001 = this.light3(min divergence) to 1.0 = pointlight(max divergence)
+      lightPosition4D.w = 0.9; // must be slightly greater than 0, due to 0 causing matrixInverse errors
 
       // Spot Light - like light bulb
       class DegRadHelper {
@@ -152,8 +165,8 @@ class Globals {
       color = 0x18dc1c;
       intensity = 100;
       const light4 = new THREE.SpotLight(color, intensity);
-      light4.position.set(-7, 4, 0);
-      light4.target.position.set(-2, 0, 0);
+      light4.position.set(-7, -10, 0);
+      light4.target.position.set(0,-15,0);
       light4.angle = THREE.MathUtils.degToRad(70.0);
       this.scene.add(light4);
       this.scene.add(light4.target);
@@ -182,6 +195,10 @@ class Globals {
 }
 
 // Global variables
+const normalVector = new THREE.Vector3( 0, 1, 0 );
+const planeConstant = -19.0; // this value must be slightly higher than the groundMesh's y position of 0.0
+const groundPlane = new THREE.Plane( normalVector, planeConstant );
+const lightPosition4D = new THREE.Vector4();
 let gs = new Globals();
 
 function renderCallback(time) {
@@ -195,6 +212,14 @@ function renderCallback(time) {
   });
  
   gs.orbitControls.update();
+
+  gs.cubeShadows.forEach((cubeShadow) => {
+    cubeShadow.update(groundPlane, lightPosition4D);
+  });
+  lightPosition4D.x = gs.light3.position.x;
+  lightPosition4D.y = gs.light3.position.y;
+  lightPosition4D.z = gs.light3.position.z;
+
   gs.renderer.render(gs.scene, gs.camera);
  
   requestAnimationFrame(renderCallback);

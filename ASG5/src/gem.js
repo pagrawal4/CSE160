@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-function createGem() {
+function createGem(position) {
   const radius = 5;
   const geometry = new THREE.IcosahedronGeometry( radius );
   const material = new THREE.MeshPhysicalMaterial({
@@ -11,6 +11,7 @@ function createGem() {
     metalness: 0.0,
   });
   const gem = new THREE.Mesh(geometry, material);
+  gem.position.set(position[0], position[1], position[2]);
   return gem;
 }
 

@@ -133,7 +133,7 @@ function createFort() {
 
   const gndsize = 20*x;
   const gndGeometry = new THREE.BoxGeometry(gndsize, x/10, gndsize);
-  const gndMaterial = new THREE.MeshStandardMaterial({color: 0x555555});
+  const gndMaterial = new THREE.MeshStandardMaterial({color: 0xffffff});
   const gnd = new THREE.Mesh(gndGeometry, gndMaterial);
   fort.add(gnd);
 
