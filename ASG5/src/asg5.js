@@ -138,20 +138,20 @@ class Globals {
 
       // Point Light - like light bulb
       color = 0xFFFFFF;
-      intensity = 0.5;
-      this.light3 = new THREE.PointLight(color, intensity);
-      this.light3.position.set(0, 10, 0);
+      intensity = 0.0;
+      //this.light3 = new THREE.PointLight(color, intensity);
+      //this.light3.position.set(0, 10, 0);
       //this.light3.lookAt(this.scene.position);
-      this.scene.add(this.light3);
-      this.gui.addColor(new ColorGUIHelper(this.light3, 'color'), 'value').name('color (point)');
-      this.gui.add(this.light3, 'intensity', 0, 5, 0.01).name('intensity (point)');
-      this.gui.add(this.light3.position, 'x', -20, 20).name( 'x (point)');
-      this.gui.add(this.light3.position, 'y', 5, 20).name( 'y (point)');
-      this.gui.add(this.light3.position, 'z', -20, 20).name( 'z (point)');
+      //this.scene.add(this.light3);
+      //this.gui.addColor(new ColorGUIHelper(this.light3, 'color'), 'value').name('color (point)');
+      //this.gui.add(this.light3, 'intensity', 0, 5, 0.01).name('intensity (point)');
+      //this.gui.add(this.light3.position, 'x', -20, 20).name( 'x (point)');
+      //this.gui.add(this.light3.position, 'y', 5, 20).name( 'y (point)');
+      //this.gui.add(this.light3.position, 'z', -20, 20).name( 'z (point)');
 
-      lightPosition4D.x = this.light3.position.x;
-      lightPosition4D.y = this.light3.position.y;
-      lightPosition4D.z = this.light3.position.z;
+      lightPosition4D.x = this.light2.position.x;
+      lightPosition4D.y = this.light2.position.y;
+      lightPosition4D.z = this.light2.position.z;
       // amount of light-ray divergence. Ranging from:
       // 0.001 = this.light3(min divergence) to 1.0 = pointlight(max divergence)
       lightPosition4D.w = 0.9; // must be slightly greater than 0, due to 0 causing matrixInverse errors
@@ -253,9 +253,9 @@ function renderCallback(time) {
   gs.gemShadows.forEach((gemShadow) => {
     gemShadow.update(groundPlane, lightPosition4D);
   });
-  lightPosition4D.x = gs.light3.position.x;
-  lightPosition4D.y = gs.light3.position.y;
-  lightPosition4D.z = gs.light3.position.z;
+  lightPosition4D.x = gs.light2.position.x;
+  lightPosition4D.y = gs.light2.position.y;
+  lightPosition4D.z = gs.light2.position.z;
 
   gs.renderer.render(gs.scene, gs.camera);
  
