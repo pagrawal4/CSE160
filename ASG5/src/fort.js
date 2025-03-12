@@ -91,7 +91,7 @@ function createOutsideWall() {
 
   for (let i =-9; i <= 9; i++) {
     const hideout = createHideout();
-    hideout.position.x = i*x;
+    hideout.position.x = 0.9*i*x + 0.2*x; // Fix the positioning for lion space
     hideout.position.y = 1.5*x;
     wall.add(hideout);
   }
@@ -201,10 +201,18 @@ function createFort() {
     objLoader.load('../models/lion_head_1k.obj', (obj) => {
       obj.scale.set(40, 40, 40);
       const obj2 = obj.clone();
+      const obj3 = obj.clone();
+      const obj4 = obj.clone();
       fort.add(obj);
       fort.add(obj2);
+      fort.add(obj3);
+      fort.add(obj4);
       obj.position.set(95, 25, 95);
       obj2.position.set(-95, 25, 95);
+      obj3.position.set(95, 25, -95);
+      obj4.position.set(-95, 25, -95);
+      obj3.rotation.set(0,Math.PI,0);
+      obj4.rotation.set(0,Math.PI,0);
     });
   });
 
