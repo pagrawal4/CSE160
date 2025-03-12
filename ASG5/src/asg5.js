@@ -177,10 +177,21 @@ class Globals {
       //castle.rotation.y = Math.PI/4;
       this.scene.add(castle);
 
+      const fogControl = {
+        on: true,
+      }
       const fogcolor = 0xD8E3E9;
       const fognear = 100;
       const fogfar = 300;
-      this.scene.fog = new THREE.Fog(fogcolor, fognear, fogfar);
+      this.storedFog = new THREE.Fog(fogcolor, fognear, fogfar); // so no need to create again
+      this.scene.fog = this.storedFog
+      this.gui.add(fogControl, 'on').name( 'Fog On/Off').onChange(() => {
+          if (gs.scene.fog) {
+            gs.scene.fog = null;
+          } else {
+            gs.scene.fog = gs.storedFog;
+          }
+      } );
 
       //const objLoader = new OBJLoader();
       /*
