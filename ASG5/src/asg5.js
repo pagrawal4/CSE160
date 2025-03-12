@@ -13,6 +13,9 @@ class Globals {
       this.renderer = new THREE.WebGLRenderer({antialias: true, canvas});
       this.gui = new GUI();
 
+      // Used for picking objects in scene
+      this.raycaster = new THREE.Raycaster();
+
       ///// Camera
       let fov = 75;
       let aspect = 2;  // the canvas default
@@ -82,6 +85,12 @@ class Globals {
 
       this.cubes = [
         createGem([0,-15,2]),
+        createGem([-20,-15,2]),
+        createGem([0,-15,-15]),
+        createGem([0,-15,-40]),
+        createGem([-40,-15,2]),
+        createGem([-40,-15,-15]),
+        createGem([-40,-15,-40]),
         //makeCube([0, 0, -1], 0xff00ff),
         //makeTexturedCube(),
         //makeShinyCube([-10, 0, 0]),
@@ -199,11 +208,36 @@ class Globals {
   }
 }
 
+function getCanvasRelativePosition(event) {
+  const rect = gs.canvas.getBoundingClientRect();
+  const x = (event.clientX - rect.left) * gs.canvas.width / rect.width;
+  const y = (event.clientY - rect.top) * gs.canvas.height / rect.height;
+  return {x, y};
+}
+
+function pickGem(event) {
+  const pos = getCanvasRelativePosition(event);
+  pickPosition.x = ( pos.x / canvas.width ) * 2 - 1;
+  pickPosition.y = ( pos.y / canvas.height ) * (- 2) + 1;
+
+  gs.raycaster.setFromCamera(pickPosition, gs.camera);
+  const intersectedObjs = gs.raycaster.intersectObjects(gs.cubes);
+  if (intersectedObjs.length) {
+    let pickedGem = intersectedObjs[0].object;
+    if (pickedGem.material.emissive.getHex() == 0xff0000) {
+      pickedGem.material.emissive.setHex(0x000000);
+    } else {
+      pickedGem.material.emissive.setHex(0xff0000);
+    }
+  }
+}
+
 // Global variables
 const normalVector = new THREE.Vector3( 0, 1, 0 );
 const planeConstant = -19.0; // this value must be slightly higher than the groundMesh's y position of 0.0
 const groundPlane = new THREE.Plane( normalVector, planeConstant );
 const lightPosition4D = new THREE.Vector4();
+const pickPosition = { x: 0, y: 0 };
 let gs = new Globals();
 
 function renderCallback(time) {
@@ -231,6 +265,7 @@ function renderCallback(time) {
 }
 
 function main() {
+  window.addEventListener( 'mousedown', pickGem );
   requestAnimationFrame(renderCallback);
 }
 
