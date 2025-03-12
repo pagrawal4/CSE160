@@ -158,18 +158,18 @@ class Globals {
       }
       color = 0x18dc1c;
       intensity = 100;
-      this.light4 = new THREE.SpotLight(color, intensity);
-      this.light4.position.set(0, -0.5, 2.2);
-      this.light4.target.position.set(0,-15,0);
-      this.light4.angle = THREE.MathUtils.degToRad(45.0);
-      this.scene.add(this.light4);
-      this.scene.add(this.light4.target);
-      this.gui.addColor(new ColorGUIHelper(this.light4, 'color'), 'value').name('color (spotlight)');
-      this.gui.add(this.light4, 'intensity', 0, 100, 5.0).name('intensity (spolight)');
-      this.gui.add(this.light4.position, 'x', -10, 10).name( 'x (spotlight)');
-      this.gui.add(this.light4.position, 'y', -10, 10).name( 'y (spotlight)');
-      this.gui.add(this.light4.position, 'z', -10, 10).name( 'z (spotlight)');
-      this.gui.add(new DegRadHelper(this.light4, 'angle'), 'value', 0, 90).name('angle (spotlight)').onChange(() => {gs.light4.target.updateMatrixWorld();});
+      this.light3 = new THREE.SpotLight(color, intensity);
+      this.light3.position.set(0, -0.5, 2.2);
+      this.light3.target.position.set(0,-15,0);
+      this.light3.angle = THREE.MathUtils.degToRad(45.0);
+      this.scene.add(this.light3);
+      this.scene.add(this.light3.target);
+      this.gui.addColor(new ColorGUIHelper(this.light3, 'color'), 'value').name('color (spotlight)');
+      this.gui.add(this.light3, 'intensity', 0, 100, 5.0).name('intensity (spolight)');
+      this.gui.add(this.light3.position, 'x', -10, 10).name( 'x (spotlight)');
+      this.gui.add(this.light3.position, 'y', -10, 10).name( 'y (spotlight)');
+      this.gui.add(this.light3.position, 'z', -10, 10).name( 'z (spotlight)');
+      this.gui.add(new DegRadHelper(this.light3, 'angle'), 'value', 0, 90).name('angle (spotlight)').onChange(() => {gs.light3.target.updateMatrixWorld();});
 
       const castle = createCastle();
       castle.position.set(-20, -20, -20);
