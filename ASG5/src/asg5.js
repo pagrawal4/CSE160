@@ -136,24 +136,11 @@ class Globals {
       this.gui.add(this.light2.position, 'y', 10, 100).name( 'y (directional)');
       this.gui.add(this.light2.position, 'z', -10, 10).name( 'z (directional)');
 
-      // Point Light - like light bulb
-      color = 0xFFFFFF;
-      intensity = 0.0;
-      //this.light3 = new THREE.PointLight(color, intensity);
-      //this.light3.position.set(0, 10, 0);
-      //this.light3.lookAt(this.scene.position);
-      //this.scene.add(this.light3);
-      //this.gui.addColor(new ColorGUIHelper(this.light3, 'color'), 'value').name('color (point)');
-      //this.gui.add(this.light3, 'intensity', 0, 5, 0.01).name('intensity (point)');
-      //this.gui.add(this.light3.position, 'x', -20, 20).name( 'x (point)');
-      //this.gui.add(this.light3.position, 'y', 5, 20).name( 'y (point)');
-      //this.gui.add(this.light3.position, 'z', -20, 20).name( 'z (point)');
-
       lightPosition4D.x = this.light2.position.x;
       lightPosition4D.y = this.light2.position.y;
       lightPosition4D.z = this.light2.position.z;
       // amount of light-ray divergence. Ranging from:
-      // 0.001 = this.light3(min divergence) to 1.0 = pointlight(max divergence)
+      // 0.001 = this.light2(min divergence) to 1.0 = pointlight(max divergence)
       lightPosition4D.w = 0.9; // must be slightly greater than 0, due to 0 causing matrixInverse errors
 
       // Spot Light - like light bulb
