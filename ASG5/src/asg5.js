@@ -118,23 +118,23 @@ class Globals {
       // Ambient light
       let color = 0xFFFFFF;
       let intensity = 0.5;
-      const light1 = new THREE.AmbientLight(color, intensity);
-      this.scene.add(light1);
-      this.gui.addColor(new ColorGUIHelper(light1, 'color'), 'value').name('color (ambient)');
-      this.gui.add(light1, 'intensity', 0, 5, 0.01).name('intensity (ambient)');
+      this.light1 = new THREE.AmbientLight(color, intensity);
+      this.scene.add(this.light1);
+      this.gui.addColor(new ColorGUIHelper(this.light1, 'color'), 'value').name('color (ambient)');
+      this.gui.add(this.light1, 'intensity', 0, 5, 0.01).name('intensity (ambient)');
 
       // Directional Light - like parallel rays of sun
       color = 0xFFFFFF;
       intensity = 2.5;
-      const light2 = new THREE.DirectionalLight(color, intensity);
-      light2.position.set(-10, 10, 3);
-      light2.target.position.set(-20, -20, -20);
-      this.scene.add(light2);
-      this.gui.addColor(new ColorGUIHelper(light2, 'color'), 'value').name('color (directional)');
-      this.gui.add(light2, 'intensity', 0, 5, 0.01).name('intensity (directional)');
-      this.gui.add(light2.position, 'x', -10, 10).name( 'x (directional)');
-      this.gui.add(light2.position, 'y', 10, 100).name( 'y (directional)');
-      this.gui.add(light2.position, 'z', -10, 10).name( 'z (directional)');
+      this.light2 = new THREE.DirectionalLight(color, intensity);
+      this.light2.position.set(-10, 10, 3);
+      this.light2.target.position.set(-20, -20, -20);
+      this.scene.add(this.light2);
+      this.gui.addColor(new ColorGUIHelper(this.light2, 'color'), 'value').name('color (directional)');
+      this.gui.add(this.light2, 'intensity', 0, 5, 0.01).name('intensity (directional)');
+      this.gui.add(this.light2.position, 'x', -10, 10).name( 'x (directional)');
+      this.gui.add(this.light2.position, 'y', 10, 100).name( 'y (directional)');
+      this.gui.add(this.light2.position, 'z', -10, 10).name( 'z (directional)');
 
       // Point Light - like light bulb
       color = 0xFFFFFF;
@@ -171,18 +171,18 @@ class Globals {
       }
       color = 0x18dc1c;
       intensity = 100;
-      const light4 = new THREE.SpotLight(color, intensity);
-      light4.position.set(-7, -10, 0);
-      light4.target.position.set(0,-15,0);
-      light4.angle = THREE.MathUtils.degToRad(70.0);
-      this.scene.add(light4);
-      this.scene.add(light4.target);
-      this.gui.addColor(new ColorGUIHelper(light4, 'color'), 'value').name('color (spotlight)');
-      this.gui.add(light4, 'intensity', 0, 100, 5.0).name('intensity (spolight)');
-      this.gui.add(light4.position, 'x', -10, 10).name( 'x (spotlight)');
-      this.gui.add(light4.position, 'y', -10, 10).name( 'y (spotlight)');
-      this.gui.add(light4.position, 'z', -10, 10).name( 'z (spotlight)');
-      this.gui.add(new DegRadHelper(light4, 'angle'), 'value', 0, 90).name('angle (spotlight)').onChange(() => {light4.target.updateMatrixWorld();});
+      this.light4 = new THREE.SpotLight(color, intensity);
+      this.light4.position.set(0, -6, 2.2);
+      this.light4.target.position.set(0,-15,0);
+      this.light4.angle = THREE.MathUtils.degToRad(45.0);
+      this.scene.add(this.light4);
+      this.scene.add(this.light4.target);
+      this.gui.addColor(new ColorGUIHelper(this.light4, 'color'), 'value').name('color (spotlight)');
+      this.gui.add(this.light4, 'intensity', 0, 100, 5.0).name('intensity (spolight)');
+      this.gui.add(this.light4.position, 'x', -10, 10).name( 'x (spotlight)');
+      this.gui.add(this.light4.position, 'y', -10, 10).name( 'y (spotlight)');
+      this.gui.add(this.light4.position, 'z', -10, 10).name( 'z (spotlight)');
+      this.gui.add(new DegRadHelper(this.light4, 'angle'), 'value', 0, 90).name('angle (spotlight)').onChange(() => {gs.light4.target.updateMatrixWorld();});
 
       const castle = createCastle();
       castle.position.set(-20, -20, -20);
