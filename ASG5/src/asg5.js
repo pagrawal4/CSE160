@@ -50,10 +50,10 @@ class Globals {
         gs.camera.updateProjectionMatrix();
       }
 
-      this.gui.add( this.camera, 'fov', 1, 180 ).onChange( updateCamera );
+      this.gui.add( this.camera, 'fov', 1, 170 ).onChange( updateCamera );
       const minMaxGUIHelper = new MinMaxGUIHelper( this.camera, 'near', 'far', 0.1 );
-      this.gui.add( minMaxGUIHelper, 'min', 0.1, 50, 0.1 ).name( 'near' ).onChange( updateCamera );
-      this.gui.add( minMaxGUIHelper, 'max', 0.1, 50, 0.1 ).name( 'far' ).onChange( updateCamera );
+      this.gui.add( minMaxGUIHelper, 'min', 0.1, 40, 0.1 ).name( 'near' ).onChange( updateCamera );
+      this.gui.add( minMaxGUIHelper, 'max', 0.1, 1000, 0.1 ).name( 'far' ).onChange( updateCamera );
       //this.gui.add( this.camera.position, 'x', -200, 200 ).name( 'x (camera)' ).onChange( updateCamera );
       //this.gui.add( this.camera.position, 'y', 0, 100 ).name( 'y (camera)' ).onChange( updateCamera );
       //this.gui.add( this.camera.position, 'z', -200, 200 ).name( 'z (camera)' ).onChange( updateCamera );
