@@ -5,20 +5,53 @@ import {MTLLoader} from 'three/addons/loaders/MTLLoader.js';
 const x = 10
 let wallMaterial = null;
 
+function createFlag() {
+  const flag = new THREE.Group();
+
+  const poleGeometry = new THREE.CylinderGeometry(x/10, x/10, x, 16);
+  const pole = new THREE.Mesh(poleGeometry, wallMaterial);
+  flag.add(pole);
+
+  const flagTopGeometry = new THREE.ConeGeometry(x/8, x, 4);
+  const flagTopMaterial = new THREE.MeshStandardMaterial({color: 0xff0000});
+  const flagTop = new THREE.Mesh(flagTopGeometry, flagTopMaterial);
+  flagTop.position.set(x/2, x/2.5, 0);
+  flagTop.rotation.set(0,0,-Math.PI/2);
+  flag.add(flagTop);
+
+  return flag;
+}
+
 function createCornerTower() {
 
   const tower = new THREE.Group();
 
   const roomGeometry = new THREE.BoxGeometry(2*x, 4*x, 2*x);
-  const roomMaterial = new THREE.MeshStandardMaterial({color: 0xff00ff});
+  const roomMaterial = new THREE.MeshStandardMaterial({color: 0x8280f5});
   const room = new THREE.Mesh(roomGeometry, roomMaterial);
   tower.add(room);
 
   const roofGeometry = new THREE.ConeGeometry(1.5*x, 2*x, 32);
-  const roofMaterial = new THREE.MeshStandardMaterial({color: 0xff0000});
+  const roofMaterial = new THREE.MeshStandardMaterial({color: 0xFF13F0});
   const roof = new THREE.Mesh(roofGeometry, roofMaterial);
   roof.position.y = 3*x;
   tower.add(roof);
+
+  const flag = createFlag();
+  flag.position.y = 4*x;
+  tower.add(flag)
+  /*
+  const windowGeometry = new THREE.BoxGeometry(x+10, x+10, 2*x);
+  const loader = new THREE.TextureLoader();
+  const texture = loader.load( '../textures/wood.jpg' );
+  texture.colorSpace = THREE.SRGBColorSpace;
+  const windowMaterial = new THREE.MeshPhongMaterial({map: texture});
+  const window1 = new THREE.Mesh(windowGeometry, windowMaterial);
+  const window2 = window1.clone();
+  window2.rotation.set(0, 0, Math.PI/2);
+  tower.add(window1);
+  tower.add(window2);
+  */
 
   return tower;
 }
@@ -52,14 +85,14 @@ function createOutsideWall() {
   const wall = new THREE.Group();
 
   const baseGeometry = new THREE.BoxGeometry(19.5*x, 2.5*x, 0.5*x);
-  const baseMaterial = new THREE.MeshStandardMaterial({color: 0xff00ff});
+  const baseMaterial = new THREE.MeshStandardMaterial({color: 0xf4b8b8});
   const base = new THREE.Mesh(baseGeometry, wallMaterial);
   wall.add(base);
 
   for (let i =-9; i <= 9; i++) {
     const hideout = createHideout();
     hideout.position.x = i*x;
-    hideout.position.y = 1.3*x;
+    hideout.position.y = 1.5*x;
     wall.add(hideout);
   }
 
@@ -70,15 +103,19 @@ function createCenterTower() {
   const tower = new THREE.Group();
 
   const roomGeometry = new THREE.CylinderGeometry(1.5*x, 1.5*x, 7*x, 32);
-  const roomMaterial = new THREE.MeshStandardMaterial({color: 0xff00ff});
+  const roomMaterial = new THREE.MeshStandardMaterial({color: 0x8280f5});
   const room = new THREE.Mesh(roomGeometry, roomMaterial);
   tower.add(room);
 
   const roofGeometry = new THREE.ConeGeometry(1.5*x, 2*x, 32);
-  const roofMaterial = new THREE.MeshStandardMaterial({color: 0xff0000});
+  const roofMaterial = new THREE.MeshStandardMaterial({color: 0xFF13F0});
   const roof = new THREE.Mesh(roofGeometry, roofMaterial);
   roof.position.y = 4.5*x;
   tower.add(roof);
+
+  const flag = createFlag();
+  flag.position.y = 5.5*x;
+  tower.add(flag)
 
   return tower;
 }
@@ -92,7 +129,7 @@ function createFort() {
   texture.wrapS = THREE.RepeatWrapping;
   //texture.wrapT = THREE.RepeatWrapping;
   texture.repeat.set(10, 1);
-  wallMaterial = new THREE.MeshPhongMaterial({color: 0xdd55ff, map: texture});
+  wallMaterial = new THREE.MeshPhongMaterial({color: 0xfdeded, map: texture});
 
   const gndsize = 20*x;
   const gndGeometry = new THREE.BoxGeometry(gndsize, x/10, gndsize);
