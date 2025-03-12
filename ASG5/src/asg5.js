@@ -54,9 +54,9 @@ class Globals {
       const minMaxGUIHelper = new MinMaxGUIHelper( this.camera, 'near', 'far', 0.1 );
       this.gui.add( minMaxGUIHelper, 'min', 0.1, 50, 0.1 ).name( 'near' ).onChange( updateCamera );
       this.gui.add( minMaxGUIHelper, 'max', 0.1, 50, 0.1 ).name( 'far' ).onChange( updateCamera );
-      this.gui.add( this.camera.position, 'x', -200, 200 ).name( 'x (camera)' ).onChange( updateCamera );
-      this.gui.add( this.camera.position, 'y', 0, 100 ).name( 'y (camera)' ).onChange( updateCamera );
-      this.gui.add( this.camera.position, 'z', -200, 200 ).name( 'z (camera)' ).onChange( updateCamera );
+      //this.gui.add( this.camera.position, 'x', -200, 200 ).name( 'x (camera)' ).onChange( updateCamera );
+      //this.gui.add( this.camera.position, 'y', 0, 100 ).name( 'y (camera)' ).onChange( updateCamera );
+      //this.gui.add( this.camera.position, 'z', -200, 200 ).name( 'z (camera)' ).onChange( updateCamera );
 
       this.orbitControls = new OrbitControls(this.camera, this.canvas);
 
@@ -159,8 +159,8 @@ class Globals {
       color = 0x18dc1c;
       intensity = 100;
       this.light3 = new THREE.SpotLight(color, intensity);
-      this.light3.position.set(0, -0.5, 2.2);
-      this.light3.target.position.set(0,-15,0);
+      this.light3.position.set(3, 4.52, 10);
+      this.light3.target.position.set(5,-10,5);
       this.light3.angle = THREE.MathUtils.degToRad(45.0);
       this.scene.add(this.light3);
       this.scene.add(this.light3.target);

@@ -166,7 +166,7 @@ function createCastle() {
 
   const gndsize = 200*x;
   const gndGeometry = new THREE.BoxGeometry(gndsize, x/10, gndsize);
-  const gndMaterial = new THREE.MeshStandardMaterial({color: 0x555555});
+  const gndMaterial = new THREE.MeshStandardMaterial({color: 0x888888});
   const gnd = new THREE.Mesh(gndGeometry, gndMaterial);
   //const gnd = createGround();
   castle.add(gnd);
