@@ -5,6 +5,39 @@ import {MTLLoader} from 'three/addons/loaders/MTLLoader.js';
 const x = 10
 let wallMaterial = null;
 
+function createGround() {
+  let gndsize = 200*x;
+  const textureLoader = new THREE.TextureLoader();
+  const baseColor = textureLoader.load('../textures/1K-snow_4_Base_Color.jpg');
+  const height = textureLoader.load('../textures/1K-snow_4_Height.jpg');
+  const metalness = textureLoader.load('../textures/1K-snow_4_Metallic.jpg');
+  const normal = textureLoader.load('../textures/1K-snow_4_Normal.jpg');
+  const roughness = textureLoader.load('../textures/1K-snow_4_Roughness.jpg');
+
+  //const geometry = new THREE.PlaneGeometry(500, 500, 256, 256);
+  // const geometry = new THREE.CylinderGeometry(250, 250, 1, 64)
+  const geometry = new THREE.BoxGeometry(gndsize, x/10, gndsize);
+  //geometry.rotateX(-Math.PI/2);
+
+  const texture = new THREE.MeshPhysicalMaterial({
+    map: baseColor,
+    displacementMap: height,
+    metalnessMap: metalness,
+    metalness: 0.0,
+    normalMap: normal,
+    roughnessMap: roughness,
+    roughness: 1.0,
+  })
+
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(100, 100);
+  const gnd = new THREE.Mesh(geometry, texture);
+  return gnd;
+}
+
+
+
 function createFlag() {
   const flag = new THREE.Group();
 
@@ -135,6 +168,7 @@ function createFort() {
   const gndGeometry = new THREE.BoxGeometry(gndsize, x/10, gndsize);
   const gndMaterial = new THREE.MeshStandardMaterial({color: 0xffffff});
   const gnd = new THREE.Mesh(gndGeometry, gndMaterial);
+  //const gnd = createGround();
   fort.add(gnd);
 
   const tower1 = createCornerTower();
