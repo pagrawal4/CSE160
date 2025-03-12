@@ -153,8 +153,8 @@ function createCenterTower() {
   return tower;
 }
 
-function createFort() {
-  const fort = new THREE.Group();
+function createCastle() {
+  const castle = new THREE.Group();
 
   const loader = new THREE.TextureLoader();
   const texture = loader.load( '../textures/stonewall.jpg' );
@@ -166,66 +166,66 @@ function createFort() {
 
   const gndsize = 200*x;
   const gndGeometry = new THREE.BoxGeometry(gndsize, x/10, gndsize);
-  const gndMaterial = new THREE.MeshStandardMaterial({color: 0xffffff});
+  const gndMaterial = new THREE.MeshStandardMaterial({color: 0x555555});
   const gnd = new THREE.Mesh(gndGeometry, gndMaterial);
   //const gnd = createGround();
-  fort.add(gnd);
+  castle.add(gnd);
 
   const tower1 = createCornerTower();
   tower1.position.set(-(5*x), 2.05*x, -(5*x));
-  fort.add(tower1);
+  castle.add(tower1);
 
   const insideWall1 = createInsideWall();
   insideWall1.position.set(0, 1.55*x, 5*x);
-  fort.add(insideWall1);
+  castle.add(insideWall1);
 
   const tower2 = createCornerTower();
   tower2.position.set(-(5*x), 2.05*x, (5*x));
-  fort.add(tower2);
+  castle.add(tower2);
 
   const insideWall2 = createInsideWall();
   insideWall2.rotation.y = Math.PI/2;
   insideWall2.position.set(5*x, 1.55*x, 0);
-  fort.add(insideWall2);
+  castle.add(insideWall2);
 
   const tower3 = createCornerTower();
   tower3.position.set(5*x, 2.05*x, -(5*x));
-  fort.add(tower3);
+  castle.add(tower3);
 
   const insideWall3 = createInsideWall();
   insideWall3.position.set(0, 1.55*x, -(5*x));
-  fort.add(insideWall3);
+  castle.add(insideWall3);
 
   const tower4 = createCornerTower();
   tower4.position.set(5*x, 2.05*x, 5*x);
-  fort.add(tower4);
+  castle.add(tower4);
 
   const insideWall4 = createInsideWall();
   insideWall4.rotation.y = Math.PI/2;
   insideWall4.position.set(-(5*x), 1.55*x, 0);
-  fort.add(insideWall4);
+  castle.add(insideWall4);
 
   const centerTower = createCenterTower();
   centerTower.position.set(0, 3.55*x, 0);
-  fort.add( centerTower);
+  castle.add( centerTower);
   
   const outsideWall1 = createOutsideWall();
   outsideWall1.position.set(-0.25*x, 1.3*x, 9.75*x);
-  fort.add(outsideWall1);
+  castle.add(outsideWall1);
 
   const outsideWall2 = createOutsideWall();
   outsideWall2.rotation.y = Math.PI/2;
   outsideWall2.position.set(9.75*x, 1.3*x, 0.25*x);
-  fort.add(outsideWall2);
+  castle.add(outsideWall2);
 
   const outsideWall3 = createOutsideWall();
   outsideWall3.position.set(0.25*x, 1.3*x, -9.75*x);
-  fort.add(outsideWall3);
+  castle.add(outsideWall3);
 
   const outsideWall4 = createOutsideWall();
   outsideWall4.rotation.y = Math.PI/2;
   outsideWall4.position.set(-9.75*x, 1.3*x, -0.25*x);
-  fort.add(outsideWall4);
+  castle.add(outsideWall4);
 
   const objLoader = new OBJLoader();
   const mtlLoader = new MTLLoader();
@@ -237,10 +237,10 @@ function createFort() {
       const obj2 = obj.clone();
       const obj3 = obj.clone();
       const obj4 = obj.clone();
-      fort.add(obj);
-      fort.add(obj2);
-      fort.add(obj3);
-      fort.add(obj4);
+      castle.add(obj);
+      castle.add(obj2);
+      castle.add(obj3);
+      castle.add(obj4);
       obj.position.set(95, 25, 95);
       obj2.position.set(-95, 25, 95);
       obj3.position.set(95, 25, -95);
@@ -250,10 +250,10 @@ function createFort() {
     });
   });
 
-  return fort;
+  return castle;
 
 }
 
-export { createFort };
+export { createCastle };
 
 

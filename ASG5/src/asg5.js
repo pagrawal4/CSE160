@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { createFort } from "./fort.js";
+import { createCastle } from "./castle.js";
 import { createGem } from "./gem.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -15,12 +15,12 @@ class Globals {
       this.raycaster = new THREE.Raycaster();
 
       ///// Camera
-      let fov = 75;
+      let fov = 100;
       let aspect = 2;  // the canvas default
       let near = 0.1;
       let far = 1000;
       this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-      this.camera.position.set(0, 5, 50);
+      this.camera.position.set(5, 42, 120);
       this.camera.lookAt(0, 0, 0);
 
       class MinMaxGUIHelper {
@@ -54,6 +54,9 @@ class Globals {
       const minMaxGUIHelper = new MinMaxGUIHelper( this.camera, 'near', 'far', 0.1 );
       this.gui.add( minMaxGUIHelper, 'min', 0.1, 50, 0.1 ).name( 'near' ).onChange( updateCamera );
       this.gui.add( minMaxGUIHelper, 'max', 0.1, 50, 0.1 ).name( 'far' ).onChange( updateCamera );
+      this.gui.add( this.camera.position, 'x', -200, 200 ).name( 'x (camera)' ).onChange( updateCamera );
+      this.gui.add( this.camera.position, 'y', 0, 100 ).name( 'y (camera)' ).onChange( updateCamera );
+      this.gui.add( this.camera.position, 'z', -200, 200 ).name( 'z (camera)' ).onChange( updateCamera );
 
       this.orbitControls = new OrbitControls(this.camera, this.canvas);
 
@@ -117,21 +120,21 @@ class Globals {
       let intensity = 0.5;
       const light1 = new THREE.AmbientLight(color, intensity);
       this.scene.add(light1);
-      this.gui.addColor(new ColorGUIHelper(light1, 'color'), 'value').name('ambient color');
-      this.gui.add(light1, 'intensity', 0, 5, 0.01).name('ambient intensity');
+      this.gui.addColor(new ColorGUIHelper(light1, 'color'), 'value').name('color (ambient)');
+      this.gui.add(light1, 'intensity', 0, 5, 0.01).name('intensity (ambient)');
 
       // Directional Light - like parallel rays of sun
       color = 0xFFFFFF;
-      intensity = 1.5;
+      intensity = 2.5;
       const light2 = new THREE.DirectionalLight(color, intensity);
-      light2.position.set(0, 0, 5);
-      // light2.target.position.set(0, 0, 0); // This is default target position
+      light2.position.set(-10, 10, 3);
+      light2.target.position.set(-20, -20, -20);
       this.scene.add(light2);
-      this.gui.addColor(new ColorGUIHelper(light2, 'color'), 'value').name('directional color');
-      this.gui.add(light2, 'intensity', 0, 5, 0.01).name('directional intensity');
-      this.gui.add(light2.position, 'x', -10, 10);
-      this.gui.add(light2.position, 'y', -10, 10);
-      this.gui.add(light2.position, 'z', -10, 10);
+      this.gui.addColor(new ColorGUIHelper(light2, 'color'), 'value').name('color (directional)');
+      this.gui.add(light2, 'intensity', 0, 5, 0.01).name('intensity (directional)');
+      this.gui.add(light2.position, 'x', -10, 10).name( 'x (directional)');
+      this.gui.add(light2.position, 'y', 10, 100).name( 'y (directional)');
+      this.gui.add(light2.position, 'z', -10, 10).name( 'z (directional)');
 
       // Point Light - like light bulb
       color = 0xFFFFFF;
@@ -140,11 +143,11 @@ class Globals {
       this.light3.position.set(0, 10, 0);
       //this.light3.lookAt(this.scene.position);
       this.scene.add(this.light3);
-      this.gui.addColor(new ColorGUIHelper(this.light3, 'color'), 'value').name('point color');
-      this.gui.add(this.light3, 'intensity', 0, 5, 0.01).name('point intensity');
-      this.gui.add(this.light3.position, 'x', -20, 20);
-      this.gui.add(this.light3.position, 'y', 5, 20);
-      this.gui.add(this.light3.position, 'z', -20, 20);
+      this.gui.addColor(new ColorGUIHelper(this.light3, 'color'), 'value').name('color (point)');
+      this.gui.add(this.light3, 'intensity', 0, 5, 0.01).name('intensity (point)');
+      this.gui.add(this.light3.position, 'x', -20, 20).name( 'x (point)');
+      this.gui.add(this.light3.position, 'y', 5, 20).name( 'y (point)');
+      this.gui.add(this.light3.position, 'z', -20, 20).name( 'z (point)');
 
       lightPosition4D.x = this.light3.position.x;
       lightPosition4D.y = this.light3.position.y;
@@ -174,22 +177,22 @@ class Globals {
       light4.angle = THREE.MathUtils.degToRad(70.0);
       this.scene.add(light4);
       this.scene.add(light4.target);
-      this.gui.addColor(new ColorGUIHelper(light4, 'color'), 'value').name('spotlight color');
-      this.gui.add(light4, 'intensity', 0, 100, 5.0).name('spolightt intensity');
-      this.gui.add(light4.position, 'x', -10, 10);
-      this.gui.add(light4.position, 'y', -10, 10);
-      this.gui.add(light4.position, 'z', -10, 10);
-      this.gui.add(new DegRadHelper(light4, 'angle'), 'value', 0, 90).name('spotlight angle').onChange(() => {light4.target.updateMatrixWorld();});
+      this.gui.addColor(new ColorGUIHelper(light4, 'color'), 'value').name('color (spotlight)');
+      this.gui.add(light4, 'intensity', 0, 100, 5.0).name('intensity (spolight)');
+      this.gui.add(light4.position, 'x', -10, 10).name( 'x (spotlight)');
+      this.gui.add(light4.position, 'y', -10, 10).name( 'y (spotlight)');
+      this.gui.add(light4.position, 'z', -10, 10).name( 'z (spotlight)');
+      this.gui.add(new DegRadHelper(light4, 'angle'), 'value', 0, 90).name('angle (spotlight)').onChange(() => {light4.target.updateMatrixWorld();});
 
-      const fort = createFort();
-      fort.position.set(-20, -20, -20);
-      fort.scale.set(0.8,0.8,0.8);
-      //fort.rotation.y = Math.PI/4;
-      this.scene.add(fort);
+      const castle = createCastle();
+      castle.position.set(-20, -20, -20);
+      //castle.scale.set(0.8,0.8,0.8);
+      //castle.rotation.y = Math.PI/4;
+      this.scene.add(castle);
 
       const fogcolor = 0xD8E3E9;
-      const fognear = 80;
-      const fogfar = 130;
+      const fognear = 100;
+      const fogfar = 300;
       this.scene.fog = new THREE.Fog(fogcolor, fognear, fogfar);
 
       //const objLoader = new OBJLoader();
