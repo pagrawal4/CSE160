@@ -117,7 +117,7 @@ class Globals {
 
       // Ambient light
       let color = 0xFFFFFF;
-      let intensity = 0.5;
+      let intensity = 0.3;
       this.light1 = new THREE.AmbientLight(color, intensity);
       this.scene.add(this.light1);
       this.gui.addColor(new ColorGUIHelper(this.light1, 'color'), 'value').name('color (ambient)');
@@ -125,7 +125,7 @@ class Globals {
 
       // Directional Light - like parallel rays of sun
       color = 0xFFFFFF;
-      intensity = 2.5;
+      intensity = 0.5;
       this.light2 = new THREE.DirectionalLight(color, intensity);
       this.light2.position.set(-10, 22, 3);
       this.light2.target.position.set(-20, -20, -20);
@@ -157,7 +157,7 @@ class Globals {
         }
       }
       color = 0x18dc1c;
-      intensity = 100;
+      intensity = 500;
       this.light3 = new THREE.SpotLight(color, intensity);
       this.light3.position.set(3, 4.52, 10);
       this.light3.target.position.set(5,-10,5);
@@ -165,7 +165,7 @@ class Globals {
       this.scene.add(this.light3);
       this.scene.add(this.light3.target);
       this.gui.addColor(new ColorGUIHelper(this.light3, 'color'), 'value').name('color (spotlight)');
-      this.gui.add(this.light3, 'intensity', 0, 100, 5.0).name('intensity (spolight)');
+      this.gui.add(this.light3, 'intensity', 0, 500, 10.0).name('intensity (spolight)');
       this.gui.add(this.light3.position, 'x', -10, 10).name( 'x (spotlight)');
       this.gui.add(this.light3.position, 'y', -10, 10).name( 'y (spotlight)');
       this.gui.add(this.light3.position, 'z', -10, 10).name( 'z (spotlight)');
@@ -202,6 +202,18 @@ class Globals {
       */
 
   }
+}
+
+function unhideShadowObjects() {
+  gs.gemShadows.forEach((gemShadow) => {
+    gs.scene.add(gemShadow);
+  });
+}
+
+function hideShadowObjects() {
+  gs.gemShadows.forEach((gemShadow) => {
+    gs.scene.remove(gemShadow);
+  });
 }
 
 function getCanvasRelativePosition(event) {
@@ -248,6 +260,11 @@ function renderCallback(time) {
  
   gs.orbitControls.update();
 
+  if (gs.light2.intensity > 0) {
+    unhideShadowObjects();
+  } else {
+    hideShadowObjects();
+  }
   gs.gemShadows.forEach((gemShadow) => {
     gemShadow.update(groundPlane, lightPosition4D);
   });
