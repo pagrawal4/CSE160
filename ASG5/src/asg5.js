@@ -1,10 +1,8 @@
 import * as THREE from 'three';
-import { makeCube, makeTexturedCube, makeShinyCube } from "./cube.js";
 import { createFort } from "./fort.js";
 import { createGem } from "./gem.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { ShadowMesh } from 'three/addons/objects/ShadowMesh.js';
 
 class Globals {
@@ -83,7 +81,7 @@ class Globals {
       });
     */
 
-      this.cubes = [
+      this.gems = [
         createGem([0,-15,2]),
         createGem([-20,-15,2]),
         createGem([0,-15,-15]),
@@ -91,17 +89,14 @@ class Globals {
         createGem([-40,-15,2]),
         createGem([-40,-15,-15]),
         createGem([-40,-15,-40]),
-        //makeCube([0, 0, -1], 0xff00ff),
-        //makeTexturedCube(),
-        //makeShinyCube([-10, 0, 0]),
       ];
 
-      this.cubeShadows = [];
-      this.cubes.forEach((cube) => {
-        this.scene.add(cube);
-        let cubeShadow = new ShadowMesh(cube);
-        this.cubeShadows.push(cubeShadow);
-        this.scene.add(cubeShadow);
+      this.gemShadows = [];
+      this.gems.forEach((gem) => {
+        this.scene.add(gem);
+        let gemShadow = new ShadowMesh(gem);
+        this.gemShadows.push(gemShadow);
+        this.scene.add(gemShadow);
       });
 
       class ColorGUIHelper {
@@ -221,7 +216,7 @@ function pickGem(event) {
   pickPosition.y = ( pos.y / canvas.height ) * (- 2) + 1;
 
   gs.raycaster.setFromCamera(pickPosition, gs.camera);
-  const intersectedObjs = gs.raycaster.intersectObjects(gs.cubes);
+  const intersectedObjs = gs.raycaster.intersectObjects(gs.gems);
   if (intersectedObjs.length) {
     let pickedGem = intersectedObjs[0].object;
     if (pickedGem.material.emissive.getHex() == 0xff0000) {
@@ -243,17 +238,17 @@ let gs = new Globals();
 function renderCallback(time) {
   time *= 0.001;  // convert time to seconds
  
-  gs.cubes.forEach((cube, index) => {
+  gs.gems.forEach((gem, index) => {
     const speed = 1 + index * 0.1;
     const rot = time * speed;
-    cube.rotation.x = rot/4;
-    cube.rotation.y = rot/4;
+    gem.rotation.x = rot/4;
+    gem.rotation.y = rot/4;
   });
  
   gs.orbitControls.update();
 
-  gs.cubeShadows.forEach((cubeShadow) => {
-    cubeShadow.update(groundPlane, lightPosition4D);
+  gs.gemShadows.forEach((gemShadow) => {
+    gemShadow.update(groundPlane, lightPosition4D);
   });
   lightPosition4D.x = gs.light3.position.x;
   lightPosition4D.y = gs.light3.position.y;
