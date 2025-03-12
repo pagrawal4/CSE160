@@ -131,7 +131,7 @@ function createFort() {
   texture.repeat.set(10, 1);
   wallMaterial = new THREE.MeshPhongMaterial({color: 0xfdeded, map: texture});
 
-  const gndsize = 20*x;
+  const gndsize = 200*x;
   const gndGeometry = new THREE.BoxGeometry(gndsize, x/10, gndsize);
   const gndMaterial = new THREE.MeshStandardMaterial({color: 0xffffff});
   const gnd = new THREE.Mesh(gndGeometry, gndMaterial);

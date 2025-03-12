@@ -183,6 +183,11 @@ class Globals {
       //fort.rotation.y = Math.PI/4;
       this.scene.add(fort);
 
+      const fogcolor = 0xD8E3E9;
+      const fognear = 80;
+      const fogfar = 130;
+      this.scene.fog = new THREE.Fog(fogcolor, fognear, fogfar);
+
       //const objLoader = new OBJLoader();
       /*
       objLoader.load('../models/lion_head_4k.obj', function(obj) {
